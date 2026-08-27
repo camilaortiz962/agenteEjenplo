@@ -10,3 +10,4 @@ Cuando se active esta skill:
 3. Señala cuál es la más urgente y por qué.
 4. Guarda el resumen en `OUTPUT/resumen_entregas_[fecha].md`.
 5. Si una entrega no tiene fecha registrada, dilo explícitamente — no asumas una.
+6. Si el estudiante confirma una regla de priorización general (no específica a esta entrega puntual), sigue "Cómo actualizo notas.md" en CLAUDE.md para proponerla y, si la confirma, guardarla en `WORK-MEMORY/notas.md`.

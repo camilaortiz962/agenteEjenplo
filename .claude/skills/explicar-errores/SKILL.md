@@ -25,3 +25,6 @@ Cuando se active esta skill:
 7. Revisa `WORK-MEMORY/registro_errores.csv`: si ya hay 3 o más filas con el mismo tipo de error
    (columna `error`), dilo explícitamente y sugiere qué tema repasar — esta es la parte que ayuda
    a mejorar el conocimiento, no solo a corregir el error de hoy.
+8. Si en el paso 7 detectaste un patrón (3+ errores del mismo tipo), o el estudiante confirma una
+   preferencia sobre cómo prefiere que le expliques los errores, sigue "Cómo actualizo notas.md" en
+   CLAUDE.md para proponerlo y, si lo confirma, guardarlo en `WORK-MEMORY/notas.md`.
