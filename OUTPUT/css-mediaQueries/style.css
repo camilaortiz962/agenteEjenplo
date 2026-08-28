@@ -1,0 +1,79 @@
+/* Mobile-first: layout apilado, imagen centrada arriba */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 0.5fr 2fr 1fr 1fr 0.5fr;
+  gap: 0;
+  grid-template-areas:
+    "header header header"
+    ". image ."
+    "description description description"
+    "skills skills skills"
+    "additional-info additional-info additional-info";
+}
+
+/* A partir de tablet/desktop: imagen fija a la izquierda,
+   description y skills se acomodan a su lado */
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: 0.3fr 3.2fr 1.5fr 1.2fr;
+    grid-template-rows: 0.5fr 1.9fr 1.7fr 0.7fr 0.7fr;
+    grid-template-areas:
+      "header header header header"
+      ". image description description"
+      ". image skills skills"
+      ". image skills skills"
+      "additional-info additional-info additional-info additional-info";
+  }
+}
+
+/* Estas reglas no cambian entre breakpoints, solo se reasignan
+   a las areas definidas arriba en cada media query */
+.header { grid-area: header; }
+.image { grid-area: image; }
+.description { grid-area: description; }
+.skills { grid-area: skills; }
+.additional-info { grid-area: additional-info; }
+
+/* Efecto de tarjeta (inspirado en pokemon-cards-css): tilt 3D fijo +
+   brillo diagonal en hover. Solo CSS, sin JS: el tilt no sigue al
+   cursor, se activa como un angulo fijo al pasar el mouse.
+   Va en su propia clase .card (separada de .container, que solo
+   define el grid) para que el efecto sea reutilizable en otras cartas. */
+.card {
+  position: relative;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1);
+}
+
+.card:hover {
+  transform: perspective(1000px) rotateX(6deg) rotateY(-8deg) scale(1.02);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.25);
+}
+
+/* Grid-column/row a "1 / -1" hace que el brillo cubra siempre toda la
+   carta, sin importar cuantas columnas/filas defina cada breakpoint. */
+.card::after {
+  content: "";
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  pointer-events: none;
+  /* Dorado translucido en vez de blanco + mix-blend-mode: sobre un
+     fondo claro, un overlay blanco no cambia nada visible. */
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(198, 156, 90, 0.55) 48%,
+    rgba(198, 156, 90, 0.55) 52%,
+    transparent 70%
+  );
+  background-size: 250% 250%;
+  background-position: -50% -50%;
+  opacity: 0;
+  transition: background-position 0.6s ease, opacity 0.4s ease;
+}
+
+.card:hover::after {
+  background-position: 150% 150%;
+  opacity: 1;
+}
