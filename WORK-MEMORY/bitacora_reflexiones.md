@@ -15,3 +15,9 @@ que nunca definí.
 Me costó organizar las referencias visuales por tema en vez de por sitio de origen. Al principio
 quería agruparlas por dónde las encontré, pero agruparlas por lo que inspiran (color, tipografía,
 layout) tiene más sentido para el proyecto.
+
+## 2026-09-03
+
+Primera clase de interacción con CSS. Me gustó descubrir que se pueden cambiar colores y elementos
+según el tamaño del dispositivo (media queries). Se me dificultaron los event listeners en
+JavaScript.
