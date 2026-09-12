@@ -15,38 +15,29 @@
       background-color: #2c3e50;
       color: #ecf0f1;
     }
-    /* ==========================================
-       ESTADO 2 — Grid Básico (SIN RESOLVER a propósito)
-       Este es el punto de partida para escribirlo en vivo en clase.
-       Sigue los TODO en orden — cada uno agrega UNA propiedad de la
-       tabla "Propiedades del contenedor" del recurso de Grid/Flexbox
-       (semana_03_recurso_css_grid_flexbox_tailwind.md).
-    ========================================== */
+    
     .grid-container {
-      /* TODO 1: activa Grid en este contenedor.
-         Propiedad: display
-         Valor: grid
-      */
-      
+   
       display: grid ;
-      
-      /* TODO 2: define 3 columnas de 200px cada una.
-         Propiedad: grid-template-columns
-         Pista: puedes escribir "200px 200px 200px" a mano,
-         o usar el atajo repeat(3, 200px) — ambos hacen lo mismo.
-      */
+    
       grid-template-columns: 100px 2fr 1fr;
       
-      /* TODO 3: agrega espacio entre las celdas, sin usar márgenes.
-         Propiedad: gap
-         Valor sugerido: 15px
-      */
-      
        gap:10px;
-      
+
+        background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+
+        
       @media (min-width: 500px) {
       .grid-item {
-        background-color: black; 
+        background-color: black;
+        color: white;
+        padding: 30px;
+        text-align: center;
+        font-size: 1.2rem; 
+        border-radius: 8px;
+        font-weight: bold;
         }
        }
       
@@ -56,18 +47,63 @@
         background-color: red; 
         }
        }
+       }
 
-      /* Ya viene incluido, no lo toques: */
-      background-color: #ecf0f1;
-      padding: 15px;
-      border-radius: 8px;
-    }
+       .dark-mode .grid-container {
+        background-color: #34495e;
+        }
+
+        .dark-mode .grid-item {
+          background-color: #1abc9c;    
+       }
 
   @media (min-width: 700px) {
       .grid-item2 {
         display:none;
         }
+
        }
+
+.grid-container2 {
+   
+      display: grid ;
+    
+      grid-template-columns: 100px 2fr 1fr;
+      
+       gap:10px;
+
+        background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+ }
+
+ 
+.grid-container3 {
+   
+      display: grid ;
+    
+      grid-template-columns: 100px 2fr 1fr;
+      
+       gap:10px;
+
+        background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+ }
+
+ .grid-container4 {
+   
+      display: grid ;
+    
+      grid-template-columns: 100px 2fr 1fr;
+      
+       gap:10px;
+
+        background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+ }
+
 
     .grid-item {
       background-color: #3498db;
@@ -94,16 +130,19 @@
       border-radius: 6px;
     }
 
-    /* TODO 4 (opcional, para quien termine antes): alinea el
-       contenido de cada celda al centro verticalmente.
-       Propiedad: align-items (va en .grid-container, no en .grid-item)
-       Valor: center
-    */
-  </style>
+    .grid-item4 {
+      background-color: #f39c12;
+      color: white;
+      padding: 30px;
+      text-align: center;
+      font-size: 1.5rem;
+      border-radius: 6px;
+    }
+</style>
 </head>
 <body>
-  <h1>Mi Primer Grid</h1>
-  <p style="margin: 20px 0;">Grid con 3 columnas de 200px cada una — completa los TODO del CSS.</p>
+  <h1 id="titulo">Mi Primer Grid</h1>
+  <p id="descripcion" style="margin: 20px 0;">Grid con 3 columnas de 200px cada una — completa los TODO del CSS.</p>
 
   <div class="grid-container">
     <div class="grid-item">1</div>
@@ -112,7 +151,7 @@
     <div class="grid-item">4</div>
     <div class="grid-item">5</div>
     <div class="grid-item">6</div>
-    <div " class="grid-item">7</div>
+    <div class="grid-item">7</div>
     <div class="grid-item">8</div>
     <div id="demo"class="grid-item">9</div>
   </div>
@@ -120,18 +159,24 @@
   <button id="boton">Botón</button>
   <button id="btnOscuro">Dark mode</button>
 
-  <div id="caja2" class="grid-container">
+  <div id="caja2" class="grid-container2">
     <div class="grid-item2">1</div>
     <div class="grid-item2">2</div>
     <div class="grid-item2">3</div>
   </div>
 
-  <div id="caja3" class="grid-container">
+  <div id="caja3" class="grid-container3">
     <div class="grid-item3">1</div>
     <div class="grid-item3">2</div>
     <div class="grid-item3">3</div>
   </div>
 
+   <div class="grid-container4">
+    <div class="grid-item4">1</div>
+    <div class="grid-item4">2</div>
+    <div class="grid-item4">3</div>
+  </div>
+<button id="btn3" > Desaparece clase </button>
 <script>
 
 let txt = document.getElementById("demo");    
@@ -174,6 +219,35 @@ if (document.body.classList.contains("dark-mode")) {
   btnOscuro.textContent = "Dark mode"; }
 });
 
+
+const gc4 = document.querySelector(".grid-container4");
+ const btn3 = document.getElementById("btn3")
+
+ btn3.addEventListener("click", function() {
+  alert("hola mundo 3");
+  gc4.style.display = "none";
+  });
+  
+  const titulo = document.getElementById("titulo");
+  const descripcion = document.getElementById("descripcion"); 
+
+  function resize (){
+    if (window.innerWidth >= 1024) {
+    titulo.textContent = "Modo Desktop";
+     descripcion.textContent = "Holiiiis";
+    }
+     else if(window.innerWidth >= 768) {
+      titulo.textContent = "Modo Tablet";
+      descripcion.textContent = "Como taaaaaas";
+    } else {
+      titulo.textContent = "Modo Móvil";
+        descripcion.textContent = "Bieeeeeeeeeen";
+  }
+  }
+
+
+  window.addEventListener("resize", resize);
+  resize(); 
 </script>
 
 </body>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    #titulo {
+      background-color: #2c3e50;
+      color: white;
+    }
+
+    #titulo h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    #imagen img {
+      max-width: 100%;
+      width: 400px;
+      border-radius: 8px;
+    }
+
+    #texto {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <section id="titulo">
+    <h1 id="tituloTexto">Título de la landing page</h1>
+  </section>
+
+  <section id="imagen">
+    <img id="imagenResponsive" src="img prueba/img1.jpg" alt="Imagen de la landing page">
+  </section>
+
+  <section id="texto">
+    <p id="descripcion">Texto de la landing page. Reemplaza este párrafo con la descripción real.</p>
+  </section>
+
+  <script>
+    const titulo = document.getElementById("tituloTexto");
+    const descripcion = document.getElementById("descripcion");
+    const imagenResponsive = document.getElementById("imagenResponsive");
+
+    function resize (){
+        if (window.innerWidth >= 1024) {
+        titulo.textContent = "Dos hermanos acurrucados";
+         descripcion.textContent = "Dos gatitos naranjas descansan juntos, apoyando la cabeza uno sobre el otro.";
+         imagenResponsive.src = "img prueba/img1.jpg";
+        }
+         else if(window.innerWidth >= 768) {
+          titulo.textContent = "Mamá y su cría";
+          descripcion.textContent = "Una gata blanca y naranja cuida de cerca a su gatito, que se asoma justo debajo.";
+          imagenResponsive.src = "img prueba/img2.jpg";
+        } else {
+          titulo.textContent = "Ojos de cielo";
+            descripcion.textContent = "Dos gatitos de ojos azules muy claros se acercan curiosos a la cámara.";
+            imagenResponsive.src = "img prueba/img3.jpg";
+        }
+              }
+
+    resize();
+    window.addEventListener("resize", resize);
+  </script>
+</body>
+</html>
