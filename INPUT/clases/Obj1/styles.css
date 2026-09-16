@@ -1,41 +1,43 @@
+/* Paleta base (modo claro). Todo el resto del archivo usa estas variables
+   en vez de colores fijos, así el modo oscuro solo tiene que redefinirlas. */
 :root {
-  --bg: #eef0f5;
-  --line-color: rgba(11, 13, 26, 0.06);
-  --card-bg: #ffffff;
-  --text: #12142a;
-  --text-muted: #444a5e;
-  --desc-bg: #f5f2e6;
-  --stat-bg: rgba(26, 63, 160, 0.1);
-  --poderes-divider: rgba(18, 20, 42, 0.15);
+  --purple: #9b5de5;
+  --pink: #ff6fae;
+  --dark: #1a0f2e;
+  --bg: #f5f0fb;
+  --line-color: rgba(155, 93, 229, 0.1);
+  --glow-1: rgba(155, 93, 229, 0.35);
+  --glow-2: rgba(255, 111, 174, 0.3);
+  --glow-3: rgba(191, 169, 255, 0.3);
 }
 
+/* Modo oscuro: Index.js le agrega esta clase a <body>. Redefine las mismas
+   variables con tonos oscuros; el resto del CSS no cambia. */
 body.dark-mode {
-  --bg: #0b0d1a;
+  --bg: #150a24;
   --line-color: rgba(255, 255, 255, 0.06);
-  --card-bg: #12142a;
-  --text: #d8dae8;
-  --text-muted: #a6a9bd;
-  --desc-bg: #1a1c33;
-  --stat-bg: rgba(26, 63, 160, 0.25);
-  --poderes-divider: rgba(216, 218, 232, 0.2);
+  --glow-1: rgba(155, 93, 229, 0.45);
+  --glow-2: rgba(255, 111, 174, 0.35);
+  --glow-3: rgba(90, 60, 160, 0.4);
 }
 
+/* Centra todo el contenido en la pantalla y arma el fondo tipo "escenario":
+   tres luces difusas (radial-gradient) + una textura de puntitos chiquitos. */
 body {
   margin: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 8px;
   padding: 20px 0;
-  font-family: "Comic Neue", "Comic Sans MS", cursive, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   background-color: var(--bg);
   background-image:
-    repeating-conic-gradient(
-      from 0deg,
-      var(--line-color) 0deg 2deg,
-      transparent 2deg 15deg
-    ),
+    radial-gradient(circle at 15% 20%, var(--glow-1), transparent 40%),
+    radial-gradient(circle at 85% 15%, var(--glow-2), transparent 40%),
+    radial-gradient(circle at 50% 95%, var(--glow-3), transparent 45%),
     repeating-radial-gradient(
       circle at center,
       var(--line-color) 0px,
@@ -47,25 +49,34 @@ body {
 }
 
 #btnOscuro {
+  position: relative;
+  z-index: 10;
   padding: 8px 16px;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #e62429, #1a3fa0);
+  background: linear-gradient(135deg, var(--purple), var(--pink));
   color: white;
-  font-family: "Comic Neue", "Comic Sans MS", cursive, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-weight: bold;
   cursor: pointer;
 }
 
+/* Contenedor de la baraja: tiene un alto fijo para reservar espacio en la
+   página, pero las cartas adentro son position:absolute (ver ".baraja .card"
+   más abajo), así que se superponen unas con otras dentro de esta caja. */
 .baraja {
   position: relative;
   width: 100%;
   max-width: 340px;
-  height: 600px;
+  height: 460px;
   margin: 0 auto;
 }
 
+/* z-index alto en los botones para que queden siempre clickeables por
+   encima de cualquier carta que se desborde del contenedor .baraja. */
 .baraja-controles {
+  position: relative;
+  z-index: 10;
   display: flex;
   gap: 12px;
 }
@@ -74,26 +85,60 @@ body {
   padding: 8px 16px;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #e62429, #1a3fa0);
+  background: linear-gradient(135deg, var(--purple), var(--pink));
   color: white;
-  font-family: "Comic Neue", "Comic Sans MS", cursive, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   font-weight: bold;
   cursor: pointer;
 }
 
+/* Contenedor exterior de una carta (tanto en la baraja como en el modal).
+   Solo pone la sombra que la "levanta" del fondo; el contenido real vive
+   en .card-inner adentro. */
 .card {
+  position: relative;
   width: 100%;
   max-width: 300px;
-  padding: 10px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #e62429, #1a3fa0);
+  border-radius: 10px;
+  overflow: hidden;
   box-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.25) inset,
     0 4px 8px rgba(0, 0, 0, 0.35),
     0 14px 28px rgba(0, 0, 0, 0.4),
     0 28px 45px rgba(0, 0, 0, 0.25);
 }
 
+/* Efecto "plastificado": una franja diagonal semitransparente que se
+   desliza en bucle (ver @keyframes brillo-holo), simulando el brillo de
+   una carta laminada. Se aplica tanto al frente (.card-inner) como al
+   reverso del modal (.flip-reverso) para que el brillo gire con la carta
+   al voltearla, en vez de quedar fijo sobre un contenedor que no rota. */
+.card-inner::after,
+.flip-reverso::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0px,
+    rgba(255, 255, 255, 0.5) 4px,
+    transparent 10px,
+    transparent 40px
+  );
+  mix-blend-mode: overlay;
+  animation: brillo-holo 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes brillo-holo {
+  0% { background-position: 0 0; }
+  100% { background-position: 300px 0; }
+}
+
+/* Dentro de la baraja, cada carta se saca del flujo normal y se posiciona
+   sobre el mismo punto (top:0, left:50% + translate -50% para centrarla).
+   La variable --card-transform la define cada clase pos-* de abajo, y acá
+   solo se aplica con una transición suave para animar el cambio. */
 .baraja .card {
   position: absolute;
   top: 0;
@@ -106,6 +151,11 @@ body {
   transform: var(--card-transform) scale(1.05);
 }
 
+/* Las 4 posiciones posibles de una carta según qué tan lejos esté de la
+   activa (Index.js decide cuál clase le toca a cada una, ver
+   "actualizarBaraja"). pos-0 = al frente y clickeable; pos-1/pos-2 = atrás,
+   rotadas en abanico y sin click (pointer-events:none); pos-oculta = fuera
+   de vista del todo. */
 .baraja .card.pos-0 {
   --card-transform: translate(-50%, 0) rotate(0deg) scale(1);
   z-index: 5;
@@ -114,14 +164,14 @@ body {
 }
 
 .baraja .card.pos-1 {
-  --card-transform: translate(-50%, 16px) rotate(-8deg) scale(0.94);
+  --card-transform: translate(-50%, 10px) rotate(-3deg) scale(0.96);
   z-index: 4;
   opacity: 0.9;
   pointer-events: none;
 }
 
 .baraja .card.pos-2 {
-  --card-transform: translate(-50%, 28px) rotate(8deg) scale(0.88);
+  --card-transform: translate(-50%, 18px) rotate(3deg) scale(0.92);
   z-index: 3;
   opacity: 0.75;
   pointer-events: none;
@@ -134,34 +184,91 @@ body {
   pointer-events: none;
 }
 
+/* El "cuerpo" real de la carta: flex en columna para que la foto de fondo
+   quede arriba, el topbar (badges) al principio y el panel de texto
+   (.card-body) se empuje solo hasta el fondo (margin-top:auto ahí abajo).
+   No tiene una altura fija (min-height nomás), así crece si el texto de
+   la descripción lo necesita en vez de recortarlo. */
 .card-inner {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  background-color: var(--card-bg);
-  border: 3px solid #e62429;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 380px;
+  background-color: var(--dark);
+  border: 3px solid var(--purple);
   border-radius: 10px;
-  padding: 10px;
+  padding: 8px;
+  overflow: hidden;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.4) inset,
     0 3px 10px rgba(0, 0, 0, 0.25) inset;
   transition: background-color 0.2s;
 }
 
-.card-header {
+/* La foto del héroe cubre TODA la carta como fondo (position:absolute +
+   object-fit:cover), no solo un recuadro chico. object-position controla
+   qué parte de la foto se prioriza al recortarla; por defecto se ancla
+   arriba para no cortar la cara. */
+.card-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+}
+
+/* Ajustes puntuales de encuadre para fotos que no quedan bien con el
+   "center top" por defecto (la grupal tiene el logo arriba y a los
+   integrantes más abajo). */
+.card-bg-img--grupo {
+  object-position: center 75%;
+}
+
+.card-bg-img--v {
+  object-position: center 25%;
+}
+
+/* Degradado oscuro sobre la foto (de arriba a abajo) para que el texto
+   blanco de encima siga siendo legible sin necesidad de cajas de fondo
+   sólidas sobre la imagen. */
+.card-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5) 0%,
+    transparent 18%,
+    rgba(0, 0, 0, 0.15) 38%,
+    rgba(0, 0, 0, 0.6) 58%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+/* Fila de badges arriba de la carta: bando/rol a la izquierda, HP a la
+   derecha. z-index:2 para quedar por encima de la foto (0) y el degradado
+   (1) definidos arriba. */
+.card-topbar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
 }
 
-.card-header h1 {
-  margin: 0;
-  font-family: "Bangers", cursive;
-  font-size: 1.6rem;
-  letter-spacing: 1px;
-  color: #e62429;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2), -1px -1px 0 #1a3fa0;
+.stage-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background-color: var(--dark);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
@@ -169,7 +276,7 @@ body {
   flex-shrink: 0;
   padding: 3px 10px;
   border-radius: 999px;
-  background-color: #e62429;
+  background-color: var(--purple);
   color: white;
   font-size: 0.7rem;
   font-weight: bold;
@@ -178,118 +285,119 @@ body {
 }
 
 .hp-badge span {
-  font-family: "Bangers", cursive;
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 700;
   font-size: 1rem;
 }
 
-.img-frame {
-  padding: 6px;
-  background: linear-gradient(135deg, #e62429, #1a3fa0);
-  border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-}
-
-.card-img {
-  display: block;
-  width: 100%;
-  max-height: 220px;
-  object-fit: contain;
-  background-color: #000;
-  border-radius: 4px;
-}
-
-.type-row {
-  display: flex;
-  justify-content: center;
-}
-
-.bando {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 18px;
-  background-color: #1a3fa0;
-  color: white;
-  font-family: "Bangers", cursive;
-  font-size: 0.95rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  clip-path: polygon(
-    4% 20%, 18% 5%, 32% 18%, 48% 2%, 62% 18%,
-    78% 3%, 92% 20%, 100% 45%, 94% 62%,
-    100% 82%, 84% 95%, 70% 82%, 50% 98%,
-    30% 82%, 16% 95%, 0% 78%, 8% 55%
-  );
-  border: 2px solid #0b0d1a;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-  transform: rotate(-3deg);
-}
-
+/* Panel inferior con toda la información de texto (nombre, movimientos,
+   descripción, stats). margin-top:auto lo empuja al fondo de la carta
+   dentro del flex column de .card-inner, dejando la foto visible arriba. */
 .card-body {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
   display: grid;
-  gap: 10px;
+  gap: 6px;
+  padding: 8px;
 }
 
+.card-title {
+  margin: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85), 0 0 2px var(--pink);
+  text-transform: uppercase;
+}
+
+/* Lista de "poderes" mostrada como movimientos de una carta de juego
+   (ícono + nombre), un <li> por cada elemento del arreglo h.poder. */
+.ataques {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  display: grid;
+  gap: 3px;
+  border-top: 2px solid var(--pink);
+  border-bottom: 2px solid var(--pink);
+}
+
+.ataque {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ataque-icono {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white;
+  font-size: 0.55rem;
+}
+
+.ataque-nombre {
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Texto completo de h.descripcion, sin recortar (nada de line-clamp):
+   si es larga, la carta simplemente crece en vez de cortar el texto. */
 .descripcion {
   margin: 0;
-  padding: 8px 10px;
-  background-color: var(--desc-bg);
-  border: 1px dashed rgba(230, 36, 41, 0.5);
-  border-radius: 6px;
-  font-size: 0.78rem;
+  padding: 6px 0;
+  font-size: 0.68rem;
   font-style: italic;
-  line-height: 1.5;
-  color: var(--text-muted);
+  line-height: 1.35;
+  color: #f0e8fa;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
-.poderes {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 2px solid #1a3fa0;
-  border-bottom: 2px solid #1a3fa0;
-}
-
-.poderes li {
-  padding: 6px 4px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: var(--text);
-}
-
-.poderes li:not(:last-child) {
-  border-bottom: 1px dashed var(--poderes-divider);
-}
-
+/* Edad/Altura/Universo/Activo en mini-fichas (2 columnas en mobile, 4 en
+   pantallas más anchas). Esta sección no se muestra en la carta del
+   grupo BTS (Index.js la omite para ese caso). */
 .stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 4px;
-  font-size: 0.65rem;
   text-align: center;
 }
 
-.stats p {
-  margin: 0;
-  padding: 6px 4px;
-  border-radius: 14px;
-  background-color: var(--stat-bg);
-  color: var(--text-muted);
+.stat {
+  display: grid;
+  gap: 1px;
+  padding: 3px 4px;
 }
 
-.stats span {
-  display: block;
+.stat-label {
+  font-size: 0.55rem;
+  color: #e4d9f2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.stat-valor {
+  font-size: 0.68rem;
   font-weight: bold;
-  color: #e62429;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* Breakpoint 1: tablet vertical */
 @media (min-width: 480px) {
-  .card {
-    max-width: 340px;
-  }
-
-  .card-header h1 {
-    font-size: 1.8rem;
+  .card-title {
+    font-size: 1.5rem;
   }
 
   .stats {
@@ -299,54 +407,50 @@ body {
 
 /* Breakpoint 2: tablet horizontal / laptop chico */
 @media (min-width: 768px) {
-  .card {
-    max-width: 380px;
-    padding: 12px;
+  .card-title {
+    font-size: 1.7rem;
   }
 
-  .card-header h1 {
-    font-size: 2rem;
-  }
-
-  .card-img {
-    max-height: 280px;
-  }
-
-  .descripcion,
-  .poderes li {
-    font-size: 0.85rem;
-  }
-
-  .baraja {
-    max-width: 400px;
-    height: 660px;
-  }
-}
-
-/* Breakpoint 3: desktop */
-@media (min-width: 1024px) {
-  .card {
-    max-width: 420px;
-  }
-
-  .card-header h1 {
-    font-size: 2.2rem;
-  }
-
-  .card-img {
-    max-height: 320px;
-  }
-
-  .stats {
+  .descripcion {
     font-size: 0.75rem;
   }
 
-  .baraja {
-    max-width: 440px;
-    height: 720px;
+  .ataque-nombre {
+    font-size: 0.78rem;
   }
 }
 
+/* Breakpoint 3: desktop. Acá sí crece la carta (a diferencia de los otros
+   2 breakpoints), y min-height escala en la misma proporción que el ancho
+   (380/300 ≈ 1.27) para no deformar la forma de la carta. */
+@media (min-width: 1024px) {
+  .card {
+    max-width: 380px;
+  }
+
+  .card-inner {
+    min-height: 480px;
+  }
+
+  .baraja {
+    max-width: 420px;
+  }
+
+  .baraja-controles {
+    margin-top: 80px;
+  }
+
+  .card-title {
+    font-size: 1.9rem;
+  }
+
+  .stat-valor {
+    font-size: 0.8rem;
+  }
+}
+
+/* Fondo oscuro a pantalla completa del modal de detalle. Index.js le pone
+   el atributo "hidden" para ocultarlo/mostrarlo (ver regla de abajo). */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -362,10 +466,68 @@ body {
   display: none;
 }
 
+/* perspective es lo que le da profundidad a las rotaciones 3D de todo lo
+   que esté adentro (.flip-escena y .flip-carta, más abajo). overflow:visible
+   para que la inclinación de la carta no se recorte contra este borde. */
 .modal-card {
-  max-width: 380px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: visible;
+  perspective: 1200px;
+}
+
+/* Inclinación fija que hace que la carta se vea como un objeto en el
+   espacio (no plana de frente), como si estuviera apoyada en una mesa
+   vista en ángulo. Se relaja un poco al pasar el mouse. */
+.flip-escena {
+  width: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(8deg) rotateY(-14deg);
+  transition: transform 0.3s ease;
+}
+
+.flip-escena:hover {
+  transform: rotateX(4deg) rotateY(-8deg);
+}
+
+/* El volteo real: gira 180° sobre su eje Y cuando Index.js le agrega la
+   clase "volteada" (al hacer click, ver abrirModal en Index.js). Gira
+   DENTRO de la inclinación de .flip-escena, no reemplaza esa inclinación. */
+.flip-carta {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flip-carta.volteada {
+  transform: rotateY(180deg);
+}
+
+/* backface-visibility:hidden es lo que hace que cada cara solo se vea
+   cuando está "de frente" al espectador, y desaparezca al dar la vuelta
+   (si no, se vería el contenido del frente reflejado/invertido). */
+.flip-cara {
+  backface-visibility: hidden;
+}
+
+/* El reverso arranca pre-rotado 180° y superpuesto (position:absolute)
+   sobre el frente: como el padre .flip-carta también gira 180° al
+   voltearse, las dos rotaciones se cancelan y el reverso queda "derecho"
+   mirando al espectador justo cuando el frente termina de esconderse. */
+.flip-reverso {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.flip-reverso img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .modal-close {
@@ -374,9 +536,9 @@ body {
   right: 24px;
   width: 40px;
   height: 40px;
-  border: 2px solid #0b0d1a;
+  border: 2px solid var(--dark);
   border-radius: 999px;
-  background-color: #e62429;
+  background-color: var(--purple);
   color: white;
   font-size: 1.4rem;
   line-height: 1;

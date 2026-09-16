@@ -1,175 +1,114 @@
+// Datos de las cartas: el grupo BTS (primer objeto) y sus 7 integrantes.
+// Cada objeto tiene la misma forma (mismos campos) para que el resto del
+// código pueda generar cualquier carta sin distinguir de quién se trata.
 let heroes = [
   {
-    nombre: "spider-man",
-    poder: ["Sentido arácnido", "Telarañas", "trepar paredes"],
+    nombre: "BTS",
+    poder: ["Canto", "Rap", "Baile", "Composición"],
     descripcion:
-     "Peter Parker es un joven que tras ser mordido por una araña radiactiva adquiere poderes sobrehumanos, como fuerza, agilidad y reflejos mejorados. Con su alter ego, Spider-Man, lucha",
-    bando: "Heroe",
-    Image: "image.png",
-    edad: 18,
+     "Bangtan Sonyeondan (BTS) es un grupo de K-pop surcoreano formado por Big Hit Entertainment (hoy HYBE). Debutó en 2013 y se convirtió en un fenómeno musical global, con giras mundiales y premios internacionales.",
+    bando: "Grupo",
+    Image: "img/bts-group.jpg",
+    edad: 32,
     altura: 1.78,
-    universo: "Marvel",
-    nivelDeFuerza: 85,
-    activo: true,
-  },
-  {
-    nombre: "Iron Man",
-    poder: ["Traje de combate", "Vuelo", "Repulsores"],
-    descripcion:
-     "Tony Stark, un genio multimillonario, construye una armadura tecnológica para protegerse y luego para defender al mundo como Iron Man.",
-    bando: "Heroe",
-    Image: "img/iron-man.png",
-    edad: 48,
-    altura: 1.85,
-    universo: "Marvel",
-    nivelDeFuerza: 88,
-    activo: true,
-  },
-  {
-    nombre: "Batman",
-    poder: ["Inteligencia estratégica", "Artes marciales", "Gadgets"],
-    descripcion:
-     "Bruce Wayne, tras presenciar el asesinato de sus padres, se convierte en un vigilante nocturno que combate el crimen en Ciudad Gótica.",
-    bando: "Heroe",
-    Image: "img/batman.jpg",
-    edad: 40,
-    altura: 1.88,
-    universo: "DC",
-    nivelDeFuerza: 75,
-    activo: true,
-  },
-  {
-    nombre: "Superman",
-    poder: ["Vuelo", "Súper fuerza", "Visión de calor"],
-    descripcion:
-     "Kal-El, un alienígena de Krypton criado en la Tierra, usa sus poderes casi ilimitados para proteger a la humanidad como Superman.",
-    bando: "Heroe",
-    Image: "img/superman.png",
-    edad: 35,
-    altura: 1.9,
-    universo: "DC",
-    nivelDeFuerza: 99,
-    activo: true,
-  },
-  {
-    nombre: "Wonder Woman",
-    poder: ["Fuerza sobrehumana", "Lazo de la verdad", "Combate"],
-    descripcion:
-     "Diana Prince, princesa amazona, lucha por la paz y la justicia utilizando sus habilidades guerreras y armas mágicas.",
-    bando: "Heroe",
-    Image: "img/wonder-woman.jpg",
-    edad: 30,
-    altura: 1.83,
-    universo: "DC",
-    nivelDeFuerza: 95,
-    activo: true,
-  },
-  {
-    nombre: "Thor",
-    poder: ["Control del rayo", "Mjolnir", "Fuerza asgardiana"],
-    descripcion:
-     "El dios del trueno de Asgard, hijo de Odín, defiende los nueve reinos con su martillo mágico Mjolnir.",
-    bando: "Heroe",
-    Image: "img/thor.png",
-    edad: 1500,
-    altura: 1.95,
-    universo: "Marvel",
-    nivelDeFuerza: 97,
-    activo: true,
-  },
-  {
-    nombre: "Hulk",
-    poder: ["Fuerza descomunal", "Regeneración", "Resistencia"],
-    descripcion:
-     "Bruce Banner, expuesto a radiación gamma, se transforma en una criatura verde de fuerza descomunal cuando se enfurece.",
-    bando: "Heroe",
-    Image: "img/hulk.png",
-    edad: 45,
-    altura: 2.4,
-    universo: "Marvel",
+    universo: "BTS",
     nivelDeFuerza: 100,
     activo: true,
   },
   {
-    nombre: "Wolverine",
-    poder: ["Garras de adamantium", "Factor curativo", "Sentidos animales"],
+    nombre: "RM",
+    poder: ["Rap", "Composición", "Liderazgo"],
     descripcion:
-     "Logan es un mutante con un poderoso factor de curación y garras retráctiles, veterano de innumerables batallas.",
-    bando: "Heroe",
-    Image: "img/wolverine.jpg",
-    edad: 200,
-    altura: 1.6,
-    universo: "Marvel",
-    nivelDeFuerza: 80,
-    activo: true,
-  },
-  {
-    nombre: "Flash",
-    poder: ["Súper velocidad", "Viaje en el tiempo", "Reflejos"],
-    descripcion:
-     "Barry Allen obtuvo súper velocidad tras un accidente con rayos y químicos, convirtiéndose en el hombre más rápido vivo.",
-    bando: "Heroe",
-    Image: "img/flash.jpg",
-    edad: 28,
-    altura: 1.83,
-    universo: "DC",
-    nivelDeFuerza: 82,
-    activo: true,
-  },
-  {
-    nombre: "Black Widow",
-    poder: ["Combate cuerpo a cuerpo", "Espionaje", "Tácticas"],
-    descripcion:
-     "Natasha Romanoff, ex-espía entrenada, combate al lado de los Vengadores usando sus habilidades de combate y estrategia.",
-    bando: "Heroe",
-    Image: "img/black-widow.jpg",
-    edad: 39,
-    altura: 1.7,
-    universo: "Marvel",
-    nivelDeFuerza: 65,
-    activo: false,
-  },
-  {
-    nombre: "Joker",
-    poder: ["Manipulación psicológica", "Química", "Imprevisibilidad"],
-    descripcion:
-     "Un criminal caótico y brillante que ve el mundo como una broma cruel, y el archienemigo más famoso de Batman.",
-    bando: "Villano",
-    Image: "img/joker.jpg",
-    edad: 45,
-    altura: 1.8,
-    universo: "DC",
-    nivelDeFuerza: 60,
-    activo: true,
-  },
-  {
-    nombre: "Thanos",
-    poder: ["Fuerza titánica", "Guantelete del Infinito", "Estrategia"],
-    descripcion:
-     "El Titán Loco busca el equilibrio del universo a través de medios extremos, portando el Guantelete del Infinito.",
-    bando: "Villano",
-    Image: "img/thanos.png",
-    edad: 1000,
-    altura: 2.03,
-    universo: "Marvel",
-    nivelDeFuerza: 98,
-    activo: true,
-  },
-  {
-    nombre: "Black Panther",
-    poder: ["Fuerza y agilidad felina", "Traje de vibranium", "Garras retráctiles"],
-    descripcion:
-     "T'Challa, rey de Wakanda, protege a su pueblo con un traje hecho de vibranium y habilidades potenciadas por la hierba en forma de corazón.",
-    bando: "Heroe",
-    Image: "img/black-panther.png",
+     "Kim Namjoon, líder del grupo, es el rapero principal y compositor, conocido por su inteligencia y su rol como vocero de BTS.",
+    bando: "Líder",
+    Image: "img/rm.png",
     edad: 32,
-    altura: 1.83,
-    universo: "Marvel",
-    nivelDeFuerza: 84,
+    altura: 1.81,
+    universo: "BTS",
+    nivelDeFuerza: 90,
+    activo: true,
+  },
+  {
+    nombre: "Jin",
+    poder: ["Vocal", "Actuación", "Humor"],
+    descripcion:
+     "Kim Seokjin es el vocalista de mayor edad del grupo, conocido por su voz, su carisma y su contenido en solitario como 'Eat Jin'.",
+    bando: "Vocalista",
+    Image: "img/jin.png",
+    edad: 34,
+    altura: 1.79,
+    universo: "BTS",
+    nivelDeFuerza: 85,
+    activo: true,
+  },
+  {
+    nombre: "Suga",
+    poder: ["Rap", "Producción musical", "Composición"],
+    descripcion:
+     "Min Yoongi, también conocido como Agust D, es rapero y productor, reconocido por sus letras introspectivas y su faceta como solista.",
+    bando: "Rapero",
+    Image: "img/suga.png",
+    edad: 33,
+    altura: 1.74,
+    universo: "BTS",
+    nivelDeFuerza: 88,
+    activo: true,
+  },
+  {
+    nombre: "J-Hope",
+    poder: ["Baile", "Rap", "Energía escénica"],
+    descripcion:
+     "Jung Hoseok es el bailarín principal del grupo, conocido por su energía positiva y su habilidad para coreografías complejas.",
+    bando: "Bailarín",
+    Image: "img/j-hope.png",
+    edad: 32,
+    altura: 1.77,
+    universo: "BTS",
+    nivelDeFuerza: 89,
+    activo: true,
+  },
+  {
+    nombre: "Jimin",
+    poder: ["Baile", "Vocal", "Coreografía"],
+    descripcion:
+     "Park Jimin es bailarín y vocalista, reconocido por su técnica de baile contemporáneo y su rango vocal.",
+    bando: "Bailarín",
+    Image: "img/jimin.png",
+    edad: 31,
+    altura: 1.74,
+    universo: "BTS",
+    nivelDeFuerza: 87,
+    activo: true,
+  },
+  {
+    nombre: "V",
+    poder: ["Vocal", "Actuación", "Fotografía"],
+    descripcion:
+     "Kim Taehyung, conocido como V, es vocalista y actor, reconocido por su voz grave y su estilo artístico distintivo.",
+    bando: "Vocalista",
+    Image: "img/v.png",
+    edad: 31,
+    altura: 1.8,
+    universo: "BTS",
+    nivelDeFuerza: 86,
+    activo: true,
+  },
+  {
+    nombre: "Jungkook",
+    poder: ["Vocal", "Baile", "Producción"],
+    descripcion:
+     "Jeon Jungkook es el vocalista principal más joven del grupo, conocido como el 'Golden Maknae' por su versatilidad en canto, baile y producción.",
+    bando: "Vocalista principal",
+    Image: "img/jungkook.png",
+    edad: 29,
+    altura: 1.78,
+    universo: "BTS",
+    nivelDeFuerza: 92,
     activo: true,
   },
 ];
 
+// Ejemplos sueltos de cómo leer datos de un objeto/arreglo (demo de clase).
 let heroe = heroes[0];
 
 console.log(heroe.altura);
@@ -178,42 +117,55 @@ console.log(heroe.nivelDeFuerza);
 console.log(heroe.edad * 4);
 console.log(heroe.poder[1]);
 
+// Arma el HTML interno de UNA carta a partir de un objeto de "heroes".
+// La usan tanto la baraja (cartas chicas) como el modal de detalle,
+// así el contenido de una carta siempre se genera de la misma forma.
 function crearContenidoCarta(h) {
+  // La carta de BTS (el grupo) no tiene edad/altura individuales,
+  // así que se le oculta esa sección de stats más abajo.
+  const esGrupo = heroes.indexOf(h) === 0;
+
+  // Convierte el arreglo de poderes en una lista de <li>, uno por poder.
   const poderesHtml = h.poder.map(function(p) {
-    return "<li>" + p + "</li>";
+    return `
+      <li class="ataque">
+        <span class="ataque-icono">✦</span>
+        <span class="ataque-nombre">${p}</span>
+      </li>
+    `;
   }).join("");
 
   return `
     <div class="card-inner">
-      <div class="card-header">
-        <h1>${h.nombre}</h1>
-        <div class="hp-badge">PWR <span>${h.nivelDeFuerza}</span></div>
-      </div>
+      <img class="card-bg-img${esGrupo ? " card-bg-img--grupo" : ""}${h.nombre === "V" ? " card-bg-img--v" : ""}" src="${h.Image}" alt="${h.nombre}">
 
-      <div class="img-frame">
-        <img class="card-img" src="${h.Image}" alt="${h.nombre}">
-      </div>
-
-      <div class="type-row">
-        <span class="bando">${h.bando}</span>
+      <div class="card-topbar">
+        <span class="stage-badge">${h.bando}</span>
+        <div class="hp-badge">HP <span>${h.nivelDeFuerza}</span></div>
       </div>
 
       <div class="card-body">
+        <h1 class="card-title">${h.nombre}</h1>
+
+        <ul class="ataques">${poderesHtml}</ul>
+
         <p class="descripcion">${h.descripcion}</p>
 
-        <ul class="poderes">${poderesHtml}</ul>
-
+        ${esGrupo ? "" : `
         <div class="stats">
-          <p>Edad: <span>${h.edad}</span></p>
-          <p>Altura: <span>${h.altura}</span> m</p>
-          <p>Universo: <span>${h.universo}</span></p>
-          <p>Activo: <span>${h.activo ? "Sí" : "No"}</span></p>
+          <div class="stat"><span class="stat-label">Edad</span><span class="stat-valor">${h.edad}</span></div>
+          <div class="stat"><span class="stat-label">Altura</span><span class="stat-valor">${h.altura} m</span></div>
+          <div class="stat"><span class="stat-label">Universo</span><span class="stat-valor">${h.universo}</span></div>
+          <div class="stat"><span class="stat-label">Activo</span><span class="stat-valor">${h.activo ? "Sí" : "No"}</span></div>
         </div>
+        `}
       </div>
     </div>
   `;
 }
 
+// Crea el elemento <div class="card"> de UNA carta para la baraja,
+// con su contenido ya adentro y el listener que abre el modal al clickearla.
 function crearCarta(h) {
   const card = document.createElement("div");
   card.className = "card";
@@ -224,6 +176,9 @@ function crearCarta(h) {
   return card;
 }
 
+// Genera las 8 cartas (una por integrante/grupo) y las agrega todas al
+// contenedor de la baraja. "cartas" guarda los elementos ya creados para
+// poder reposicionarlos después sin volver a generarlos.
 const baraja = document.getElementById("baraja");
 const cartas = heroes.map(function(h) {
   const carta = crearCarta(h);
@@ -231,8 +186,14 @@ const cartas = heroes.map(function(h) {
   return carta;
 });
 
+// Índice de la carta que está "al frente" de la baraja en este momento.
 let indiceActivo = 0;
 
+// Recalcula, para cada carta, qué tan lejos está de la carta activa
+// (en círculo, dando la vuelta al llegar al final del arreglo) y le pone
+// la clase de posición correspondiente (pos-0 = al frente, pos-1/pos-2 =
+// asomando detrás, pos-oculta = escondida). El CSS se encarga de traducir
+// esas clases en la posición/rotación real de cada carta.
 function actualizarBaraja() {
   const total = cartas.length;
 
@@ -253,8 +214,12 @@ function actualizarBaraja() {
   });
 }
 
+// Ubica las cartas apenas carga la página (antes de cualquier click).
 actualizarBaraja();
 
+// Los botones "Anterior"/"Siguiente" solo cambian el índice activo
+// (sumando o restando 1, dando la vuelta con el módulo) y piden que se
+// vuelva a acomodar la baraja con ese nuevo índice.
 const btnSiguiente = document.getElementById("btnSiguiente");
 const btnAnterior = document.getElementById("btnAnterior");
 
@@ -272,8 +237,28 @@ const modalOverlay = document.getElementById("modalOverlay");
 const modalCard = document.getElementById("modalCard");
 const modalClose = document.getElementById("modalClose");
 
+// Abre el modal con el detalle de un héroe/integrante en particular.
+// Arma una carta "volteable en 3D": el frente muestra la carta normal
+// (crearContenidoCarta) y el reverso muestra la imagen del dorso.
+// Un click sobre la carta abierta alterna la clase "volteada", que el
+// CSS usa para rotarla 180° y mostrar el otro lado.
 function abrirModal(h) {
-  modalCard.innerHTML = crearContenidoCarta(h);
+  modalCard.innerHTML = `
+    <div class="flip-escena">
+      <div class="flip-carta">
+        <div class="flip-cara flip-frente">${crearContenidoCarta(h)}</div>
+        <div class="flip-cara flip-reverso">
+          <img src="img/bts-carta-atras.png" alt="Reverso de la carta">
+        </div>
+      </div>
+    </div>
+  `;
+
+  const flipCarta = modalCard.querySelector(".flip-carta");
+  flipCarta.addEventListener("click", function() {
+    flipCarta.classList.toggle("volteada");
+  });
+
   modalOverlay.hidden = false;
 }
 
@@ -283,12 +268,17 @@ function cerrarModal() {
 
 modalClose.addEventListener("click", cerrarModal);
 
+// Cierra el modal solo si se hace click en el fondo oscuro (el overlay
+// en sí), no si se hace click en la carta o en cualquier cosa dentro de ella.
 modalOverlay.addEventListener("click", function(e) {
   if (e.target === modalOverlay) {
     cerrarModal();
   }
 });
 
+// Alterna el modo oscuro agregando/quitando una clase en <body> (el CSS
+// define las variables de color para cada modo) y actualiza el texto
+// del botón para reflejar qué acción hace si lo volvés a apretar.
 const btnOscuro = document.getElementById("btnOscuro");
 
 btnOscuro.addEventListener("click", function() {
