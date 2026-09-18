@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>arr2</title>
+</head>
+<body>
+
+  <input type="text" id="entrada">
+  <button id="boton">Enviar</button>
+  <button id="boton2">Eliminar Último</button>
+  <button id="boton3">Eliminar Primero</button>
+  <button id="boton4">Mostrar lista</button>
+  <p id="resultado"></p>
+  <ul id="lista"></ul>
+  <button id="boton5">Buscar elemento</button>
+
+
+  <script>
+    let arr = ["manzana","pera","uva","mango",
+                  "pina","fresa","melon","kiwi",
+                  "naranja","limon","papaya","banano"];
+
+    const entrada = document.getElementById("entrada");
+    const boton = document.getElementById("boton");
+    const resultado = document.getElementById("resultado");
+    const boton2 = document.getElementById("boton2");
+    const boton3 = document.getElementById("boton3");
+    const boton4 = document.getElementById("boton4");
+    const lista = document.getElementById("lista");
+    const boton5 = document.getElementById("boton5");
+
+    boton.addEventListener("click", function() {
+      console.log("input:", entrada.value.trim() .toLowerCase());
+      resultado.textContent = "Valor ingresado: " + entrada.value.trim() .toLowerCase();
+    
+    arr.unshift(entrada.value.trim() .toLowerCase());
+    mostrarLista();
+    });
+
+    function eliminarUltimo() {
+      if (arr.length > 0) {
+        let eliminado = arr.pop();
+        resultado.textContent = "Elemento eliminado: " + eliminado;
+        mostrarLista();
+      } else {
+        resultado.textContent = "El arreglo está vacío.";
+      }
+    }
+
+    function eliminarPrimero() {
+      if (arr.length > 0) {
+        let eliminado = arr.shift();
+        resultado.textContent = "Elemento eliminado: " + eliminado;
+        mostrarLista();
+      } else {
+        resultado.textContent = "El arreglo está vacío.";
+      }
+    }
+
+    boton2.addEventListener("click", eliminarUltimo);
+    boton3.addEventListener("click", eliminarPrimero);
+
+    function mostrarLista() {
+      lista.innerHTML = "";
+      arr.forEach(function(item) {
+        const li = document.createElement("li");
+        li.textContent = item;
+        lista.appendChild(li);
+      });
+    }
+
+    function buscarElemento() {
+      let valorBuscado = entrada.value.trim().toLowerCase();
+      let indice = arr.indexOf(valorBuscado);
+      if (indice !== -1) {
+        resultado.textContent = "Elemento encontrado en la posición: " + indice;
+      } else {
+        resultado.textContent = "Elemento no encontrado en la lista.";
+      }
+    }
+ 
+    boton4.addEventListener("click", mostrarLista);
+    boton5.addEventListener("click", buscarElemento);
+  </script>
+</body>
+</html>
