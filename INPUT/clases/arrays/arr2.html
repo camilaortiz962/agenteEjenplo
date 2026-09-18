@@ -12,9 +12,12 @@
   <button id="boton2">Eliminar Último</button>
   <button id="boton3">Eliminar Primero</button>
   <button id="boton4">Mostrar lista</button>
+  <button id="boton5">Buscar elemento</button>
+  <button id="boton6">Eliminar por nombre</button>
+  <button id="boton7">Cambiar elemento</button>
   <p id="resultado"></p>
   <ul id="lista"></ul>
-  <button id="boton5">Buscar elemento</button>
+  
 
 
   <script>
@@ -30,6 +33,8 @@
     const boton4 = document.getElementById("boton4");
     const lista = document.getElementById("lista");
     const boton5 = document.getElementById("boton5");
+    const boton6 = document.getElementById("boton6");
+    const boton7 = document.getElementById("boton7");
 
     boton.addEventListener("click", function() {
       console.log("input:", entrada.value.trim() .toLowerCase());
@@ -83,6 +88,49 @@
  
     boton4.addEventListener("click", mostrarLista);
     boton5.addEventListener("click", buscarElemento);
+    boton6.addEventListener("click", eliminarElemento);
+
+    function eliminarElemento() {
+      let valorAEliminar = entrada.value.trim().toLowerCase();
+      let indice = arr.indexOf(valorAEliminar);
+      if (valorAEliminar === "") {
+        resultado.textContent = "El campo no puede estar vacío.";
+        return;
+      }
+      if (indice !== -1) {
+        arr.splice(indice, 1);
+        resultado.textContent = "Elemento eliminado: " + valorAEliminar;
+        mostrarLista();
+      } else {
+        resultado.textContent = "Elemento no encontrado en la lista.";
+      }
+    }
+
+    function cambiarElemento() {
+      let valorActual = entrada.value.trim().toLowerCase();
+      if (valorActual === "") {
+        resultado.textContent = "El campo no puede estar vacío.";
+        return;
+      }
+      
+        let indice = arr.indexOf(valorActual);
+      if (indice !== -1) {
+          let nuevoValor = prompt("Ingrese el nuevo valor para '" + valorActual + "':").trim().toLowerCase();
+          if (nuevoValor !== null && nuevoValor !== "") {
+            arr[indice] = nuevoValor;
+            resultado.textContent = "Elemento cambiado: '" + valorActual + "' a '" + nuevoValor + "'";
+            mostrarLista();
+          
+        } else {
+          resultado.textContent = "No se ingreso un nuevo valor.";
+        }
+      } else {
+        resultado.textContent = "Elemento no encontrado en la lista.";
+      }
+       }
+
+
+    boton7.addEventListener("click", cambiarElemento);
   </script>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obj1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <button id="btnOscuro">Modo oscuro</button>
+
+  <!-- Baraja: Index.js llena esto con una carta (.card) por cada
+       integrante, apiladas una sobre otra vía CSS -->
+<section class="baraja" id="baraja"></section>
+
+  <!-- Botones para rotar cuál carta de la baraja está al frente -->
+  <div class="baraja-controles">
+    <button id="btnAnterior">‹ Anterior</button>
+    <button id="btnSiguiente">Siguiente ›</button>
+  </div>
+
+  <!-- Modal de detalle: oculto por defecto (atributo hidden), Index.js lo
+       muestra y llena #modalCard al hacer click en una carta de la baraja -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="card modal-card" id="modalCard"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="cartas.js"></script>
+  <script src="Index.js"></script>
+</body>
+</html>

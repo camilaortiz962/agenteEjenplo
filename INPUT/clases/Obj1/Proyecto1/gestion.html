@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="gestion-layout">
+
+  <aside class="sidebar">
+    <h2 class="sidebar-titulo">Gestión</h2>
+    <nav class="sidebar-nav">
+      <button class="sidebar-item activo" data-seccion="mostrar">Mostrar todos</button>
+      <button class="sidebar-item" data-seccion="crear">Crear</button>
+      <button class="sidebar-item" data-seccion="buscar">Buscar</button>
+      <button class="sidebar-item" data-seccion="actualizar">Actualizar</button>
+      <button class="sidebar-item" data-seccion="eliminar">Eliminar</button>
+    </nav>
+  </aside>
+
+  <main class="contenido-gestion">
+    <section class="seccion" id="seccion-mostrar">
+      <h1>Mostrar todos</h1>
+
+      <table class="tabla-heroes">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Bando</th>
+            <th>Edad</th>
+            <th>Altura</th>
+            <th>Universo</th>
+            <th>Fuerza</th>
+            <th>Activo</th>
+            <th>Poderes</th>
+          </tr>
+        </thead>
+        <tbody id="tablaHeroesBody"></tbody>
+      </table>
+
+      <div class="galeria-cartas" id="galeriaCartas"></div>
+    </section>
+
+    <section class="seccion" id="seccion-crear" hidden>
+      <h1>Crear</h1>
+
+      <form id="formCrear" class="formulario">
+        <label>
+          Nombre
+          <input type="text" id="crearNombre" required>
+        </label>
+
+        <label>
+          Poderes (separados por coma)
+          <input type="text" id="crearPoder" placeholder="Rap, Baile, Vocal" required>
+        </label>
+
+        <label>
+          Descripción
+          <textarea id="crearDescripcion" rows="3" required></textarea>
+        </label>
+
+        <label>
+          Bando / rol
+          <input type="text" id="crearBando" placeholder="Vocalista, Líder..." required>
+        </label>
+
+        <label>
+          Imagen
+          <input type="file" id="crearImage" accept="image/*">
+        </label>
+
+        <label>
+          Edad
+          <input type="number" id="crearEdad" min="0" required>
+        </label>
+
+        <label>
+          Altura (m)
+          <input type="number" id="crearAltura" min="0" step="0.01" required>
+        </label>
+
+        <label>
+          Universo
+          <input type="text" id="crearUniverso" required>
+        </label>
+
+        <label>
+          Nivel de fuerza
+          <input type="number" id="crearNivelDeFuerza" min="0" max="100" required>
+        </label>
+
+        <label class="formulario-checkbox">
+          <input type="checkbox" id="crearActivo" checked>
+          Activo
+        </label>
+
+        <button type="submit">Aceptar</button>
+      </form>
+
+      <p id="crearMensaje"></p>
+    </section>
+
+    <section class="seccion" id="seccion-buscar" hidden>
+      <h1>Buscar</h1>
+    </section>
+
+    <section class="seccion" id="seccion-actualizar" hidden>
+      <h1>Actualizar</h1>
+
+      <form id="formBuscarActualizar" class="formulario">
+        <label>
+          Nombre del integrante a actualizar
+          <input type="text" id="actualizarNombreBuscar" required>
+        </label>
+
+        <button type="submit">Buscar</button>
+      </form>
+
+      <p id="actualizarMensaje"></p>
+
+      <form id="formActualizar" class="formulario" hidden>
+        <label>
+          Nombre
+          <input type="text" id="actualizarNombre" required>
+        </label>
+
+        <label>
+          Poderes (separados por coma)
+          <input type="text" id="actualizarPoder" required>
+        </label>
+
+        <label>
+          Descripción
+          <textarea id="actualizarDescripcion" rows="3" required></textarea>
+        </label>
+
+        <label>
+          Bando / rol
+          <input type="text" id="actualizarBando" required>
+        </label>
+
+        <label>
+          Imagen nueva (dejar vacío para no cambiarla)
+          <input type="file" id="actualizarImage" accept="image/*">
+        </label>
+
+        <label>
+          Edad
+          <input type="number" id="actualizarEdad" min="0" required>
+        </label>
+
+        <label>
+          Altura (m)
+          <input type="number" id="actualizarAltura" min="0" step="0.01" required>
+        </label>
+
+        <label>
+          Universo
+          <input type="text" id="actualizarUniverso" required>
+        </label>
+
+        <label>
+          Nivel de fuerza
+          <input type="number" id="actualizarNivelDeFuerza" min="0" max="100" required>
+        </label>
+
+        <label class="formulario-checkbox">
+          <input type="checkbox" id="actualizarActivo">
+          Activo
+        </label>
+
+        <button type="submit">Guardar cambios</button>
+      </form>
+    </section>
+
+    <section class="seccion" id="seccion-eliminar" hidden>
+      <h1>Eliminar</h1>
+
+      <p id="eliminarMensaje"></p>
+
+      <ul class="lista-eliminar" id="listaEliminar"></ul>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="cartas.js"></script>
+  <script src="gestion.js"></script>
+</body>
+</html>
