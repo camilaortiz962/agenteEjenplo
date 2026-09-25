@@ -21,3 +21,9 @@ layout) tiene más sentido para el proyecto.
 Primera clase de interacción con CSS. Me gustó descubrir que se pueden cambiar colores y elementos
 según el tamaño del dispositivo (media queries). Se me dificultaron los event listeners en
 JavaScript.
+
+## 2026-09-25
+
+Aprendí que ordenar archivos es difícil. (Sesión: filtros de la baraja, login con regex, juego de
+memoria y usuarios con historial; el código se fue repartiendo en `cartas.js`, `userStore.js`,
+`memory.js` y `game.js`.)
