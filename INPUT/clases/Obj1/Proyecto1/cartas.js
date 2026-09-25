@@ -4,8 +4,10 @@
 // el mismo diseño, sin duplicar esta función en los dos lados.
 function crearContenidoCarta(h) {
   // La carta de BTS (el grupo) no tiene edad/altura individuales,
-  // así que se le oculta esa sección de stats más abajo.
-  const esGrupo = heroes.indexOf(h) === 0;
+  // así que se le oculta esa sección de stats más abajo. Se detecta por su
+  // "bando" y no por su posición en "heroes", para que la función funcione
+  // igual con cualquier arreglo (por ejemplo uno filtrado).
+  const esGrupo = h.bando === "Grupo";
 
   // Convierte el arreglo de poderes en una lista de <li>, uno por poder.
   const poderesHtml = h.poder.map(function(p) {
@@ -44,4 +46,26 @@ function crearContenidoCarta(h) {
       </div>
     </div>
   `;
+}
+
+// Dibuja una carta (<div class="card">) por cada objeto de "lista" y las
+// agrega a "contenedor". "alClickear" es opcional: si se pasa, se llama con
+// el objeto de esa carta cuando se le hace click (la baraja lo usa para abrir
+// el modal; la galería de gestion.html no lo necesita).
+// Retorna el arreglo de elementos creados, por si hay que manipularlos después.
+function dibujarCartas(lista, contenedor, alClickear) {
+  return lista.map(function(h) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = crearContenidoCarta(h);
+
+    if (alClickear) {
+      card.addEventListener("click", function() {
+        alClickear(h);
+      });
+    }
+
+    contenedor.appendChild(card);
+    return card;
+  });
 }

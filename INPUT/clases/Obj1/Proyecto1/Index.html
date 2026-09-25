@@ -13,9 +13,32 @@
 
   <button id="btnOscuro">Modo oscuro</button>
 
+  <!-- Panel de filtros (a la izquierda): los botones filtran por "bando" y
+       el slider vertical por nivelDeFuerza mínimo. Index.js vuelve a dibujar
+       la baraja cada vez que cambia cualquiera de los dos. -->
+  <aside class="filtros">
+    <div class="filtros-botones" id="filtrosBotones">
+      <button class="filtro-btn activo" data-bando="Todos">Todos</button>
+      <button class="filtro-btn" data-bando="Grupo">Grupo</button>
+      <button class="filtro-btn" data-bando="Líder">Líder</button>
+      <button class="filtro-btn" data-bando="Vocalista">Vocalista</button>
+      <button class="filtro-btn" data-bando="Rapero">Rapero</button>
+      <button class="filtro-btn" data-bando="Bailarín">Bailarín</button>
+    </div>
+
+    <label class="filtro-slider" for="sliderFuerza">
+      <span>HP mín.</span>
+      <input type="range" id="sliderFuerza" min="85" max="100" value="85">
+      <span class="filtro-valor" id="valorFuerza">85</span>
+    </label>
+  </aside>
+
   <!-- Baraja: Index.js llena esto con una carta (.card) por cada
        integrante, apiladas una sobre otra vía CSS -->
 <section class="baraja" id="baraja"></section>
+
+  <!-- Aviso que Index.js muestra cuando ningún personaje cumple los filtros -->
+  <p class="baraja-vacia" id="barajaVacia" hidden>Sin cartas con este filtro</p>
 
   <!-- Botones para rotar cuál carta de la baraja está al frente -->
   <div class="baraja-controles">

@@ -10,30 +10,15 @@ console.log(heroe.nivelDeFuerza);
 console.log(heroe.edad * 4);
 console.log(heroe.poder[1]);
 
-// crearContenidoCarta(h) ahora vive en cartas.js (cargado antes que este
-// archivo en Index.html), porque gestion.html también la necesita.
+// crearContenidoCarta(h) y dibujarCartas(lista, contenedor, alClickear)
+// viven en cartas.js (cargado antes que este archivo en Index.html),
+// porque gestion.html también las necesita.
 
-// Crea el elemento <div class="card"> de UNA carta para la baraja,
-// con su contenido ya adentro y el listener que abre el modal al clickearla.
-function crearCarta(h) {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = crearContenidoCarta(h);
-  card.addEventListener("click", function() {
-    abrirModal(h);
-  });
-  return card;
-}
-
-// Genera las 8 cartas (una por integrante/grupo) y las agrega todas al
-// contenedor de la baraja. "cartas" guarda los elementos ya creados para
-// poder reposicionarlos después sin volver a generarlos.
+// "cartas" guarda los elementos de la baraja que se ven ahora, para poder
+// reposicionarlos sin volver a generarlos. Es "let" porque cada vez que
+// cambia un filtro se reemplaza por un arreglo nuevo (ver aplicarFiltros).
 const baraja = document.getElementById("baraja");
-const cartas = heroes.map(function(h) {
-  const carta = crearCarta(h);
-  baraja.appendChild(carta);
-  return carta;
-});
+let cartas = [];
 
 // Índice de la carta que está "al frente" de la baraja en este momento.
 let indiceActivo = 0;
@@ -63,9 +48,6 @@ function actualizarBaraja() {
   });
 }
 
-// Ubica las cartas apenas carga la página (antes de cualquier click).
-actualizarBaraja();
-
 // Los botones "Anterior"/"Siguiente" solo cambian el índice activo
 // (sumando o restando 1, dando la vuelta con el módulo) y piden que se
 // vuelva a acomodar la baraja con ese nuevo índice.
@@ -81,6 +63,68 @@ btnAnterior.addEventListener("click", function() {
   indiceActivo = (indiceActivo - 1 + cartas.length) % cartas.length;
   actualizarBaraja();
 });
+
+// --- Filtros: botones por "bando" + slider de nivelDeFuerza mínimo ---
+const filtrosBotones = document.getElementById("filtrosBotones");
+const sliderFuerza = document.getElementById("sliderFuerza");
+const valorFuerza = document.getElementById("valorFuerza");
+const barajaVacia = document.getElementById("barajaVacia");
+
+// Bando elegido con los botones ("Todos" = no filtrar por bando).
+let bandoActivo = "Todos";
+
+// Arma la lista filtrada combinando los dos filtros y vuelve a dibujar la
+// baraja desde cero con ella. Se llama al cargar la página y cada vez que
+// cambia un botón o el slider.
+function aplicarFiltros() {
+  // El valor de un <input> siempre llega como texto: Number() lo convierte
+  // para poder compararlo con >= contra nivelDeFuerza.
+  const fuerzaMinima = Number(sliderFuerza.value);
+  valorFuerza.textContent = fuerzaMinima;
+
+  const filtradas = heroes.filter(function(h) {
+    // startsWith para que "Vocalista" también incluya "Vocalista principal".
+    const cumpleBando = bandoActivo === "Todos" || h.bando.startsWith(bandoActivo);
+    const cumpleFuerza = h.nivelDeFuerza >= fuerzaMinima;
+    return cumpleBando && cumpleFuerza;
+  });
+
+  baraja.innerHTML = "";
+  cartas = dibujarCartas(filtradas, baraja, abrirModal);
+  indiceActivo = 0;
+
+  // Sin cartas, Anterior/Siguiente harían "% 0" (da NaN): se desactivan
+  // y se muestra el aviso en su lugar.
+  const hayCartas = cartas.length > 0;
+  barajaVacia.hidden = hayCartas;
+  btnAnterior.disabled = !hayCartas;
+  btnSiguiente.disabled = !hayCartas;
+
+  actualizarBaraja();
+}
+
+// Un solo listener en el contenedor en vez de uno por botón (delegación de
+// eventos): closest() encuentra el botón clickeado aunque el click caiga en
+// el texto de adentro, y data-bando dice qué filtro representa.
+filtrosBotones.addEventListener("click", function(e) {
+  const boton = e.target.closest(".filtro-btn");
+  if (!boton) return;
+
+  filtrosBotones.querySelectorAll(".filtro-btn").forEach(function(b) {
+    b.classList.remove("activo");
+  });
+  boton.classList.add("activo");
+
+  bandoActivo = boton.dataset.bando;
+  aplicarFiltros();
+});
+
+// "input" se dispara en cada movimiento mientras se arrastra el slider
+// ("change" solo al soltarlo), por eso la baraja se actualiza en vivo.
+sliderFuerza.addEventListener("input", aplicarFiltros);
+
+// Dibuja la baraja apenas carga la página (sin filtros aplicados).
+aplicarFiltros();
 
 const modalOverlay = document.getElementById("modalOverlay");
 const modalCard = document.getElementById("modalCard");

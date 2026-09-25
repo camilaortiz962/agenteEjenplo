@@ -19,6 +19,7 @@
       <button class="sidebar-item" data-seccion="buscar">Buscar</button>
       <button class="sidebar-item" data-seccion="actualizar">Actualizar</button>
       <button class="sidebar-item" data-seccion="eliminar">Eliminar</button>
+      <button class="sidebar-item" data-seccion="usuarios">Usuarios</button>
     </nav>
   </aside>
 
@@ -185,10 +186,33 @@
 
       <ul class="lista-eliminar" id="listaEliminar"></ul>
     </section>
+
+    <!-- Usuarios del login de game.html (localStorage, clave "gameUsers",
+         sembrado desde users.json). gestion.js la llena. -->
+    <section class="seccion" id="seccion-usuarios" hidden>
+      <h1>Usuarios registrados</h1>
+
+      <p id="usuariosMensaje"></p>
+
+      <table class="tabla-heroes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Alias</th>
+            <th>Email</th>
+            <th>Contraseña</th>
+            <th>Partidas</th>
+          </tr>
+        </thead>
+        <tbody id="tablaUsuariosBody"></tbody>
+      </table>
+    </section>
   </main>
 
   <script src="data.js"></script>
   <script src="cartas.js"></script>
+  <script src="userStore.js"></script>
   <script src="gestion.js"></script>
 </body>
 </html>

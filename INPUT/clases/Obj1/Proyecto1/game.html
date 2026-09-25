@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Formulario con dos modos: "Iniciar sesión" (email + contraseña) y
+       "Registrarse" (los 4 campos). game.js muestra/oculta los campos
+       .register-only según el modo activo. "novalidate" apaga los globitos
+       de error del navegador para que los mensajes los maneje game.js. -->
+  <form class="login" id="loginForm" novalidate>
+    <!-- Pestañas: data-mode dice a qué modo cambia cada botón.
+         type="button" para que no envíen el formulario al clickearlas. -->
+    <div class="login-tabs" id="loginTabs">
+      <button type="button" class="login-tab activo" data-mode="login">Iniciar sesión</button>
+      <button type="button" class="login-tab" data-mode="register">Registrarse</button>
+    </div>
+
+    <h1 class="login-title" id="loginTitle">Entrar al juego</h1>
+
+    <label class="login-field register-only" hidden>
+      Nombre
+      <input type="text" id="nameInput" autocomplete="name">
+      <span class="login-error" id="nameError"></span>
+    </label>
+
+    <label class="login-field register-only" hidden>
+      Alias
+      <input type="text" id="aliasInput" autocomplete="nickname">
+      <span class="login-error" id="aliasError"></span>
+    </label>
+
+    <!-- type="text" y no "email": la validación la hace game.js con su
+         propia regex (con "email" el navegador aplicaría la suya). -->
+    <label class="login-field">
+      Email
+      <input type="text" id="emailInput" autocomplete="email" inputmode="email">
+      <span class="login-error" id="emailError"></span>
+    </label>
+
+    <label class="login-field">
+      Contraseña
+      <input type="password" id="passwordInput" autocomplete="current-password">
+      <span class="login-error" id="passwordError"></span>
+    </label>
+
+    <!-- Checklist de reglas (solo al registrarse): game.js le pone la clase
+         "ok" a cada <li> que se cumple, mientras se escribe la contraseña. -->
+    <ul class="login-rules register-only" hidden>
+      <li id="ruleLength">Mínimo 6 caracteres</li>
+      <li id="ruleDigits">Al menos 3 números</li>
+      <li id="ruleUpper">Al menos 1 mayúscula</li>
+    </ul>
+
+    <button type="submit" class="login-btn" id="submitBtn">Entrar</button>
+  </form>
+
+  <!-- Pantalla del juego: se muestra después de un login válido.
+       memory.js llena #memoryBoard con las cartas de "heroes" (data.js). -->
+  <section class="welcome" id="welcome" hidden>
+    <h1>Bienvenido/a, <span id="welcomeAlias"></span></h1>
+
+    <!-- HUD: estadísticas de la partida en curso -->
+    <div class="memory-hud">
+      <div class="memory-hud-item">
+        <span class="memory-hud-value" id="hudTimer">00:00</span>
+        <span class="memory-hud-label">Tiempo</span>
+      </div>
+      <div class="memory-hud-item">
+        <span class="memory-hud-value" id="hudAttempts">0</span>
+        <span class="memory-hud-label">Intentos</span>
+      </div>
+      <div class="memory-hud-item">
+        <span class="memory-hud-value" id="hudPairs">0/0</span>
+        <span class="memory-hud-label">Pares</span>
+      </div>
+      <div class="memory-hud-item">
+        <span class="memory-hud-value" id="hudBest">--</span>
+        <span class="memory-hud-label">Mejor</span>
+      </div>
+      <button class="memory-btn" id="btnRestart">↺ Reiniciar</button>
+    </div>
+
+    <p class="memory-message" id="memoryMessage" hidden></p>
+
+    <div class="memory-board" id="memoryBoard"></div>
+  </section>
+
+  <!-- Modal de victoria: memory.js lo muestra al encontrar todos los pares -->
+  <div class="memory-victory" id="memoryVictory" hidden>
+    <div class="memory-victory-modal">
+      <div class="memory-trophy">🏆</div>
+      <h2 id="victoryTitle">¡Lo lograste!</h2>
+      <div class="memory-victory-stats">
+        <div class="memory-hud-item">
+          <span class="memory-hud-value" id="victoryTime">--:--</span>
+          <span class="memory-hud-label">Tiempo</span>
+        </div>
+        <div class="memory-hud-item">
+          <span class="memory-hud-value" id="victoryAttempts">0</span>
+          <span class="memory-hud-label">Intentos</span>
+        </div>
+        <div class="memory-hud-item">
+          <span class="memory-hud-value" id="victoryPairs">0/0</span>
+          <span class="memory-hud-label">Pares</span>
+        </div>
+      </div>
+      <button class="memory-btn memory-btn--solid" id="btnPlayAgain">Jugar de nuevo</button>
+    </div>
+  </div>
+
+  <!-- data.js primero: define "heroes" (incluye los creados/eliminados en
+       gestión, vía localStorage), que memory.js usa para armar el tablero. -->
+  <script src="data.js"></script>
+  <!-- userStore.js: usuarios y su historial de partidas (localStorage) -->
+  <script src="userStore.js"></script>
+  <script src="memory.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

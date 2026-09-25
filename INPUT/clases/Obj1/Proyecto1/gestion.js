@@ -20,6 +20,12 @@ function mostrarSeccion(nombre) {
   sidebarItems.forEach(function(item) {
     item.classList.toggle("activo", item.dataset.seccion === nombre);
   });
+
+  // Los usuarios se registran desde otra página (game.html), así que se
+  // vuelven a leer cada vez que se abre la pestaña para ver los últimos.
+  if (nombre === "usuarios") {
+    renderUsuarios();
+  }
 }
 
 sidebarItems.forEach(function(item) {
@@ -29,7 +35,7 @@ sidebarItems.forEach(function(item) {
 });
 
 // --- Sección Mostrar todos: pinta el arreglo "heroes" como tabla y como
-// galería de cartas (reutilizando crearContenidoCarta de cartas.js). ---
+// galería de cartas (reutilizando dibujarCartas de cartas.js). ---
 const tablaHeroesBody = document.getElementById("tablaHeroesBody");
 const galeriaCartas = document.getElementById("galeriaCartas");
 
@@ -50,12 +56,9 @@ function renderMostrarTodos() {
       <td>${h.poder.join(", ")}</td>
     `;
     tablaHeroesBody.appendChild(fila);
-
-    const carta = document.createElement("div");
-    carta.className = "card";
-    carta.innerHTML = crearContenidoCarta(h);
-    galeriaCartas.appendChild(carta);
   });
+
+  dibujarCartas(heroes, galeriaCartas);
 }
 
 renderMostrarTodos();
@@ -323,3 +326,42 @@ formActualizar.addEventListener("submit", function(e) {
   };
   lector.readAsDataURL(archivoImagen);
 });
+
+// --- Sección Usuarios: lista los usuarios del login de game.html.
+// loadUsers (userStore.js) ya junta todo en localStorage: la semilla de
+// users.json se copia ahí una sola vez, así que no hay que leerla aparte. ---
+// OJO: la contraseña se muestra en texto plano solo porque es un ejercicio;
+// en un sistema real nunca se guarda ni se muestra así.
+const tablaUsuariosBody = document.getElementById("tablaUsuariosBody");
+const usuariosMensaje = document.getElementById("usuariosMensaje");
+
+async function renderUsuarios() {
+  const usuarios = await loadUsers();
+
+  tablaUsuariosBody.innerHTML = "";
+
+  if (usuarios.length === 0) {
+    tablaUsuariosBody.innerHTML = `<tr><td colspan="6">Todavía no hay usuarios registrados.</td></tr>`;
+    return;
+  }
+
+  usuarios.forEach(function(u) {
+    const fila = document.createElement("tr");
+
+    // Se arma celda por celda con textContent (no con innerHTML) porque
+    // estos datos los escribió cualquier persona en el formulario de
+    // registro: si alguien pone HTML en su alias, se ve como texto y no
+    // se ejecuta como código.
+    [u.id.slice(0, 8), u.name, u.alias, u.email, u.password, u.games.length].forEach(function(valor) {
+      const celda = document.createElement("td");
+      celda.textContent = valor;
+      fila.appendChild(celda);
+    });
+
+    // El id completo es largo: en la tabla se ven los primeros 8 caracteres
+    // y el id entero aparece al pasar el mouse (atributo title).
+    fila.firstChild.title = u.id;
+
+    tablaUsuariosBody.appendChild(fila);
+  });
+}

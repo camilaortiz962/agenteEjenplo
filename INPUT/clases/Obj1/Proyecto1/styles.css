@@ -92,6 +92,103 @@ body {
   cursor: pointer;
 }
 
+.baraja-controles button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Panel de filtros: fijo a la izquierda y centrado en vertical, así no
+   empuja la baraja (que sigue centrada en el body). */
+.filtros {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+body.dark-mode .filtros {
+  background: rgba(26, 15, 46, 0.85);
+  color: white;
+}
+
+.filtros-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtro-btn {
+  padding: 6px 14px;
+  border: 2px solid var(--purple);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--purple);
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* El botón del filtro que está aplicado ahora (Index.js mueve esta clase). */
+.filtro-btn.activo {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white;
+}
+
+.filtro-slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Slider vertical: writing-mode lo pone de pie y direction:rtl hace que el
+   mínimo quede abajo y el máximo arriba (sin rtl quedaría al revés). */
+.filtro-slider input[type="range"] {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  height: 200px;
+  accent-color: var(--pink);
+  cursor: pointer;
+}
+
+.filtro-valor {
+  font-size: 18px;
+  color: var(--pink);
+}
+
+.baraja-vacia {
+  margin: 0;
+  font-weight: 600;
+  color: var(--purple);
+}
+
+/* En pantallas angostas el panel fijo taparía las cartas: se vuelve parte
+   del flujo normal (arriba de la baraja) y los botones se acomodan en fila. */
+@media (max-width: 800px) {
+  .filtros {
+    position: static;
+    transform: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filtros-botones {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
 /* Contenedor exterior de una carta (tanto en la baraja como en el modal).
    Solo pone la sombra que la "levanta" del fondo; el contenido real vive
    en .card-inner adentro. */
@@ -734,4 +831,354 @@ body.dark-mode .contenido-gestion {
   font-weight: bold;
   font-size: 0.8rem;
   cursor: pointer;
+}
+
+/* ===== game.html: login ===== */
+.login {
+  width: 100%;
+  max-width: 340px;
+  box-sizing: border-box;
+  padding: 28px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--dark);
+}
+
+/* .login y .login-field tienen display:flex, y eso le gana al display:none
+   que el navegador le da al atributo hidden. Estas reglas hacen que hidden gane:
+   - ".login[hidden]"  (sin espacio) -> el formulario mismo, al entrar al juego
+   - ".login [hidden]" (con espacio) -> los campos DENTRO del formulario */
+.login[hidden],
+.login [hidden] {
+  display: none;
+}
+
+.login-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(155, 93, 229, 0.12);
+}
+
+.login-tab {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--purple);
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Pestaña del modo activo (game.js mueve esta clase en setMode). */
+.login-tab.activo {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white;
+}
+
+.login-title {
+  margin: 0 0 4px;
+  font-size: 1.4rem;
+  color: var(--purple);
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.login-field input {
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 0.9rem;
+  padding: 8px 10px;
+  border: 2px solid var(--purple);
+  border-radius: 8px;
+  background-color: transparent;
+  color: inherit;
+}
+
+/* Mensaje de error debajo de cada campo (vacío = no ocupa espacio). */
+.login-error {
+  min-height: 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #e0457a;
+}
+
+.login-rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+}
+
+/* Cada regla arranca con ✗ gris; game.js le pone "ok" cuando se cumple. */
+.login-rules li::before {
+  content: "✗ ";
+  color: #999;
+}
+
+.login-rules li.ok {
+  color: #2a9d5c;
+}
+
+.login-rules li.ok::before {
+  content: "✓ ";
+  color: #2a9d5c;
+}
+
+.login-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white;
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.welcome h1 {
+  color: var(--purple);
+  text-align: center;
+}
+
+/* ===== game.html: juego de memoria =====
+   Adaptado de "cardGame" (Julian Bejarano, MIT). Todas las clases llevan el
+   prefijo "memory-" para no chocar con las de las cartas de la baraja
+   (.stat, .stat-label, .flip-carta...) que ya existen en este archivo. */
+.welcome {
+  width: 100%;
+  max-width: 720px;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+.memory-hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .memory-hud {
+  background: rgba(26, 15, 46, 0.85);
+}
+
+.memory-hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+}
+
+.memory-hud-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--purple);
+  line-height: 1.1;
+}
+
+.memory-hud-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+.memory-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--purple);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--purple);
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.memory-btn--solid {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white;
+}
+
+.memory-message {
+  text-align: center;
+  font-weight: 600;
+  color: var(--pink);
+}
+
+/* Tablero: 4 columnas; con 8 pares queda una grilla de 4x4. */
+.memory-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px 0 40px;
+}
+
+/* --- Carta con giro 3D ---
+   perspective en el contenedor da la profundidad; el hijo .memory-card-inner
+   es el que gira, y cada cara oculta su parte de atrás (backface-visibility)
+   para que solo se vea la que está de frente. */
+.memory-card {
+  aspect-ratio: 3 / 4;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.memory-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.memory-card.flipped .memory-card-inner,
+.memory-card.found .memory-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Una carta ya encontrada no se puede volver a clickear. */
+.memory-card.found {
+  cursor: default;
+  pointer-events: none;
+}
+
+.memory-card-front,
+.memory-card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.memory-card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* La cara con el héroe arranca girada 180°, así queda "detrás" del dorso. */
+.memory-card-back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  background: var(--dark);
+  color: white;
+}
+
+.memory-card-back img,
+.memory-initial {
+  width: 100%;
+  height: 72%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Si el héroe no tiene imagen: su inicial en grande. */
+.memory-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+}
+
+.memory-card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 8px;
+}
+
+.memory-card-name {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.memory-card-hp {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--pink);
+}
+
+.memory-card.found .memory-card-back {
+  box-shadow: 0 0 0 3px #2ecc71, 0 0 18px rgba(46, 204, 113, 0.35);
+}
+
+/* --- Modal de victoria --- */
+.memory-victory {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 15, 46, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+/* display:flex le gana a hidden (igual que pasó en el login). */
+.memory-victory[hidden] {
+  display: none;
+}
+
+.memory-victory-modal {
+  width: 90%;
+  max-width: 380px;
+  padding: 36px 28px;
+  border-radius: 24px;
+  background: var(--bg);
+  text-align: center;
+  animation: memory-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.memory-victory-modal h2 {
+  margin: 8px 0 20px;
+  color: var(--purple);
+}
+
+.memory-trophy {
+  font-size: 3rem;
+}
+
+.memory-victory-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@keyframes memory-pop {
+  from { transform: scale(0.8) translateY(30px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@media (max-width: 520px) {
+  .memory-board { gap: 8px; }
+  .memory-hud { gap: 12px; }
 }
