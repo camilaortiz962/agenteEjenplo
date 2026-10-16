@@ -1,0 +1,18 @@
+[
+  {
+    "id": "5f0c8a2e-1b7d-4c3a-9e6f-2d8b4a1c7e90",
+    "name": "Kim Namjoon",
+    "alias": "RM",
+    "email": "rm@bts.com",
+    "password": "Namjoon123",
+    "games": []
+  },
+  {
+    "id": "b3e9d1f4-6a2c-4f8e-8d0b-7c5a9e3f1b26",
+    "name": "Jeon Jungkook",
+    "alias": "JK",
+    "email": "jk@bts.com",
+    "password": "Golden997",
+    "games": []
+  }
+]
