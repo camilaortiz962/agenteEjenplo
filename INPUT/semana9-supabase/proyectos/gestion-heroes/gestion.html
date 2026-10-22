@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión BTS · Supabase</title>
+  <link rel="stylesheet" href="css/gestion.css">
+</head>
+<body>
+  <header>
+    <h1>Gestión de integrantes · BTS</h1>
+    <p>Los datos viven en Supabase (tabla <code>heroes</code>), no en localStorage.</p>
+  </header>
+
+  <main>
+    <!-- LISTA -->
+    <section class="card">
+      <div class="fila">
+        <h2>Lista</h2>
+        <button id="btn-recargar" class="sec">Recargar</button>
+      </div>
+      <div id="lista" class="grid"></div>
+    </section>
+
+    <!-- CREATE -->
+    <section class="card">
+      <h2>Agregar</h2>
+      <form id="form-agregar" class="form">
+        <label>Nombre <input id="ag-nombre" required></label>
+        <label>Universo <input id="ag-universo" value="BTS"></label>
+        <label>Bando / rol <input id="ag-bando" placeholder="Vocalista"></label>
+        <label>Edad <input id="ag-edad" type="number" min="0"></label>
+        <label>Altura (m) <input id="ag-altura" type="number" step="0.01" min="0"></label>
+        <label>Nivel de fuerza <input id="ag-fuerza" type="number" min="0" max="100"></label>
+        <label class="ancho">Poderes (separados por coma) <input id="ag-poder" placeholder="Vocal, Baile"></label>
+        <label class="ancho">Imagen (ruta o URL) <input id="ag-image" placeholder="../../img/archivo.png"></label>
+        <label class="ancho">Descripción <textarea id="ag-descripcion" rows="2"></textarea></label>
+        <label class="check"><input id="ag-activo" type="checkbox" checked> Activo</label>
+        <button id="btn-ejecutar-agregar" type="submit">Agregar</button>
+      </form>
+      <div id="res-agregar" class="mensaje"></div>
+    </section>
+
+    <!-- READ -->
+    <section class="card">
+      <h2>Buscar</h2>
+      <form id="form-buscar-id" class="form linea">
+        <label>Por id <input id="bu-id" type="number" min="1" required></label>
+        <button id="btn-ejecutar-buscar-id" type="submit">Buscar</button>
+      </form>
+      <form id="form-buscar-nombre" class="form linea">
+        <label>Por nombre <input id="bu-nombre" required placeholder="ji"></label>
+        <button id="btn-ejecutar-buscar-nombre" type="submit">Buscar</button>
+      </form>
+      <div id="res-buscar" class="mensaje"></div>
+    </section>
+
+    <!-- UPDATE -->
+    <section class="card">
+      <h2>Modificar</h2>
+      <p class="ayuda">Escribe el id y solo los campos que quieras cambiar; los vacíos no se tocan.</p>
+      <form id="form-modificar" class="form">
+        <label>Id <input id="mo-id" type="number" min="1" required></label>
+        <label>Nombre <input id="mo-nombre"></label>
+        <label>Bando / rol <input id="mo-bando"></label>
+        <label>Edad <input id="mo-edad" type="number" min="0"></label>
+        <label>Nivel de fuerza <input id="mo-fuerza" type="number" min="0" max="100"></label>
+        <label>Activo
+          <select id="mo-activo">
+            <option value="">(sin cambio)</option>
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label class="ancho">Poderes (separados por coma) <input id="mo-poder"></label>
+        <button id="btn-ejecutar-modificar" type="submit">Guardar cambios</button>
+      </form>
+      <div id="res-modificar" class="mensaje"></div>
+    </section>
+
+    <!-- DELETE -->
+    <section class="card">
+      <h2>Eliminar</h2>
+      <form id="form-eliminar" class="form linea">
+        <label>Id <input id="el-id" type="number" min="1" required></label>
+        <button id="btn-ejecutar-eliminar" type="submit" class="peligro">Eliminar</button>
+      </form>
+      <div id="res-eliminar" class="mensaje"></div>
+    </section>
+  </main>
+
+  <!-- El orden importa -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <!-- 1° -->
+  <script src="../../js/supabaseClient.js"></script>                               <!-- 2° -->
+  <script src="js/crudHeroes.js"></script>                                     <!-- 3° -->
+  <script src="js/gestion.js"></script>                                        <!-- 4° -->
+</body>
+</html>

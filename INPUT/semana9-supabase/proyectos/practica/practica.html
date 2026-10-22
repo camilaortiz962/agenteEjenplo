@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Práctica CRUD · productos_practica</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; }
+    button { margin: 4px 4px 4px 0; padding: 8px 12px; }
+    pre { background: #f4f4f4; padding: 12px; border-radius: 8px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Sección 5 · CRUD sobre productos_practica</h1>
+  <p>El hilo de la Lámpara Solar Portátil: agregar → buscar → modificar → eliminar.</p>
+
+  <button id="btn-listar">Listar todos</button>
+  <button id="btn-agregar">5.1 Agregar lámpara</button>
+  <button id="btn-buscar">5.2 Buscar "sol"</button>
+  <button id="btn-modificar">5.3 Unidades → 37</button>
+  <button id="btn-eliminar">5.4 Eliminar lámpara</button>
+
+  <pre id="salida">Haz clic en un botón…</pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/supabaseClient.js"></script>
+  <script src="js/crudProductos.js"></script>
+  <script>
+    const salida = document.getElementById('salida');
+    const ver = (titulo, valor) => salida.textContent = titulo + '\n' + JSON.stringify(valor, null, 2);
+
+    // Guardamos el id que nos devuelve Supabase al agregar (puede no ser 4
+    // si ya habías insertado y borrado filas antes: el contador no retrocede).
+    let idLampara = null;
+
+    document.getElementById('btn-listar').addEventListener('click', async () => {
+      ver('Todos:', await listarProductos());
+    });
+
+    document.getElementById('btn-agregar').addEventListener('click', async () => {
+      const nuevo = await agregarProducto({
+        nombre: "Lámpara Solar Portátil",
+        descripcion: "Lámpara recargable con panel solar, ideal para exteriores",
+        precio: 89000, unidades: 40, descuento: 0.05, disponible: true,
+        categorias: ["hogar", "exteriores", "ofertas"]
+      });
+      if (nuevo) idLampara = nuevo.id;
+      ver('agregarProducto →', nuevo);
+    });
+
+    document.getElementById('btn-buscar').addEventListener('click', async () => {
+      const porId = idLampara ? await buscarProductoPorId(idLampara) : null;
+      ver('buscarProductoPorId(' + idLampara + ') y buscarProductosPorNombre("sol") →',
+          { porId, porNombre: await buscarProductosPorNombre('sol') });
+    });
+
+    document.getElementById('btn-modificar').addEventListener('click', async () => {
+      if (!idLampara) return ver('Primero agrega la lámpara', null);
+      ver('modificarProducto →', await modificarProducto(idLampara, { unidades: 37 }));
+    });
+
+    document.getElementById('btn-eliminar').addEventListener('click', async () => {
+      if (!idLampara) return ver('Primero agrega la lámpara', null);
+      ver('eliminarProducto(' + idLampara + ') →', await eliminarProducto(idLampara));
+      idLampara = null;
+    });
+  </script>
+</body>
+</html>
