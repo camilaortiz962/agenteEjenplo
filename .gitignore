@@ -5,3 +5,7 @@ LEEME_DOCENTE.md
 # Fotos personales — no subir a este repo público
 INPUT/ChatGPT Image 1 jun 2026, 11_22_53 p.m..png
 OUTPUT/css-mediaQueries/foto-perfil.png
+
+# Credenciales de Supabase — no subir al repo público (usar *.example.js como plantilla)
+INPUT/clases/Obj1/semana-11/js/supabaseClient.js
+INPUT/clases/Obj1/semana-11/chrysos/credenciales.js

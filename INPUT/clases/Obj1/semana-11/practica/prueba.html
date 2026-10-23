@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba Supabase</title>
+  <!-- CDN: trae la librería de Supabase ANTES que nuestros propios
+       scripts — sin esta línea, "supabase.createClient" no existiría
+       todavía cuando supabaseClient.js intente usarlo -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; padding: 16px; }
+
+    /* Galería: grid que mete tantas columnas de 240px como quepan */
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+    .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+    .card .info { padding: 12px; }
+    .card h3 { margin: 0 0 8px; font-size: 1rem; }
+    .card p { margin: 4px 0; font-size: 0.9rem; }
+    .precio { font-weight: bold; }
+    .descuento { background: #e53935; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+    .categorias span { background: #eee; padding: 2px 8px; border-radius: 12px; margin-right: 4px; font-size: 0.8rem; }
+    .agotado img { filter: grayscale(1); opacity: 0.6; }
+  </style>
+</head>
+<body>
+
+  <button id="btn-traer">Traer productos</button>
+  <div id="resultado"></div>
+
+  <!-- supabaseClient.js crea "db" (sección 4.3): el cliente ya
+       conectado a tu proyecto de Supabase. Lo vamos a usar en
+       prueba.js, por eso tiene que cargarse ANTES que ese archivo -->
+  <script src="../js/supabaseClient.js"></script>
+  <!-- datos.js: las 4 funciones CRUD de la sección 5, para probarlas desde la consola -->
+  <script src="datos.js"></script>
+  <!-- prueba.js: aquí está el código de los Pasos 3, 4 y 5 -->
+  <script src="prueba.js"></script>
+</body>
+</html>
