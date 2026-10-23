@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos práctica</title>
+
+  <!-- CDN: trae la librería de Supabase ANTES que nuestros propios
+       scripts — sin esta línea, "supabase.createClient" no existiría
+       todavía cuando supabaseClient.js intente usarlo -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Estilos en archivo aparte, igual que separamos el JS -->
+  <link rel="stylesheet" href="prueba2.css">
+</head>
+<body>
+
+  <main>
+    <h1>Productos práctica</h1>
+
+    <section>
+      <h2>Productos en Supabase</h2>
+      <button id="btn-traer" class="secondary">Traer productos</button>
+      <div id="resultado"></div>
+      <!-- <pre> respeta saltos de línea y espacios: ideal para mostrar
+           el JSON con sangría; <code> le da fuente de código -->
+      <pre id="json-productos"><code></code></pre>
+    </section>
+
+    <section>
+      <h2>Buscar producto</h2>
+
+      <!-- Un solo input para los dos tipos de búsqueda: el botón que
+           presiones decide si el texto se usa como id o como nombre -->
+      <div class="buscador">
+        <input type="text" id="input-buscar" placeholder="Escribe un id o un nombre">
+        <button id="btn-buscar-id" class="secondary">Por ID</button>
+        <button id="btn-buscar-nombre" class="secondary">Por nombre</button>
+      </div>
+      <p id="mensaje-busqueda"></p>
+      <div id="resultado-busqueda"></div>
+    </section>
+
+    <section>
+      <h2>Productos de ejemplo</h2>
+      <!-- Inserta el mouse y la lámpara definidos en prueba2.js -->
+      <button id="btn-agregar-ejemplos" class="secondary">Agregar productos de ejemplo</button>
+    </section>
+
+    <section>
+      <h2>Agregar producto</h2>
+
+      <!-- Formulario: un campo por cada propiedad de "productoprueba".
+           El atributo "name" de cada input es el que usamos en prueba2.js
+           para leer su valor, así que debe coincidir con la columna de la tabla.
+           "required" hace que el navegador no deje enviar si está vacío. -->
+      <form id="form-producto">
+        <label class="full">Nombre
+          <input type="text" name="nombre" required>
+        </label>
+
+        <label class="full">Descripción
+          <textarea name="descripcion"></textarea>
+        </label>
+
+        <label>Precio
+          <input type="number" name="precio" min="0" required>
+        </label>
+
+        <!-- step="any" permite decimales (ej: 0.05) además de enteros -->
+        <label>Descuento
+          <input type="number" name="descuento" min="0" step="any" value="0">
+        </label>
+
+        <label>Unidades
+          <input type="number" name="unidades" min="0" value="0">
+        </label>
+
+        <!-- las categorías se escriben separadas por coma; en JS las
+             convertimos en un array, que es lo que espera la columna -->
+        <label>Categorías
+          <input type="text" name="categorias" placeholder="hogar, ofertas">
+        </label>
+
+        <label class="full">URL de imagen
+          <input type="url" name="img_url" placeholder="https://...">
+        </label>
+
+        <!-- checkbox: true si está marcado, false si no -->
+        <label class="check full">
+          <input type="checkbox" name="disponible" checked> Disponible
+        </label>
+
+        <!-- type="submit": al hacer clic, dispara el evento "submit" del form -->
+        <button type="submit" id="btn-agregar-obj" class="full">Agregar producto</button>
+      </form>
+    </section>
+
+    <div id="notificacion"></div>
+  </main>
+
+  <!-- supabaseClient.js crea "db" (sección 4.3): el cliente ya
+       conectado a tu proyecto de Supabase. Lo vamos a usar en
+       prueba2.js, por eso tiene que cargarse ANTES que ese archivo -->
+  <script src="../js/supabaseClient.js"></script>
+  <!-- datos.js: trae buscarProductoPorId() y buscarProductosPorNombre().
+       Va DESPUÉS de supabaseClient.js porque usa "db", y ANTES de
+       prueba2.js porque prueba2.js llama a esas funciones -->
+  <script src="datos.js"></script>
+  <!-- prueba2.js: aquí escribes el código de los Pasos 2, 3 y 4 -->
+  <script src="prueba2.js"></script>
+</body>
+</html>
