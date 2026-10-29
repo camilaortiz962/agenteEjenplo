@@ -15,99 +15,275 @@
 </head>
 <body>
 
-  <main>
-    <h1>Productos práctica</h1>
+  <!-- Fuera del layout: es un aviso flotante (position: fixed en el CSS) -->
+  <div id="notificacion"></div>
 
-    <section>
-      <h2>Productos en Supabase</h2>
-      <button id="btn-traer" class="secondary">Traer productos</button>
-      <div id="resultado"></div>
-      <!-- <pre> respeta saltos de línea y espacios: ideal para mostrar
-           el JSON con sangría; <code> le da fuente de código -->
-      <pre id="json-productos"><code></code></pre>
-    </section>
+  <!-- .app es el "marco" gris-malva: barra lateral + contenido -->
+  <div class="app">
 
-    <section>
-      <h2>Buscar producto</h2>
-
-      <!-- Un solo input para los dos tipos de búsqueda: el botón que
-           presiones decide si el texto se usa como id o como nombre -->
-      <div class="buscador">
-        <input type="text" id="input-buscar" placeholder="Escribe un id o un nombre">
-        <button id="btn-buscar-id" class="secondary">Por ID</button>
-        <button id="btn-buscar-nombre" class="secondary">Por nombre</button>
+    <!-- ===================== Barra lateral ===================== -->
+    <aside class="sidebar">
+      <div class="marca">
+        <span class="marca-logo">P</span>
+        Productos
       </div>
-      <p id="mensaje-busqueda"></p>
-      <div id="resultado-busqueda"></div>
-    </section>
 
-    <section>
-      <h2>Productos de ejemplo</h2>
-      <!-- Inserta el mouse y la lámpara definidos en prueba2.js -->
-      <button id="btn-agregar-ejemplos" class="secondary">Agregar productos de ejemplo</button>
-    </section>
+      <!-- El menú son las pestañas del CRUD. Cada botón muestra su panel
+           y esconde los demás. data-panel guarda el id del panel que abre.
+           Mismo orden del CRUD: Create, Read, Update, Delete -->
+      <nav class="tabs" role="tablist" aria-orientation="vertical">
+        <button type="button" class="tab activa" role="tab" aria-selected="true" data-panel="panel-agregar">
+          <!-- Íconos en SVG dentro del HTML: stroke="currentColor" hace que
+               tomen el mismo color del texto del botón -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar
+        </button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-buscar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          Buscar
+        </button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-modificar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/></svg>
+          Modificar
+        </button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-eliminar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+          Eliminar
+        </button>
+      </nav>
 
-    <section>
-      <h2>Agregar producto</h2>
+      <p class="sidebar-pie"><span class="punto"></span> Conectado a Supabase</p>
+    </aside>
 
-      <!-- Formulario: un campo por cada propiedad de "productoprueba".
-           El atributo "name" de cada input es el que usamos en prueba2.js
-           para leer su valor, así que debe coincidir con la columna de la tabla.
-           "required" hace que el navegador no deje enviar si está vacío. -->
-      <form id="form-producto">
-        <label class="full">Nombre
-          <input type="text" name="nombre" required>
-        </label>
+    <!-- ===================== Contenido ===================== -->
+    <main class="contenido">
 
-        <label class="full">Descripción
-          <textarea name="descripcion"></textarea>
-        </label>
+      <header class="encabezado">
+        <div>
+          <h1>Panel de <span class="resaltado">productos</span></h1>
+          <p class="subtitulo">Administra el inventario guardado en Supabase</p>
+        </div>
+        <!-- Un solo botón que alterna entre "Traer" y "Ocultar".
+             aria-expanded dice si el catálogo está abierto (true) o no (false):
+             lo usan los lectores de pantalla Y el CSS para elegir el ícono.
+             aria-controls dice qué elemento abre/cierra este botón -->
+        <button id="btn-traer" class="secondary" aria-expanded="false" aria-controls="seccion-catalogo">
+          <svg class="icono-traer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
+          <svg class="icono-ocultar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A9.9 9.9 0 0 1 12 6c5 0 8.5 4 9.5 6a12.6 12.6 0 0 1-2.8 3.6M6.5 7.6C4.6 8.9 3.2 10.7 2.5 12c1 2 4.5 6 9.5 6 1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          <span id="btn-traer-texto">Traer productos</span>
+        </button>
+      </header>
 
-        <label>Precio
-          <input type="number" name="precio" min="0" required>
-        </label>
+      <!-- Indicadores: los llena actualizarResumen() en prueba2.js -->
+      <div class="resumen">
+        <div class="stat stat-principal">
+          <span class="stat-label">Valor del inventario</span>
+          <strong id="stat-valor">—</strong>
+          <span class="stat-nota">precio × unidades</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Productos</span>
+          <strong id="stat-total">—</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Disponibles</span>
+          <strong id="stat-disponibles">—</strong>
+        </div>
+      </div>
 
-        <!-- step="any" permite decimales (ej: 0.05) además de enteros -->
-        <label>Descuento
-          <input type="number" name="descuento" min="0" step="any" value="0">
-        </label>
+      <div class="cuerpo">
 
-        <label>Unidades
-          <input type="number" name="unidades" min="0" value="0">
-        </label>
+        <!-- Catálogo: todos los productos como tarjetas.
+             "hidden": arranca escondido; prueba2.js lo muestra al hacer
+             clic en "Traer productos" -->
+        <section class="tarjeta" id="seccion-catalogo" hidden>
+          <h2>Catálogo</h2>
+          <div id="resultado"></div>
+          <!-- <details> es plegable: el JSON queda escondido hasta que
+               haces clic en el <summary>. <pre> respeta saltos de línea
+               y espacios; <code> le da fuente de código -->
+          <details id="detalles-json">
+            <summary>Ver JSON</summary>
+            <pre id="json-productos"><code></code></pre>
+          </details>
+        </section>
 
-        <!-- las categorías se escriben separadas por coma; en JS las
-             convertimos en un array, que es lo que espera la columna -->
-        <label>Categorías
-          <input type="text" name="categorias" placeholder="hogar, ofertas">
-        </label>
+        <!-- Panel del CRUD: se ve solo el que eligió el menú lateral -->
+        <section class="tarjeta">
 
-        <label class="full">URL de imagen
-          <input type="url" name="img_url" placeholder="https://...">
-        </label>
+          <div class="panel" id="panel-agregar" role="tabpanel">
+            <h2>Agregar producto</h2>
+            <p class="ayuda">Llena los datos y se guarda como una fila nueva en la tabla.</p>
 
-        <!-- checkbox: true si está marcado, false si no -->
-        <label class="check full">
-          <input type="checkbox" name="disponible" checked> Disponible
-        </label>
+            <!-- Formulario: un campo por cada columna de la tabla.
+                 El atributo "name" de cada input es el que usamos en prueba2.js
+                 para leer su valor, así que debe coincidir con la columna.
+                 "required" hace que el navegador no deje enviar si está vacío. -->
+            <form id="form-producto">
+              <label class="full">Nombre
+                <input type="text" name="nombre" required>
+              </label>
 
-        <!-- type="submit": al hacer clic, dispara el evento "submit" del form -->
-        <button type="submit" id="btn-agregar-obj" class="full">Agregar producto</button>
-      </form>
-    </section>
+              <label class="full">Descripción
+                <textarea name="descripcion"></textarea>
+              </label>
 
-    <div id="notificacion"></div>
-  </main>
+              <!-- step="any" permite decimales (ej: 0.05) además de enteros -->
+              <label>Precio
+                <input type="number" name="precio" min="0" step="any" required>
+              </label>
+
+              <label>Descuento
+                <input type="number" name="descuento" min="0" step="any" value="0">
+              </label>
+
+              <label>Unidades
+                <input type="number" name="unidades" min="0" value="0">
+              </label>
+
+              <!-- las categorías se escriben separadas por coma; en JS las
+                   convertimos en un array, que es lo que espera la columna -->
+              <label>Categorías
+                <input type="text" name="categorias" placeholder="hogar, ofertas">
+              </label>
+
+              <label class="full">URL de imagen
+                <input type="url" name="img_url" placeholder="https://...">
+              </label>
+
+              <!-- checkbox: true si está marcado, false si no -->
+              <label class="check full">
+                <input type="checkbox" name="disponible" checked> Disponible
+              </label>
+
+              <!-- type="submit": al hacer clic, dispara el evento "submit" del form -->
+              <button type="submit" class="full">Agregar producto</button>
+            </form>
+          </div>
+
+          <!-- "hidden" lo esconde al cargar: arranca abierto el panel Agregar -->
+          <div class="panel" id="panel-buscar" role="tabpanel" hidden>
+            <h2>Buscar producto</h2>
+            <p class="ayuda">Solo números busca por id; cualquier otro texto, por nombre.</p>
+
+            <!-- Es un <form> para que Enter también busque -->
+            <form id="form-buscar" class="buscador">
+              <input type="search" id="input-buscar" placeholder="Escribe un id o un nombre" autocomplete="off">
+              <button type="submit">Buscar</button>
+            </form>
+            <p id="mensaje-busqueda"></p>
+            <div id="resultado-busqueda" class="lista-filas"></div>
+          </div>
+
+          <div class="panel" id="panel-modificar" role="tabpanel" hidden>
+            <h2>Modificar producto</h2>
+            <p class="ayuda">Elige un producto: sus datos aparecen abajo y solo se guarda lo que cambies.</p>
+
+            <form id="form-modificar">
+              <!-- Sin atributo "name": así FormData no lo lee y nunca se
+                   confunde con un campo a modificar. Filtra la lista de al lado -->
+              <label>Buscar
+                <input type="search" id="filtro-modificar" placeholder="Nombre o id" autocomplete="off">
+              </label>
+
+              <!-- Las opciones las llena prueba2.js: el value de cada
+                   <option> es el id, y el texto es "#id — nombre" -->
+              <label>Producto
+                <select name="id" id="select-producto" required>
+                  <option value="">Cargando productos...</option>
+                </select>
+              </label>
+
+              <!-- <fieldset disabled> bloquea TODO lo de adentro: hasta que no
+                   elijas un producto no puedes escribir ni guardar.
+                   prueba2.js le quita el "disabled" al elegir uno -->
+              <fieldset id="campos-modificar" disabled>
+                <label class="full">Nombre
+                  <input type="text" name="nombre" required>
+                </label>
+
+                <!-- si la borras, el producto queda "Sin descripción" -->
+                <label class="full">Descripción
+                  <textarea name="descripcion"></textarea>
+                </label>
+
+                <label>Precio
+                  <input type="number" name="precio" min="0" step="any" required>
+                </label>
+
+                <label>Unidades
+                  <input type="number" name="unidades" min="0" required>
+                </label>
+
+                <!-- separadas por coma, igual que en "Agregar". Vacío = sin categorías -->
+                <label class="full">Categorías
+                  <input type="text" name="categorias" placeholder="hogar, ofertas">
+                </label>
+
+                <label class="full">Disponible
+                  <select name="disponible">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                </label>
+
+                <button type="submit" class="full">Guardar cambios</button>
+              </fieldset>
+            </form>
+          </div>
+
+          <div class="panel" id="panel-eliminar" role="tabpanel" hidden>
+            <h2>Eliminar producto</h2>
+            <p class="ayuda">Borra la fila de la tabla. Esta acción no se puede deshacer.</p>
+
+            <!-- Misma lista que en "Modificar": la llena llenarSelect() -->
+            <form id="form-eliminar">
+              <label>Buscar
+                <input type="search" id="filtro-eliminar" placeholder="Nombre o id" autocomplete="off">
+              </label>
+
+              <label>Producto
+                <select id="select-eliminar" required>
+                  <option value="">Cargando productos...</option>
+                </select>
+              </label>
+
+              <!-- Vista previa: muestra el producto elegido para revisarlo
+                   ANTES de borrarlo. La llena mostrarVistaEliminar() -->
+              <div id="vista-eliminar" class="vista-eliminar" hidden>
+                <p class="vista-titulo">Vas a eliminar este producto:</p>
+                <div id="vista-eliminar-producto" class="lista-filas"></div>
+              </div>
+
+              <!-- .peligro lo pinta de rojo: avisa que esta acción borra datos -->
+              <button type="submit" class="full peligro">Eliminar producto</button>
+            </form>
+
+            <!-- Historial de lo que se ha borrado, el más reciente arriba.
+                 Lo dibuja mostrarRegistro() con lo guardado en localStorage -->
+            <div class="registro">
+              <div class="registro-cabecera">
+                <h3>Registro de eliminados</h3>
+                <button type="button" id="btn-limpiar-registro" class="secondary btn-chico" hidden>Limpiar registro</button>
+              </div>
+              <ul id="lista-registro" class="lista-registro"></ul>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </main>
+  </div>
 
   <!-- supabaseClient.js crea "db" (sección 4.3): el cliente ya
-       conectado a tu proyecto de Supabase. Lo vamos a usar en
-       prueba2.js, por eso tiene que cargarse ANTES que ese archivo -->
+       conectado a tu proyecto de Supabase. Tiene que cargarse ANTES
+       que los archivos que lo usan -->
   <script src="../js/supabaseClient.js"></script>
-  <!-- datos.js: trae buscarProductoPorId() y buscarProductosPorNombre().
-       Va DESPUÉS de supabaseClient.js porque usa "db", y ANTES de
-       prueba2.js porque prueba2.js llama a esas funciones -->
+  <!-- datos.js: trae todas las funciones del CRUD (listar, agregar, buscar,
+       modificar, eliminar). Va DESPUÉS de supabaseClient.js porque usa "db",
+       y ANTES de prueba2.js porque prueba2.js llama a esas funciones -->
   <script src="datos.js"></script>
-  <!-- prueba2.js: aquí escribes el código de los Pasos 2, 3 y 4 -->
+  <!-- prueba2.js: la interfaz (menú, formularios, catálogo) -->
   <script src="prueba2.js"></script>
 </body>
 </html>

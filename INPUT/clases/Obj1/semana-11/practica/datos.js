@@ -13,9 +13,11 @@ async function listarProductos() {
     .select('*')
     .order('id');     // orden estable: 1, 2, 3...
 
+  // null (y no []) para que quien la llame distinga "hubo un error"
+  // de "la tabla está vacía"
   if (error) {
     console.log("Error al listar:", error);
-    return [];
+    return null;
   }
   return data;
 }
@@ -85,11 +87,22 @@ async function modificarProducto(id, cambios) {
 // ---------------------------------------------------------------------
 async function eliminarProducto(id) {
 
-  const { error } = await db
+  const { data, error } = await db
     .from(TABLA)
     .delete()
-    .eq('id', id);
+    .eq('id', id)
+    .select();         // devuelve las filas que SÍ se borraron
 
-  if (error) console.log("Error al eliminar:", error);
-  return !error;   // true si NO hubo error
+  if (error) {
+    console.log("Error al eliminar:", error);
+    return false;
+  }
+
+  // Si RLS no permite DELETE, Supabase NO da error: solo borra 0 filas.
+  // Por eso "sin error" no basta; revisamos que haya borrado algo.
+  if (data.length === 0) {
+    console.log("No se borró ninguna fila (¿falta una política RLS de DELETE?) id:", id);
+    return false;
+  }
+  return true;
 }
