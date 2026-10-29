@@ -1,161 +1,679 @@
-/* prueba2.css — estilos de prueba2.html */
+/* prueba2.css — estilos de prueba2.html
+   Layout tipo dashboard: barra lateral negra con el menú del CRUD,
+   encabezado, fila de indicadores y abajo catálogo + panel.
+   Paleta: negro, gris-malva y rosa, tomada de la imagen de referencia. */
 
-/* Variables: cambiando estos valores cambias toda la paleta */
+/* @import trae la fuente de Google Fonts. Tiene que ir ANTES de
+   cualquier otra regla del archivo, o el navegador lo ignora.
+   Outfit: geométrica y redondeada, como la de la referencia */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
+/* ============================================================
+   Variables: cambiando estos valores cambias toda la paleta
+   ============================================================ */
 :root {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --text: #1a1a1a;
-  --muted: #6b6b6b;
-  --border: #e4e4e4;
-  --accent: #1a1a1a;
-  --radius: 8px;
+  --bg: #08070a;               /* fondo de la página */
+  --frame-top: #4b4149;        /* marco gris-malva (arriba, más claro) */
+  --frame-bottom: #1d191d;     /* marco gris-malva (abajo, más oscuro) */
+  --sidebar: #050405;
+  --card: #0d0c0e;             /* tarjetas */
+  --tile: #141215;             /* tarjetas internas (productos, indicadores) */
+  --field: #18161a;            /* inputs */
+  --text: #f5f0f4;
+  --muted: #9d939b;
+  --line: rgba(255, 255, 255, 0.10);
+  --line-strong: rgba(255, 255, 255, 0.28);
+  --pink: #e3b0d8;             /* acento: "Nadia", textos destacados */
+  --pink-deep: #b47fa9;        /* botones */
+  --mauve-a: #8d7189;          /* degradado del ítem activo */
+  --mauve-b: #2e252c;
+  --green: #4fd18b;
+  --red: #ec7b82;
+
+  --font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* color-scheme: dark hace que lo que dibuja el navegador (opciones del
+     <select>, barras de scroll, la X del input search) también salga oscuro */
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding: 48px 16px;
-  background: var(--bg);
+  padding: 32px 16px;
+  min-height: 100vh;
+  /* brillo malva difuso detrás del marco, como en la referencia */
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(140, 95, 130, 0.22), transparent 70%),
+    var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 15px;
+  font-family: var(--font);
+  font-size: 14px;
   line-height: 1.5;
 }
 
-/* Contenedor central: limita el ancho para que no se estire */
-main {
-  max-width: 560px;
+h1, h2 { font-weight: 400; margin: 0; }
+h2 { font-size: 19px; margin-bottom: 4px; }
+
+/* ============================================================
+   Marco general: sidebar | contenido
+   ============================================================ */
+.app {
+  max-width: 1240px;
   margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 24px;
+  background: linear-gradient(165deg, var(--frame-top) 0%, #2c262b 40%, var(--frame-bottom) 100%);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================================
+   Barra lateral
+   ============================================================ */
+.sidebar {
+  background: var(--sidebar);
+  border-radius: 22px;
+  padding: 28px 14px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
-h1 { font-size: 22px; font-weight: 600; margin: 0; }
-h2 { font-size: 15px; font-weight: 600; margin: 0 0 16px; }
-
-/* Cada bloque (lista y formulario) es una "tarjeta" */
-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
-
-/* Grid de 2 columnas: los campos cortos van lado a lado */
-form {
+.marca-logo {
+  width: 30px;
+  height: 30px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  place-items: center;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%);
+  color: #1a1018;
+  font-weight: 600;
+}
+
+/* Menú vertical: cada pestaña es una fila con ícono + texto */
+.tabs { display: flex; flex-direction: column; gap: 6px; }
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: #d6ced4;
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;  /* quita la sombra rosa que hereda de "button" */
+  transition: background 0.15s, color 0.15s;
+}
+.tab svg { width: 19px; height: 19px; flex-shrink: 0; }
+.tab:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); filter: none; }
+
+/* Ítem activo: degradado malva que se desvanece hacia la derecha,
+   igual que "Dashboard" en la referencia */
+.tab.activa {
+  background: linear-gradient(90deg, var(--mauve-a) 0%, var(--mauve-b) 100%);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* margin-top: auto empuja este texto al fondo de la barra (es flex column) */
+.sidebar-pie {
+  margin: auto 0 0;
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ============================================================
+   Contenido
+   ============================================================ */
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 12px 8px 8px 0;
+  min-width: 0; /* deja que lo de adentro haga scroll en vez de ensanchar */
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.encabezado h1 { font-size: 32px; letter-spacing: -0.01em; }
+.resaltado { color: var(--pink); }
+.subtitulo { margin: 2px 0 0; font-size: 13px; color: #cfc6cd; }
+
+/* --- Indicadores --- */
+.resumen {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
   gap: 16px;
 }
-/* .full ocupa las 2 columnas (campos largos) */
-.full { grid-column: 1 / -1; }
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+/* El indicador principal lleva el brillo malva de "Total Holding" */
+.stat-principal {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(227, 176, 216, 0.28), transparent 60%),
+    var(--card);
+}
+.stat-label { font-size: 14px; color: #d6ced4; }
+.stat strong { font-size: 30px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.stat-principal strong { font-size: 34px; }
+.stat-nota { font-size: 12px; color: var(--muted); }
 
-/* Label arriba, input abajo */
+/* --- Catálogo + panel --- */
+.cuerpo {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* Mientras el catálogo está escondido, el panel del CRUD ocupa todo el
+   ancho. :has() pregunta "¿.cuerpo TIENE adentro un catálogo con hidden?".
+   Cómo se reacomoda el formulario está en "Panel ancho", más abajo */
+.cuerpo:has(#seccion-catalogo[hidden]) { grid-template-columns: minmax(0, 1fr); }
+
+/* container-type: inline-size convierte cada tarjeta en un "contenedor":
+   así las reglas @container de abajo miran el ancho de LA TARJETA, no el
+   de la pantalla. Es lo que permite que el mismo formulario se acomode
+   distinto con o sin catálogo al lado */
+.tarjeta { container-type: inline-size; }
+
+.tarjeta {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px;
+  min-width: 0;
+}
+
+.ayuda { margin: 0 0 18px; font-size: 13px; color: var(--muted); }
+
+/* ============================================================
+   Catálogo: productos como tarjetas en cuadrícula ("My Portfolio")
+   ============================================================ */
+#resultado:empty { display: none; }
+
+.lista-productos { list-style: none; margin: 16px 0 0; padding: 0; }
+
+/* auto-fill + minmax: entran tantas columnas de mínimo 190px como
+   quepan, y se reparten el espacio sobrante. No hace falta media query */
+#resultado .lista-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+  max-height: 640px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+#resultado .producto {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--tile);
+  border: 1px solid var(--line);
+  transition: border-color 0.15s, transform 0.15s;
+}
+#resultado .producto:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+
+/* Imagen arriba, ocupando todo el ancho de la tarjeta.
+   object-fit: cover recorta la foto para llenar el cuadro sin deformarla */
+#resultado .producto-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;  /* alto proporcional al ancho */
+  object-fit: cover;
+  border-radius: 12px;
+  background: #fff;     /* muchas fotos de producto tienen fondo blanco */
+}
+
+/* Sin imagen (o URL rota): cuadro malva con la inicial */
+.producto-img.sin-imagen {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--mauve-a) 0%, var(--mauve-b) 100%) !important;
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 500;
+}
+
+/* Precio arriba y grande, nombre debajo: como "$ 1,721.3" en la referencia.
+   flex-direction: column-reverse invierte el orden visual sin tocar el HTML */
+.producto-cabecera {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+}
+.producto-cabecera strong { font-weight: 500; font-size: 14px; }
+.precio { font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.producto-id { color: var(--pink); font-weight: 400; font-size: 12px; }
+
+.producto p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  /* corta la descripción a 2 líneas con "..." para que las tarjetas
+     tengan alturas parecidas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Categorías como píldoras con borde, igual que "Gain" / "Lose" */
+.categorias { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.categoria {
+  font-size: 11px;
+  padding: 1px 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+}
+
+/* Pie: estado a la izquierda, unidades a la derecha ("Units 104") */
+.producto-pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.producto-pie b { color: var(--text); font-weight: 500; }
+.estado.si { color: var(--green); }
+.estado.no { color: var(--red); }
+
+/* Filas compactas (imagen chica a la izquierda): resultados de Buscar y
+   vista previa de Eliminar. Las dos usan la clase .lista-filas */
+#resultado-busqueda .lista-productos { max-height: 360px; overflow: auto; }
+.lista-filas .producto {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.lista-filas .producto:last-child { border-bottom: none; }
+.lista-filas .producto-img {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #fff;
+}
+.lista-filas .producto-img.sin-imagen { font-size: 20px; }
+.lista-filas .producto-info { flex: 1; min-width: 0; }
+.lista-filas .precio { font-size: 16px; }
+
+.vacio { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
+
+/* Vista previa de Eliminar: caja con borde y fondo rojizos para que
+   quede claro que ESE es el producto que se va a borrar */
+.vista-eliminar {
+  grid-column: 1 / -1;
+  padding: 12px 16px 4px;
+  border: 1px solid rgba(236, 123, 130, 0.45);
+  border-radius: 16px;
+  background: rgba(236, 123, 130, 0.07);
+}
+.vista-titulo { margin: 0; font-size: 12px; color: var(--red); }
+
+/* Registro de eliminados: separado del formulario por una línea */
+.registro {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.registro-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.registro h3 { margin: 0; font-size: 16px; font-weight: 400; }
+
+/* Botón pequeño para acciones secundarias como "Limpiar registro" */
+.btn-chico { padding: 6px 14px; font-size: 12px; }
+/* .secondary tiene display: inline-flex, que le ganaría a [hidden];
+   esta regla asegura que "hidden" sí lo esconda */
+.btn-chico[hidden] { display: none; }
+
+.lista-registro {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 300px;   /* con muchos registros, scroll propio */
+  overflow: auto;
+}
+.lista-registro .vacio { margin: 8px 0 0; }
+
+/* Cada registro: miniatura · nombre y fecha · precio tachado */
+.registro-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.registro-item:last-child { border-bottom: none; }
+.registro-item .producto-img {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #fff;
+  opacity: 0.55;       /* apagada: el producto ya no existe */
+  filter: grayscale(1);
+}
+.registro-item .producto-img.sin-imagen { font-size: 16px; }
+.registro-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.registro-info strong { font-weight: 500; font-size: 14px; }
+.registro-fecha { font-size: 12px; color: var(--muted); }
+.registro-precio {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: line-through;   /* tachado: ya no está a la venta */
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* sin margen ni scroll: es un solo producto */
+.vista-eliminar .lista-productos { margin: 0; max-height: none; }
+
+/* JSON plegable */
+#detalles-json { margin-top: 16px; }
+#detalles-json summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+#detalles-json summary:hover { color: var(--pink); }
+#detalles-json:has(code:empty) { display: none; }  /* oculto mientras no haya JSON */
+#json-productos {
+  margin: 12px 0 0;
+  padding: 16px;
+  max-height: 300px;
+  overflow: auto;
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--pink);
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+}
+
+/* ============================================================
+   Formularios
+   ============================================================ */
+
+/* Grid de 2 columnas: los campos cortos van lado a lado.
+   minmax(0, 1fr) en vez de 1fr: deja que la columna se encoja aunque
+   su contenido "quiera" ser más ancho */
+form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+.full { grid-column: 1 / -1; }  /* ocupa las 2 columnas */
+
+/* El <fieldset> de Modificar repite la grilla del form por dentro */
+fieldset {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+fieldset:disabled { opacity: 0.35; }  /* sin producto elegido */
+
 label {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
-input, textarea {
+/* width: 100% + min-width: 0: sin esto, un <input> no se encoge por
+   debajo de su ancho "natural" y se sale de la columna del grid */
+input, textarea, select {
+  width: 100%;
+  min-width: 0;
   font: inherit;
+  font-size: 14px;
   color: var(--text);
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--field);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-textarea { resize: vertical; min-height: 80px; }
+input::placeholder, textarea::placeholder { color: #6c636a; }
+textarea { resize: vertical; min-height: 84px; }
 
-/* :focus marca el campo activo sin el borde azul por defecto */
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: var(--pink-deep);
+  box-shadow: 0 0 0 3px rgba(227, 176, 216, 0.14);
 }
 
-/* El checkbox va en línea con su texto */
 label.check {
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-size: 14px;
   color: var(--text);
 }
-label.check input { width: 16px; height: 16px; margin: 0; }
+/* accent-color pinta el checkbox del color de acento */
+label.check input { width: 17px; height: 17px; flex-shrink: 0; margin: 0; accent-color: var(--pink-deep); }
 
-button {
-  font: inherit;
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: #fff;
-}
-button:hover { opacity: 0.85; }
-
-/* Botón secundario: solo borde */
-.secondary { background: transparent; color: var(--accent); }
-
-#resultado ul { margin: 16px 0 0; padding-left: 20px; }
-#resultado:empty, #notificacion:empty { display: none; }
-
-#notificacion {
-  font-size: 13px;
-  color: var(--muted);
-  padding: 12px;
-  border-radius: var(--radius);
-  background: var(--bg);
-}
-
-/* En pantallas angostas, todo a una sola columna */
-@media (max-width: 480px) {
-  form { grid-template-columns: 1fr; }
-}
-
-
-/* Bloque de código con el JSON: scroll propio para que no estire la página */
-#json-productos {
-  margin: 16px 0 0;
-  padding: 16px;
-  max-height: 320px;
-  overflow: auto;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-family: ui-monospace, Consolas, monospace;
-  font-size: 13px;
-}
-/* se oculta mientras no haya JSON */
-#json-productos:has(code:empty) { display: none; }
-
-/* Lista de productos: sin viñetas, cada producto separado por una línea */
-#resultado .lista-productos, #resultado-busqueda .lista-productos { list-style: none; margin: 16px 0 0; padding: 0; }
-.producto { padding: 12px 0; border-bottom: 1px solid var(--border); }
-.producto:last-child { border-bottom: none; }
-
-/* Nombre a la izquierda, precio a la derecha */
-.producto-cabecera {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-.precio { font-variant-numeric: tabular-nums; white-space: nowrap; }
-.producto p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
-
-/* Buscador: input que se estira + dos botones al lado */
+/* Buscador redondo, como "Ask helios.ai anything" */
 .buscador { display: flex; gap: 8px; }
-.buscador input { flex: 1; min-width: 0; }
-#mensaje-busqueda { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+.buscador input { flex: 1; width: auto; border-radius: 999px; padding-left: 20px; }
+#mensaje-busqueda { margin: 14px 0 0; font-size: 13px; color: var(--muted); }
 #mensaje-busqueda:empty { display: none; }
 
+/* ============================================================
+   Panel ancho: cuando la tarjeta del CRUD mide 760px o más
+   (catálogo oculto, o tablet con todo en una columna)
+   ============================================================ */
+@container (min-width: 760px) {
+
+  /* 4 columnas en vez de 2. align-items: end alinea los campos por
+     abajo: así el checkbox y el botón (que no tienen texto encima)
+     quedan a la altura de los inputs */
+  form, fieldset {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: end;
+  }
+
+  /* Los campos "largos" ya no ocupan toda la fila, sino la mitad */
+  .full { grid-column: span 2; }
+
+  /* El checkbox y el botón principal ocupan una sola columna */
+  label.check.full,
+  button.full { grid-column: span 1; }
+  label.check { height: 46px; }  /* misma altura que un input, para centrarse con él */
+
+  /* La descripción, de una línea: queda al lado del nombre con la misma
+     altura. Sigue siendo redimensionable si necesitas escribir más */
+  textarea { min-height: 46px; height: 46px; }
+
+  /* Modificar y Eliminar: el buscador y el select de producto
+     ocupan media fila cada uno */
+  #form-modificar > label { grid-column: span 2; }
+
+  /* El botón de guardar va en la última columna, a la derecha */
+  #campos-modificar button { grid-column: -2 / -1; }
+
+  /* Eliminar: arriba buscador (2) + producto (2); abajo la vista previa
+     (3) con el botón a su derecha (1), alineado al fondo */
+  #form-eliminar > label { grid-column: span 2; }
+  #vista-eliminar { grid-column: span 3; }
+  #form-eliminar button { grid-column: -2 / -1; }
+
+  /* Resultados de Buscar en dos columnas de filas */
+  #resultado-busqueda .lista-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    column-gap: 28px;
+  }
+  /* sin la línea de abajo en la última fila de cada columna se vería
+     cortada; mejor usar solo la de arriba */
+  #resultado-busqueda .producto { border-bottom: none; border-top: 1px solid var(--line); }
+
+  /* El buscador no necesita todo el ancho */
+  .buscador { max-width: 640px; }
+}
+
+/* ============================================================
+   Botones
+   ============================================================ */
+
+/* Principal: píldora rosa, como "Explore AI Insights" */
+button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px 24px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: linear-gradient(180deg, #d3a5c9 0%, var(--pink-deep) 100%);
+  color: #1d121b;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(180, 127, 169, 0.25);
+  transition: filter 0.15s, background 0.15s;
+}
+button:hover { filter: brightness(1.08); }
+
+/* Secundario: píldora negra con borde claro, como "See all" */
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #050405;
+  color: var(--text);
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+.secondary svg { width: 17px; height: 17px; }
+.secondary:hover { background: #151215; filter: none; }
+
+/* Botón Traer/Ocultar: muestra un ícono u otro según aria-expanded,
+   que prueba2.js cambia en cada clic. El texto lo cambia el JS */
+#btn-traer[aria-expanded="false"] .icono-ocultar,
+#btn-traer[aria-expanded="true"] .icono-traer { display: none; }
+
+/* Acciones que borran datos */
+.peligro {
+  background: linear-gradient(180deg, #f0959b 0%, #c95c63 100%);
+  color: #1d0b0c;
+  box-shadow: 0 6px 20px rgba(201, 92, 99, 0.25);
+}
+
+button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
+
+/* ============================================================
+   Aviso flotante (lo controla notificar() en prueba2.js)
+   ============================================================ */
+#notificacion:empty { display: none; }
+
+/* position: fixed lo pega arriba de la PANTALLA: se ve aunque
+   hayas bajado. translateX(-50%) lo centra */
+#notificacion {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(13, 12, 14, 0.9);
+  backdrop-filter: blur(12px);  /* desenfoca lo de atrás: efecto vidrio */
+  color: var(--text);
+  font-size: 14px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
+}
+#notificacion.exito { border-color: rgba(79, 209, 139, 0.55); color: var(--green); }
+#notificacion.error { border-color: rgba(236, 123, 130, 0.55); color: var(--red); }
+
+/* Barra de scroll fina y oscura */
+* { scrollbar-width: thin; scrollbar-color: #463d44 transparent; }
+
+/* ============================================================
+   Pantallas más pequeñas
+   ============================================================ */
+
+/* Tablet: catálogo y panel uno debajo del otro */
+/* minmax(0, 1fr) en todas: una columna "1fr" no se encoge por debajo
+   del ancho de su contenido, y en pantallas angostas se sale de la página */
+@media (max-width: 1050px) {
+  .cuerpo { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Celular grande: la barra lateral pasa arriba y el menú queda en 2×2 */
+@media (max-width: 800px) {
+  .app { grid-template-columns: minmax(0, 1fr); border-radius: 24px; padding: 12px; }
+  .sidebar { padding: 18px 12px; gap: 16px; }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; }
+  .tab { justify-content: center; }
+  .sidebar-pie { display: none; }
+  .contenido { padding: 0; }
+  .resumen { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .stat-principal { grid-column: 1 / -1; }
+}
+
+/* Celular: todo a una sola columna */
 @media (max-width: 480px) {
+  body { padding: 12px; }
+  form, fieldset { grid-template-columns: 1fr; }
+  .encabezado h1 { font-size: 26px; }
   .buscador { flex-wrap: wrap; }
   .buscador input { flex-basis: 100%; }
 }
-
-/* Botón desactivado (mientras se guarda o cuando ya se usó) */
-button:disabled { opacity: 0.4; cursor: not-allowed; }
