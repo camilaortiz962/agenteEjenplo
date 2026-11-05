@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi cuenta</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- prueba2.css trae la paleta, la fuente, los inputs, los botones y
+         el layout con sidebar (.app, .sidebar, .tab) del CRUD: así las dos
+         páginas se ven iguales sin copiar estilos.
+         cliente.css va DESPUÉS porque solo agrega/ajusta lo de esta página -->
+    <link rel="stylesheet" href="prueba2.css" />
+    <link rel="stylesheet" href="cliente.css" />
+  </head>
+  <body>
+    <!-- .app es el "marco" gris-malva: barra lateral + contenido (de prueba2.css) -->
+    <div class="app">
+
+      <!-- ===================== Barra lateral ===================== -->
+      <aside class="sidebar">
+        <div class="marca">
+          <span class="marca-logo">C</span>
+          Clientes
+        </div>
+
+        <!-- Cada ítem tiene data-panel con el id del panel que muestra.
+             cliente.js decide cuáles se ven: sin sesión solo "Acceso",
+             con sesión solo "Actualizar datos" -->
+        <nav class="tabs" role="tablist" aria-orientation="vertical">
+          <button type="button" class="tab activa" role="tab" aria-selected="true" data-panel="panel-acceso" id="tab-acceso">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+            Acceso
+          </button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-perfil" id="tab-perfil" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            Actualizar datos
+          </button>
+        </nav>
+
+        <!-- Abajo de la barra: cerrar sesión y quién está conectado -->
+        <button id="btn-logout" type="button" class="tab tab-salir" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Cerrar sesión
+        </button>
+        <p class="sidebar-pie"><span class="punto"></span> <span id="sidebar-usuario">Sin sesión</span></p>
+      </aside>
+
+      <!-- ===================== Contenido ===================== -->
+      <main class="contenido">
+
+        <header class="encabezado">
+          <div>
+            <h1>Mi <span class="resaltado">cuenta</span></h1>
+            <p class="subtitulo">Regístrate o inicia sesión con Supabase Auth</p>
+          </div>
+        </header>
+
+        <!-- Mensaje de sesión: lo escribe mostrarMensaje() en cliente.js y le
+             pone la clase "exito" (verde) o "error" (rojo) -->
+        <p id="estado-sesion">No has iniciado sesión.</p>
+
+        <!-- Panel "Acceso": registro e inicio de sesión lado a lado -->
+        <div class="cuenta-formularios" id="panel-acceso" role="tabpanel">
+
+          <section class="tarjeta">
+            <h2>Registrarme</h2>
+            <p class="ayuda">Crea una cuenta nueva con tu nombre, correo y contraseña.</p>
+
+            <!-- Cada input va DENTRO de su <label>: así prueba2.css los pone
+                 uno debajo del otro, y hacer clic en el texto enfoca el input -->
+            <form id="form-registro">
+              <label class="full">Nombre
+                <input id="registro-nombre" type="text" required />
+              </label>
+
+              <label class="full">Correo
+                <input id="registro-correo" type="email" required />
+              </label>
+
+              <label class="full">Contraseña
+                <input id="registro-password" type="password" minlength="6" required placeholder="Mínimo 6 caracteres" />
+              </label>
+
+              <button type="submit" class="full">Crear cuenta</button>
+            </form>
+          </section>
+
+          <section class="tarjeta">
+            <h2>Iniciar sesión</h2>
+            <p class="ayuda">Si ya tienes cuenta, entra con tu correo y contraseña.</p>
+
+            <form id="form-login">
+              <label class="full">Correo
+                <input id="login-correo" type="email" required />
+              </label>
+
+              <label class="full">Contraseña
+                <input id="login-password" type="password" required />
+              </label>
+
+              <button type="submit" class="full">Iniciar sesión</button>
+            </form>
+          </section>
+
+        </div>
+
+        <!-- Panel "Actualizar datos": aparece SOLO después de iniciar sesión.
+             cliente.js primero lee la fila de clientes_practica y después
+             llena los campos -->
+        <section class="tarjeta" id="panel-perfil" role="tabpanel" hidden>
+          <h2>Actualizar datos</h2>
+          <p class="ayuda">Así están guardados tus datos en clientes_practica. Cambia lo que necesites y guarda.</p>
+
+          <form id="form-perfil">
+            <!-- Los id siguen el patrón "perfil-" + nombre de la columna:
+                 así cliente.js los recorre con un solo bucle -->
+            <label class="full">Nombre
+              <input id="perfil-nombre" type="text" required />
+            </label>
+
+            <!-- readonly: se ve pero no se puede editar. Es el correo de tu
+                 cuenta de Auth (con el que inicias sesión) -->
+            <label>Correo
+              <input id="perfil-correo" type="email" readonly />
+            </label>
+
+            <!-- type="tel": en el celular abre el teclado numérico -->
+            <label>Teléfono
+              <input id="perfil-telefono" type="tel" placeholder="300 123 4567" />
+            </label>
+
+            <label class="full">Dirección
+              <input id="perfil-direccion" type="text" placeholder="Calle, número, ciudad" />
+            </label>
+
+            <!-- readonly: el rol lo asigna el sistema, no el cliente -->
+            <label>Rol
+              <input id="perfil-rol" type="text" readonly />
+            </label>
+
+            <button type="submit">Guardar cambios</button>
+          </form>
+        </section>
+
+      </main>
+    </div>
+
+    <script src="../js/supabaseClient.js"></script>
+    <script src="../js/cliente.js"></script>
+  </body>
+</html>

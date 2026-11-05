@@ -1,0 +1,97 @@
+/* cliente.css — estilos propios de cliente.html.
+   Todo lo general (paleta, fuente, inputs, botones, tarjetas) viene de
+   prueba2.css, que se carga antes. Aquí solo va el layout de esta página
+   y el mensaje de sesión, usando las MISMAS variables (--pink, --line...). */
+
+/* El marco con sidebar (.app, .sidebar, .tab...) viene de prueba2.css.
+   Aquí solo un poco menos de ancho: esta página tiene menos contenido */
+.app { max-width: 1100px; }
+
+/* .tab tiene display: flex, que le ganaría al atributo hidden: así
+   los ítems que cliente.js esconde sí desaparecen */
+.tab[hidden] { display: none; }
+
+/* "Cerrar sesión" va al fondo de la barra (la sidebar es flex column:
+   margin-top: auto empuja el elemento hacia abajo) */
+.tab-salir { margin-top: auto; }
+.tab-salir:hover { color: var(--red); }
+/* si "Cerrar sesión" se ve, el texto de abajo va pegado a él */
+.tab-salir:not([hidden]) + .sidebar-pie { margin-top: 0; }
+
+/* El correo largo se corta con "..." en vez de desbordar la barra */
+#sidebar-usuario { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* El punto es verde (de prueba2.css) solo con sesión: sin sesión, gris.
+   La clase "conectado" la pone actualizarVista() en cliente.js */
+.sidebar-pie:not(.conectado) .punto { background: var(--muted); box-shadow: none; }
+
+/* El botón de guardar no se estira a la altura del campo de al lado */
+#form-perfil button { align-self: end; }
+
+/* Registro y login lado a lado; minmax(0, 1fr) para que no se desborden */
+.cuenta-formularios {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+/* Mensaje de sesión: una tarjeta ancha con un punto de color a la izquierda */
+#estado-sesion {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 15px;
+}
+/* ::before crea un elemento "falso" antes del texto: aquí, el punto */
+#estado-sesion::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+/* Sesión iniciada: verde, con el mismo brillo de .punto en prueba2 */
+#estado-sesion.exito {
+  color: var(--green);
+  border-color: rgba(79, 209, 139, 0.45);
+  background: rgba(79, 209, 139, 0.07);
+}
+#estado-sesion.exito::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+/* Error: rojo */
+#estado-sesion.error {
+  color: var(--red);
+  border-color: rgba(236, 123, 130, 0.45);
+  background: rgba(236, 123, 130, 0.07);
+}
+#estado-sesion.error::before { background: var(--red); }
+
+/* .secondary (inline-flex) y .cuenta-formularios (grid) tienen un display
+   propio que le ganaría al atributo hidden; estas reglas aseguran que
+   hidden sí los esconda */
+#btn-logout[hidden],
+.cuenta-formularios[hidden] { display: none; }
+
+/* Campos de solo lectura (correo y rol en "Mis datos"): apagados, para
+   que se note que no se pueden editar */
+input[readonly] {
+  color: var(--muted);
+  background: transparent;
+  border-style: dashed;
+  cursor: not-allowed;
+}
+input[readonly]:focus { border-color: var(--line); box-shadow: none; }
+
+/* Celular: un formulario debajo del otro */
+@media (max-width: 720px) {
+  .cuenta-formularios { grid-template-columns: minmax(0, 1fr); }
+}
