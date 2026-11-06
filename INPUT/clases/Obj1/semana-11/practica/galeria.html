@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galería de productos</title>
+
+  <!-- Librería de Supabase: tiene que cargar ANTES de supabaseClient.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- admin.css primero: trae la paleta (--pink, --card...), la fuente
+       Outfit, los botones y las tarjetas. galeria.css después, solo con
+       lo propio de la tienda (igual que cliente.html reutiliza admin.css) -->
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="galeria.css" />
+</head>
+<body>
+
+  <div class="tienda">
+
+    <!-- ===== Barra superior: marca + botón de carrito ===== -->
+    <header class="tienda-barra">
+      <div class="marca">
+        <span class="marca-logo">M</span>
+        MiTienda
+      </div>
+
+      <!-- El badge lo actualiza actualizarCarrito() con el número de ítems -->
+      <button id="btn-carrito" class="secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.4a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>
+        Carrito
+        <span id="contador-badge" class="badge">0</span>
+      </button>
+    </header>
+
+    <!-- ===== Título de la sección ===== -->
+    <div class="seccion-titulo">
+      <h1>Nuestros <span class="resaltado">productos</span></h1>
+      <p>Selecciona la cantidad de cada producto y agrégalo al carrito.</p>
+    </div>
+
+    <!-- La galería se construye aquí con JavaScript (renderizarGaleria) -->
+    <div id="galeria" class="galeria"></div>
+
+  </div>
+
+  <!-- ===== Overlay: oscurece el fondo cuando el carrito está abierto ===== -->
+  <div id="overlay"></div>
+
+  <!-- ===== Panel de carrito deslizable ===== -->
+  <aside id="panel-carrito">
+    <div class="carrito-header">
+      <h2>Tu carrito</h2>
+      <button id="btn-cerrar-carrito" class="btn-cerrar" aria-label="Cerrar">✕</button>
+    </div>
+
+    <!-- Lo llena actualizarCarrito() en galeria.js -->
+    <div id="lista-carrito">
+      <p class="carrito-vacio">Tu carrito está vacío 🛒</p>
+    </div>
+
+    <div class="carrito-footer">
+      <div class="total-row">
+        <span class="total-label">Total</span>
+        <span class="total-valor" id="total-valor">$0</span>
+      </div>
+      <!-- Sin acción por ahora: la vista es solo visual/UX -->
+      <button id="btn-checkout">Proceder al pago →</button>
+    </div>
+  </aside>
+
+  <!-- supabaseClient.js crea "db" (el cliente conectado); datos.js trae
+       listarProductos(). Van ANTES de galeria.js, que los usa para traer
+       el catálogo real de admin (tabla productos_practica) -->
+  <script src="../js/supabaseClient.js"></script>
+  <script src="../js/datos.js"></script>
+  <!-- Toda la lógica de la tienda (carrito, render) vive en galeria.js -->
+  <script src="../js/galeria.js"></script>
+</body>
+</html>
