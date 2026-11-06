@@ -15,39 +15,71 @@
 </head>
 <body>
 
-  <section id="zona-acceso-admin">
-  <p id="estado-sesion-admin" role="status">No has iniciado sesión.</p>
+  <!-- Zona de acceso: lo único que se ve hasta que admin.js confirma un
+       administrador. data-vista controla qué se muestra: "elegir" (los dos
+       botones), "login" o "registro". admin.js lo cambia al hacer clic. -->
+  <section id="zona-acceso-admin" data-vista="elegir">
+    <header class="encabezado">
+      <div>
+        <h1>Panel de <span class="resaltado">administración</span></h1>
+        <p class="subtitulo">Inicia sesión o registra un administrador para gestionar el inventario</p>
+      </div>
+    </header>
 
-  <form id="form-registro-admin">
-    <h3>Registrar administrador</h3>
-    <label for="admin-registro-nombre">Nombre</label>
-    <input id="admin-registro-nombre" type="text" required>
+    <!-- Mensaje de estado: lo escribe mostrarEstadoSesionAdmin() en admin.js -->
+    <p id="estado-sesion-admin" role="status">No has iniciado sesión.</p>
 
-    <label for="admin-registro-correo">Correo</label>
-    <input id="admin-registro-correo" type="email" required>
+    <!-- Paso 1: elegir. Cada botón lleva data-vista con la vista que abre -->
+    <div class="tarjeta" id="acceso-elegir">
+      <h2>Acceder</h2>
+      <p class="ayuda">¿Qué quieres hacer?</p>
+      <div class="acceso-opciones">
+        <button type="button" data-vista="login">Iniciar sesión</button>
+        <button type="button" class="secondary" data-vista="registro">Crear cuenta de administrador</button>
+      </div>
+    </div>
 
-    <label for="admin-registro-password">Contraseña</label>
-    <input id="admin-registro-password" type="password" minlength="6" required>
+    <!-- Paso 2a: iniciar sesión -->
+    <section class="tarjeta" id="tarjeta-login">
+      <h2>Iniciar sesión</h2>
+      <p class="ayuda">Entra con tu correo y contraseña.</p>
+      <!-- Cada input va DENTRO de su <label>: así admin.css los apila y
+           hacer clic en el texto enfoca el input -->
+      <form id="form-login-admin">
+        <label class="full">Correo
+          <input id="admin-login-correo" type="email" required>
+        </label>
+        <label class="full">Contraseña
+          <input id="admin-login-password" type="password" required>
+        </label>
+        <button type="submit" class="full">Iniciar sesión</button>
+      </form>
+      <p class="acceso-cambiar">¿No tienes cuenta?
+        <button type="button" class="enlace" data-vista="registro">Crear una</button>
+      </p>
+    </section>
 
-    <button type="submit">Crear cuenta de administrador</button>
-  </form>
-
-  <form id="form-login-admin">
-    <h3>Iniciar sesión</h3>
-    <label for="admin-login-correo">Correo</label>
-    <input id="admin-login-correo" type="email" required>
-
-    <label for="admin-login-password">Contraseña</label>
-    <input id="admin-login-password" type="password" required>
-
-    <button type="submit">Iniciar sesión</button>
-  </form>
-</section>
-
-<button id="btn-logout-admin" type="button" hidden>Cerrar sesión</button>
-
-<!-- el panel real (catálogo, mis clientes...) debe quedar oculto hasta
-     que admin.js confirme sesión iniciada Y que existe fila en admins_practica -->
+    <!-- Paso 2b: registrar -->
+    <section class="tarjeta" id="tarjeta-registro">
+      <h2>Registrar administrador</h2>
+      <p class="ayuda">Crea una cuenta nueva con tu nombre, correo y contraseña.</p>
+      <form id="form-registro-admin">
+        <label class="full">Nombre
+          <input id="admin-registro-nombre" type="text" required>
+        </label>
+        <label class="full">Correo
+          <input id="admin-registro-correo" type="email" required>
+        </label>
+        <label class="full">Contraseña
+          <input id="admin-registro-password" type="password" minlength="6" required placeholder="Mínimo 6 caracteres">
+        </label>
+        <button type="submit" class="full">Crear cuenta de administrador</button>
+      </form>
+      <p class="acceso-cambiar">¿Ya tienes cuenta?
+        <button type="button" class="enlace" data-vista="login">Inicia sesión</button>
+      </p>
+    </section>
+  </section>
 
   <!-- Fuera del layout: es un aviso flotante (position: fixed en el CSS) -->
   <div id="notificacion"></div>
@@ -103,6 +135,11 @@
           <h1>Panel de <span class="resaltado">productos</span></h1>
           <p class="subtitulo">Administra el inventario guardado en Supabase</p>
         </div>
+        <!-- Solo se ve con sesión de admin: admin.js le quita el "hidden" -->
+        <button id="btn-logout-admin" type="button" class="secondary" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Cerrar sesión
+        </button>
       </header>
 
       <!-- Indicadores: los llena actualizarResumen() en admin.js -->

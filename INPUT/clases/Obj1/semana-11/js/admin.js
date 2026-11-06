@@ -48,20 +48,46 @@ async function mostrarEstadoSesionAdmin() {
   const { data } = await db.auth.getUser();
   const estado = document.getElementById('estado-sesion-admin');
 
+  // esAdmin = tiene sesión Y además existe su fila en admins_practica.
+  // Solo cuando es true se muestra el CRUD.
+  let esAdmin = false;
+
   if (!data.user) {
     estado.innerText = 'No has iniciado sesión.';
-    return;
+  } else {
+    // Importante: tener sesión no basta — confirmamos que además exista
+    // su fila en admins_practica. maybeSingle() devuelve null si no hay
+    // fila (single() lanzaría un error 406 en la consola en ese caso).
+    const { data: perfil } = await db.from('admins_practica').select('nombre').eq('id', data.user.id).maybeSingle();
+
+    if (perfil) {
+      esAdmin = true;
+      estado.innerText = 'Sesión iniciada como ' + perfil.nombre + ' (admin).';
+    } else {
+      estado.innerText = 'Sesión iniciada, pero sin perfil de administrador.';
+    }
   }
 
-  // Importante: tener sesión no basta — confirmamos que además exista
-  // su fila en admins_practica.
-  const { data: perfil } = await db.from('admins_practica').select('nombre').eq('id', data.user.id).single();
-  estado.innerText = perfil ? 'Sesión iniciada como ' + perfil.nombre + ' (admin).' : 'Sesión iniciada, pero sin perfil de administrador.';
+  // body.admin-ok es el interruptor que lee admin.css: con la clase se ve
+  // el CRUD (.app) y se esconden los formularios de acceso; sin ella, al revés.
+  document.body.classList.toggle('admin-ok', esAdmin);
+  // El botón de salir solo tiene sentido cuando hay un admin dentro
+  document.getElementById('btn-logout-admin').hidden = !esAdmin;
 }
 
 document.getElementById('btn-logout-admin').addEventListener('click', async () => {
   await db.auth.signOut();
   mostrarEstadoSesionAdmin();
+});
+
+// Cambiar de vista en la zona de acceso: elegir → login / registro, y los
+// enlaces para saltar de un formulario al otro. Todos los botones que
+// cambian de vista llevan data-vista con el paso que abren.
+const zonaAcceso = document.getElementById('zona-acceso-admin');
+zonaAcceso.querySelectorAll('[data-vista]').forEach(boton => {
+  boton.addEventListener('click', () => {
+    zonaAcceso.dataset.vista = boton.dataset.vista;
+  });
 });
 
 mostrarEstadoSesionAdmin();

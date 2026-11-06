@@ -73,6 +73,87 @@ h2 { font-size: 19px; margin-bottom: 4px; }
 }
 
 /* ============================================================
+   Control de acceso de administrador
+   ============================================================ */
+/* admin.js pone la clase "admin-ok" en <body> solo cuando confirma
+   sesión iniciada Y fila en admins_practica. Mientras no esté esa clase,
+   el CRUD (.app) queda oculto —arranca así desde el HTML, sin parpadeo—
+   y se ve la zona de acceso. Confirmado el admin, se invierte. */
+body:not(.admin-ok) .app { display: none; }
+body.admin-ok #zona-acceso-admin { display: none; }
+
+/* .secondary tiene display: inline-flex, que le ganaría a [hidden]: esta
+   regla asegura que el "hidden" del botón de salir sí lo esconda */
+.secondary[hidden] { display: none; }
+
+/* La zona de acceso usa las mismas tarjetas/inputs/botones del resto de la
+   app; aquí solo la centramos. Se ve UNA tarjeta a la vez (elegir, login o
+   registro), por eso es angosta */
+#zona-acceso-admin {
+  max-width: 460px;
+  margin: 24px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* data-vista dice qué paso mostrar; aquí escondemos los otros dos.
+   Arranca en "elegir" desde el HTML, y admin.js lo cambia al hacer clic */
+#zona-acceso-admin[data-vista="elegir"] #tarjeta-login,
+#zona-acceso-admin[data-vista="elegir"] #tarjeta-registro,
+#zona-acceso-admin[data-vista="login"] #acceso-elegir,
+#zona-acceso-admin[data-vista="login"] #tarjeta-registro,
+#zona-acceso-admin[data-vista="registro"] #acceso-elegir,
+#zona-acceso-admin[data-vista="registro"] #tarjeta-login { display: none; }
+
+/* Paso "elegir": los dos botones, uno debajo del otro y centrados */
+.acceso-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.acceso-opciones button { width: 100%; justify-content: center; }
+
+/* "¿Ya tienes cuenta? ..." con un botón que parece enlace */
+.acceso-cambiar { margin: 16px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
+.enlace {
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--pink);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.enlace:hover { filter: none; color: var(--pink-deep); }
+
+/* Mensaje de estado: una barra con un punto a la izquierda, como el
+   #estado-sesion de la página de cuenta */
+#estado-sesion-admin {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 15px;
+}
+#estado-sesion-admin::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+/* ============================================================
    Barra lateral
    ============================================================ */
 .sidebar {
