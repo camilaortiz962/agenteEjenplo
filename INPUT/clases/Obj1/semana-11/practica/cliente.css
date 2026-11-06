@@ -1,9 +1,9 @@
 /* cliente.css — estilos propios de cliente.html.
    Todo lo general (paleta, fuente, inputs, botones, tarjetas) viene de
-   prueba2.css, que se carga antes. Aquí solo va el layout de esta página
+   admin.css, que se carga antes. Aquí solo va el layout de esta página
    y el mensaje de sesión, usando las MISMAS variables (--pink, --line...). */
 
-/* El marco con sidebar (.app, .sidebar, .tab...) viene de prueba2.css.
+/* El marco con sidebar (.app, .sidebar, .tab...) viene de admin.css.
    Aquí solo un poco menos de ancho: esta página tiene menos contenido */
 .app { max-width: 1100px; }
 
@@ -21,7 +21,7 @@
 /* El correo largo se corta con "..." en vez de desbordar la barra */
 #sidebar-usuario { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* El punto es verde (de prueba2.css) solo con sesión: sin sesión, gris.
+/* El punto es verde (de admin.css) solo con sesión: sin sesión, gris.
    La clase "conectado" la pone actualizarVista() en cliente.js */
 .sidebar-pie:not(.conectado) .punto { background: var(--muted); box-shadow: none; }
 
@@ -59,7 +59,7 @@
   background: var(--muted);
 }
 
-/* Sesión iniciada: verde, con el mismo brillo de .punto en prueba2 */
+/* Sesión iniciada: verde, con el mismo brillo de .punto en admin.css */
 #estado-sesion.exito {
   color: var(--green);
   border-color: rgba(79, 209, 139, 0.45);

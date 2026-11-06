@@ -1,4 +1,76 @@
-/* prueba2.js — el JS de la guía de la semana 11:
+document.getElementById('form-registro-admin').addEventListener('submit', async (evento) => {
+  evento.preventDefault();
+  const form = evento.target;
+
+  const { data, error } = await db.auth.signUp({
+    email: form.elements['admin-registro-correo'].value,
+    password: form.elements['admin-registro-password'].value,
+  });
+
+  if (error) {
+    document.getElementById('estado-sesion-admin').innerText = 'Error al registrar: ' + error.message;
+    return;
+  }
+
+  const { error: errorPerfil } = await db.from('admins_practica').insert([{
+    id: data.user.id,
+    nombre: form.elements['admin-registro-nombre'].value.trim(),
+    correo: form.elements['admin-registro-correo'].value.trim(),
+  }]);
+
+  if (errorPerfil) {
+    document.getElementById('estado-sesion-admin').innerText = 'Cuenta creada, pero falló el perfil: ' + errorPerfil.message;
+    return;
+  }
+
+  document.getElementById('estado-sesion-admin').innerText = 'Cuenta de administrador creada. Ya puedes iniciar sesión.';
+  form.reset();
+});
+
+document.getElementById('form-login-admin').addEventListener('submit', async (evento) => {
+  evento.preventDefault();
+  const form = evento.target;
+
+  const { error } = await db.auth.signInWithPassword({
+    email: form.elements['admin-login-correo'].value,
+    password: form.elements['admin-login-password'].value,
+  });
+
+  if (error) {
+    document.getElementById('estado-sesion-admin').innerText = 'Error al iniciar sesión: ' + error.message;
+    return;
+  }
+
+  mostrarEstadoSesionAdmin();
+});
+
+async function mostrarEstadoSesionAdmin() {
+  const { data } = await db.auth.getUser();
+  const estado = document.getElementById('estado-sesion-admin');
+
+  if (!data.user) {
+    estado.innerText = 'No has iniciado sesión.';
+    return;
+  }
+
+  // Importante: tener sesión no basta — confirmamos que además exista
+  // su fila en admins_practica.
+  const { data: perfil } = await db.from('admins_practica').select('nombre').eq('id', data.user.id).single();
+  estado.innerText = perfil ? 'Sesión iniciada como ' + perfil.nombre + ' (admin).' : 'Sesión iniciada, pero sin perfil de administrador.';
+}
+
+document.getElementById('btn-logout-admin').addEventListener('click', async () => {
+  await db.auth.signOut();
+  mostrarEstadoSesionAdmin();
+});
+
+mostrarEstadoSesionAdmin();
+
+
+
+
+
+/* admin.js — el JS de la guía de la semana 11:
    4.4 Paso 5 (botón "Traer productos") y el CRUD de la sección 5.
    Las funciones que hablan con Supabase (listarProductos, agregarProducto,
    buscarProductoPorId, buscarProductosPorNombre, modificarProducto,
@@ -199,36 +271,6 @@ function actualizarResumen(lista) {
   document.getElementById('stat-total').textContent = lista.length;
   document.getElementById('stat-disponibles').textContent = disponibles + ' / ' + lista.length;
 }
-
-// --- 4.4 Paso 5: botón "Traer productos" ---
-const btnTraer = document.getElementById('btn-traer');
-
-const seccionCatalogo = document.getElementById('seccion-catalogo');
-const btnTraerTexto = document.getElementById('btn-traer-texto');
-
-// Los datos se cargan solos al abrir la página (los necesitan los
-// indicadores y los selects), pero el catálogo solo se MUESTRA con este
-// botón. Funciona como interruptor: si está escondido lo trae, y si ya
-// se ve, lo oculta.
-btnTraer.addEventListener('click', async () => {
-
-  if (!seccionCatalogo.hidden) {
-    seccionCatalogo.hidden = true;
-    btnTraer.setAttribute('aria-expanded', 'false');
-    btnTraerTexto.textContent = 'Traer productos';
-    return;
-  }
-
-  // Al abrirlo pedimos los productos otra vez, por si alguien cambió
-  // algo en Supabase desde otro lado
-  btnTraer.disabled = true;
-  await refrescarDatos();
-  btnTraer.disabled = false;
-
-  seccionCatalogo.hidden = false;
-  btnTraer.setAttribute('aria-expanded', 'true');   // el CSS cambia el ícono con esto
-  btnTraerTexto.textContent = 'Ocultar productos';
-});
 
 /* ============================================================
    Selects con buscador (Modificar y Eliminar)
@@ -668,6 +710,11 @@ tabs.forEach(tab => {
     tab.classList.add('activa');
     tab.setAttribute('aria-selected', 'true');
     document.getElementById(tab.dataset.panel).hidden = false;
+
+    // Al abrir el catálogo volvemos a pedir los productos, por si alguien
+    // cambió algo en Supabase desde otro lado (igual que hacía el botón
+    // "Traer productos" que reemplazamos por esta pestaña)
+    if (tab.dataset.panel === 'panel-catalogo') refrescarDatos();
   });
 });
 

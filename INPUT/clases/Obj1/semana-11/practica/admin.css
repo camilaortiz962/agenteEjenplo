@@ -1,4 +1,4 @@
-/* prueba2.css — estilos de prueba2.html
+/* admin.css — estilos de admin.html
    Layout tipo dashboard: barra lateral negra con el menú del CRUD,
    encabezado, fila de indicadores y abajo catálogo + panel.
    Paleta: negro, gris-malva y rosa, tomada de la imagen de referencia. */
@@ -202,17 +202,14 @@ h2 { font-size: 19px; margin-bottom: 4px; }
 .stat-nota { font-size: 12px; color: var(--muted); }
 
 /* --- Catálogo + panel --- */
+/* Una sola columna: el catálogo ya no va al lado, ahora es un panel más
+   que se abre desde la pestaña "Catálogo" del menú lateral */
 .cuerpo {
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
 }
-
-/* Mientras el catálogo está escondido, el panel del CRUD ocupa todo el
-   ancho. :has() pregunta "¿.cuerpo TIENE adentro un catálogo con hidden?".
-   Cómo se reacomoda el formulario está en "Panel ancho", más abajo */
-.cuerpo:has(#seccion-catalogo[hidden]) { grid-template-columns: minmax(0, 1fr); }
 
 /* container-type: inline-size convierte cada tarjeta en un "contenedor":
    así las reglas @container de abajo miran el ancho de LA TARJETA, no el
@@ -602,11 +599,6 @@ button:hover { filter: brightness(1.08); }
 .secondary svg { width: 17px; height: 17px; }
 .secondary:hover { background: #151215; filter: none; }
 
-/* Botón Traer/Ocultar: muestra un ícono u otro según aria-expanded,
-   que prueba2.js cambia en cada clic. El texto lo cambia el JS */
-#btn-traer[aria-expanded="false"] .icono-ocultar,
-#btn-traer[aria-expanded="true"] .icono-traer { display: none; }
-
 /* Acciones que borran datos */
 .peligro {
   background: linear-gradient(180deg, #f0959b 0%, #c95c63 100%);
@@ -617,7 +609,7 @@ button:hover { filter: brightness(1.08); }
 button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
 
 /* ============================================================
-   Aviso flotante (lo controla notificar() en prueba2.js)
+   Aviso flotante (lo controla notificar() en admin.js)
    ============================================================ */
 #notificacion:empty { display: none; }
 

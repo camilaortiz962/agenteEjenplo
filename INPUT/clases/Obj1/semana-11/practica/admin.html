@@ -11,9 +11,43 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Estilos en archivo aparte, igual que separamos el JS -->
-  <link rel="stylesheet" href="prueba2.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
+
+  <section id="zona-acceso-admin">
+  <p id="estado-sesion-admin" role="status">No has iniciado sesión.</p>
+
+  <form id="form-registro-admin">
+    <h3>Registrar administrador</h3>
+    <label for="admin-registro-nombre">Nombre</label>
+    <input id="admin-registro-nombre" type="text" required>
+
+    <label for="admin-registro-correo">Correo</label>
+    <input id="admin-registro-correo" type="email" required>
+
+    <label for="admin-registro-password">Contraseña</label>
+    <input id="admin-registro-password" type="password" minlength="6" required>
+
+    <button type="submit">Crear cuenta de administrador</button>
+  </form>
+
+  <form id="form-login-admin">
+    <h3>Iniciar sesión</h3>
+    <label for="admin-login-correo">Correo</label>
+    <input id="admin-login-correo" type="email" required>
+
+    <label for="admin-login-password">Contraseña</label>
+    <input id="admin-login-password" type="password" required>
+
+    <button type="submit">Iniciar sesión</button>
+  </form>
+</section>
+
+<button id="btn-logout-admin" type="button" hidden>Cerrar sesión</button>
+
+<!-- el panel real (catálogo, mis clientes...) debe quedar oculto hasta
+     que admin.js confirme sesión iniciada Y que existe fila en admins_practica -->
 
   <!-- Fuera del layout: es un aviso flotante (position: fixed en el CSS) -->
   <div id="notificacion"></div>
@@ -32,7 +66,13 @@
            y esconde los demás. data-panel guarda el id del panel que abre.
            Mismo orden del CRUD: Create, Read, Update, Delete -->
       <nav class="tabs" role="tablist" aria-orientation="vertical">
-        <button type="button" class="tab activa" role="tab" aria-selected="true" data-panel="panel-agregar">
+        <!-- Catálogo: ahora es la primera pestaña (y la activa al abrir).
+             Al seleccionarla, admin.js vuelve a pedir los productos. -->
+        <button type="button" class="tab activa" role="tab" aria-selected="true" data-panel="panel-catalogo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          Catálogo
+        </button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-agregar">
           <!-- Íconos en SVG dentro del HTML: stroke="currentColor" hace que
                tomen el mismo color del texto del botón -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -63,18 +103,9 @@
           <h1>Panel de <span class="resaltado">productos</span></h1>
           <p class="subtitulo">Administra el inventario guardado en Supabase</p>
         </div>
-        <!-- Un solo botón que alterna entre "Traer" y "Ocultar".
-             aria-expanded dice si el catálogo está abierto (true) o no (false):
-             lo usan los lectores de pantalla Y el CSS para elegir el ícono.
-             aria-controls dice qué elemento abre/cierra este botón -->
-        <button id="btn-traer" class="secondary" aria-expanded="false" aria-controls="seccion-catalogo">
-          <svg class="icono-traer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
-          <svg class="icono-ocultar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A9.9 9.9 0 0 1 12 6c5 0 8.5 4 9.5 6a12.6 12.6 0 0 1-2.8 3.6M6.5 7.6C4.6 8.9 3.2 10.7 2.5 12c1 2 4.5 6 9.5 6 1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
-          <span id="btn-traer-texto">Traer productos</span>
-        </button>
       </header>
 
-      <!-- Indicadores: los llena actualizarResumen() en prueba2.js -->
+      <!-- Indicadores: los llena actualizarResumen() en admin.js -->
       <div class="resumen">
         <div class="stat stat-principal">
           <span class="stat-label">Valor del inventario</span>
@@ -93,30 +124,31 @@
 
       <div class="cuerpo">
 
-        <!-- Catálogo: todos los productos como tarjetas.
-             "hidden": arranca escondido; prueba2.js lo muestra al hacer
-             clic en "Traer productos" -->
-        <section class="tarjeta" id="seccion-catalogo" hidden>
-          <h2>Catálogo</h2>
-          <div id="resultado"></div>
-          <!-- <details> es plegable: el JSON queda escondido hasta que
-               haces clic en el <summary>. <pre> respeta saltos de línea
-               y espacios; <code> le da fuente de código -->
-          <details id="detalles-json">
-            <summary>Ver JSON</summary>
-            <pre id="json-productos"><code></code></pre>
-          </details>
-        </section>
-
         <!-- Panel del CRUD: se ve solo el que eligió el menú lateral -->
         <section class="tarjeta">
 
-          <div class="panel" id="panel-agregar" role="tabpanel">
+          <!-- Catálogo: ahora es un panel más, controlado por la pestaña
+               "Catálogo" del menú lateral. Arranca visible porque es la
+               pestaña activa al abrir la página. -->
+          <div class="panel" id="panel-catalogo" role="tabpanel">
+            <h2>Catálogo</h2>
+            <div id="resultado"></div>
+            <!-- <details> es plegable: el JSON queda escondido hasta que
+                 haces clic en el <summary>. <pre> respeta saltos de línea
+                 y espacios; <code> le da fuente de código -->
+            <details id="detalles-json">
+              <summary>Ver JSON</summary>
+              <pre id="json-productos"><code></code></pre>
+            </details>
+          </div>
+
+          <!-- "hidden": arranca escondido porque la pestaña activa es Catálogo -->
+          <div class="panel" id="panel-agregar" role="tabpanel" hidden>
             <h2>Agregar producto</h2>
             <p class="ayuda">Llena los datos y se guarda como una fila nueva en la tabla.</p>
 
             <!-- Formulario: un campo por cada columna de la tabla.
-                 El atributo "name" de cada input es el que usamos en prueba2.js
+                 El atributo "name" de cada input es el que usamos en admin.js
                  para leer su valor, así que debe coincidir con la columna.
                  "required" hace que el navegador no deje enviar si está vacío. -->
             <form id="form-producto">
@@ -186,7 +218,7 @@
                 <input type="search" id="filtro-modificar" placeholder="Nombre o id" autocomplete="off">
               </label>
 
-              <!-- Las opciones las llena prueba2.js: el value de cada
+              <!-- Las opciones las llena admin.js: el value de cada
                    <option> es el id, y el texto es "#id — nombre" -->
               <label>Producto
                 <select name="id" id="select-producto" required>
@@ -196,7 +228,7 @@
 
               <!-- <fieldset disabled> bloquea TODO lo de adentro: hasta que no
                    elijas un producto no puedes escribir ni guardar.
-                   prueba2.js le quita el "disabled" al elegir uno -->
+                   admin.js le quita el "disabled" al elegir uno -->
               <fieldset id="campos-modificar" disabled>
                 <label class="full">Nombre
                   <input type="text" name="nombre" required>
@@ -281,9 +313,10 @@
   <script src="../js/supabaseClient.js"></script>
   <!-- datos.js: trae todas las funciones del CRUD (listar, agregar, buscar,
        modificar, eliminar). Va DESPUÉS de supabaseClient.js porque usa "db",
-       y ANTES de prueba2.js porque prueba2.js llama a esas funciones -->
+       y ANTES de admin.js porque admin.js llama a esas funciones -->
   <script src="../js/datos.js"></script>
-  <!-- prueba2.js: la interfaz (menú, formularios, catálogo) -->
-  <script src="../js/prueba2.js"></script>
+  <!-- admin.js: la interfaz (menú, formularios, catálogo) -->
+  <script src="../js/admin.js"></script>
 </body>
+
 </html>
