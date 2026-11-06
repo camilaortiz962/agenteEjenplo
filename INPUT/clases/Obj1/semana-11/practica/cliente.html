@@ -6,15 +6,15 @@
     <title>Mi cuenta</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- prueba2.css trae la paleta, la fuente, los inputs, los botones y
+    <!-- admin.css trae la paleta, la fuente, los inputs, los botones y
          el layout con sidebar (.app, .sidebar, .tab) del CRUD: así las dos
          páginas se ven iguales sin copiar estilos.
          cliente.css va DESPUÉS porque solo agrega/ajusta lo de esta página -->
-    <link rel="stylesheet" href="prueba2.css" />
+    <link rel="stylesheet" href="admin.css" />
     <link rel="stylesheet" href="cliente.css" />
   </head>
   <body>
-    <!-- .app es el "marco" gris-malva: barra lateral + contenido (de prueba2.css) -->
+    <!-- .app es el "marco" gris-malva: barra lateral + contenido (de admin.css) -->
     <div class="app">
 
       <!-- ===================== Barra lateral ===================== -->
@@ -67,7 +67,7 @@
             <h2>Registrarme</h2>
             <p class="ayuda">Crea una cuenta nueva con tu nombre, correo y contraseña.</p>
 
-            <!-- Cada input va DENTRO de su <label>: así prueba2.css los pone
+            <!-- Cada input va DENTRO de su <label>: así admin.css los pone
                  uno debajo del otro, y hacer clic en el texto enfoca el input -->
             <form id="form-registro">
               <label class="full">Nombre
