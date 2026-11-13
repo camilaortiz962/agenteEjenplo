@@ -79,7 +79,10 @@ h2 { font-size: 19px; margin-bottom: 4px; }
    sesión iniciada Y fila en admins_practica. Mientras no esté esa clase,
    el CRUD (.app) queda oculto —arranca así desde el HTML, sin parpadeo—
    y se ve la zona de acceso. Confirmado el admin, se invierte. */
-body:not(.admin-ok) .app { display: none; }
+/* :has(#zona-acceso-admin) acota estas reglas a admin.html: cliente.html
+   también carga admin.css y NO debe heredar el ocultar-.app (no tiene esa
+   zona ni recibe la clase admin-ok, así que su .app debe verse siempre) */
+body:has(#zona-acceso-admin):not(.admin-ok) .app { display: none; }
 body.admin-ok #zona-acceso-admin { display: none; }
 
 /* .secondary tiene display: inline-flex, que le ganaría a [hidden]: esta
