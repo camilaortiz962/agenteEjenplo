@@ -92,93 +92,18 @@ input[readonly] {
 input[readonly]:focus { border-color: var(--line); box-shadow: none; }
 
 /* ============================================================
-   Vitrina de productos (pestaña "Productos") — solo lectura.
-   Usa los mismos tokens de admin.css (--tile, --line, --mauve-a...).
+   Pestaña "Productos": el grid de tarjetas y el carrito deslizable
+   vienen de galeria.css. Aquí solo la barra superior del panel
+   (título a la izquierda, botón del carrito a la derecha).
    ============================================================ */
-.catalogo-cliente {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-}
-
-/* Mensaje mientras carga / si está vacío o hay error */
-.catalogo-aviso {
-  grid-column: 1 / -1;
-  margin: 24px 0;
-  text-align: center;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.card-producto {
+.productos-barra {
   display: flex;
-  flex-direction: column;
-  background: var(--tile);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
-  transition: border-color 0.15s, transform 0.15s;
-}
-.card-producto:hover { border-color: var(--line-strong); transform: translateY(-3px); }
-
-.card-img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: #fff;   /* muchas fotos de producto tienen fondo blanco */
-}
-/* Sin imagen: cuadro malva con la inicial, igual que el catálogo de admin */
-.card-img.sin-imagen {
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, var(--mauve-a) 0%, var(--mauve-b) 100%);
-  color: var(--text);
-  font-size: 32px;
-  font-weight: 500;
-}
-
-/* flex: 1 iguala la altura de todas las tarjetas aunque la descripción
-   sea más corta, así la fila de precio queda alineada abajo */
-.card-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 14px 16px 16px;
-}
-.card-nombre { margin: 0; font-size: 15px; font-weight: 500; color: var(--text); }
-.card-descripcion {
-  margin: 0;
-  font-size: 12px;
-  color: var(--muted);
-  /* corta a 2 líneas con "..." para emparejar alturas */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Precio a la izquierda, estado (Disponible/Agotado) a la derecha */
-.card-pie {
-  margin-top: 8px;
-  display: flex;
-  align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.card-precio {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
-.card-estado { font-size: 12px; color: var(--green); }
-
-/* Producto agotado: apagado y el estado en rojo */
-.card-producto.agotado { opacity: 0.55; }
-.card-producto.agotado .card-estado { color: var(--red); }
+.productos-barra .seccion-titulo p { margin: 4px 0 0; }
 
 /* Celular: un formulario debajo del otro */
 @media (max-width: 720px) {
