@@ -91,6 +91,20 @@ input[readonly] {
 }
 input[readonly]:focus { border-color: var(--line); box-shadow: none; }
 
+/* ============================================================
+   Pestaña "Productos": el grid de tarjetas y el carrito deslizable
+   vienen de galeria.css. Aquí solo la barra superior del panel
+   (título a la izquierda, botón del carrito a la derecha).
+   ============================================================ */
+.productos-barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.productos-barra .seccion-titulo p { margin: 4px 0 0; }
+
 /* Celular: un formulario debajo del otro */
 @media (max-width: 720px) {
   .cuenta-formularios { grid-template-columns: minmax(0, 1fr); }

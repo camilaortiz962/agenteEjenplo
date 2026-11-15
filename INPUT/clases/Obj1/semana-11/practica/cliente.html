@@ -12,6 +12,9 @@
          cliente.css va DESPUÉS porque solo agrega/ajusta lo de esta página -->
     <link rel="stylesheet" href="admin.css" />
     <link rel="stylesheet" href="cliente.css" />
+    <!-- galeria.css al final: trae el grid de productos y el carrito
+         deslizable de la tienda, que reutilizamos en la pestaña "Productos" -->
+    <link rel="stylesheet" href="galeria.css" />
   </head>
   <body>
     <!-- .app es el "marco" gris-malva: barra lateral + contenido (de admin.css) -->
@@ -35,6 +38,13 @@
           <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-perfil" id="tab-perfil" hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
             Actualizar datos
+          </button>
+
+          <!-- Productos: siempre visible (con o sin sesión). Muestra el
+               catálogo real de la tienda, solo para mirar. -->
+          <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-productos" id="tab-productos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1-5h16l1 5M3 9h18M3 9v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9M9 13h6"/></svg>
+            Productos
           </button>
         </nav>
 
@@ -143,10 +153,61 @@
           </form>
         </section>
 
+        <!-- Panel "Productos": la tienda completa. galeria.js llena #galeria
+             con listarProductos() y maneja el carrito (los mismos ids que
+             galeria.html: #galeria, #btn-carrito, #contador-badge) -->
+        <section id="panel-productos" role="tabpanel" hidden>
+          <div class="productos-barra">
+            <div class="seccion-titulo">
+              <h2>Nuestros <span class="resaltado">productos</span></h2>
+              <p class="ayuda">Selecciona la cantidad de cada producto y agrégalo al carrito.</p>
+            </div>
+
+            <!-- El badge lo actualiza actualizarCarrito() en galeria.js -->
+            <button id="btn-carrito" type="button" class="secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.4a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L21 7H6"/></svg>
+              Carrito
+              <span id="contador-badge" class="badge">0</span>
+            </button>
+          </div>
+
+          <!-- La galería se construye aquí con JavaScript (renderizarGaleria) -->
+          <div id="galeria" class="galeria"></div>
+        </section>
+
       </main>
     </div>
 
+    <!-- ===== Carrito deslizable (de galeria.html): overlay + panel. Van
+         fuera de .app porque son position: fixed sobre toda la pantalla ===== -->
+    <div id="overlay"></div>
+
+    <aside id="panel-carrito">
+      <div class="carrito-header">
+        <h2>Tu carrito</h2>
+        <button id="btn-cerrar-carrito" type="button" class="btn-cerrar" aria-label="Cerrar">✕</button>
+      </div>
+
+      <!-- Lo llena actualizarCarrito() en galeria.js -->
+      <div id="lista-carrito">
+        <p class="carrito-vacio">Tu carrito está vacío 🛒</p>
+      </div>
+
+      <div class="carrito-footer">
+        <div class="total-row">
+          <span class="total-label">Total</span>
+          <span class="total-valor" id="total-valor">$0</span>
+        </div>
+        <button id="btn-checkout" type="button">Proceder al pago →</button>
+      </div>
+    </aside>
+
     <script src="../js/supabaseClient.js"></script>
+    <!-- datos.js trae listarProductos(); lo usan cliente.js y galeria.js -->
+    <script src="../js/datos.js"></script>
     <script src="../js/cliente.js"></script>
+    <!-- galeria.js maneja la pestaña Productos: render del catálogo y carrito.
+         Reutilizado tal cual de la tienda (mismos ids en el HTML de arriba) -->
+    <script src="../js/galeria.js"></script>
   </body>
 </html>
