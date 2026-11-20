@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galería de productos</title>
+  <title>Tienda · Numin</title>
 
   <!-- Librería de Supabase: tiene que cargar ANTES de supabaseClient.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,10 +20,13 @@
 
     <!-- ===== Barra superior: marca + botón de carrito ===== -->
     <header class="tienda-barra">
-      <div class="marca">
-        <span class="marca-logo">M</span>
-        MiTienda
-      </div>
+      <!-- Logo Numin (estilos .logo en admin.css): vuelve a la landing -->
+      <a href="index.html" class="logo" aria-label="Numin, ir al inicio">N<span class="logo-u">U</span>MIN<sup>®</sup></a>
+
+      <nav class="tienda-menu" aria-label="Navegación">
+        <a href="index.html">Inicio</a>
+        <a href="cliente.html">Mi cuenta</a>
+      </nav>
 
       <!-- El badge lo actualiza actualizarCarrito() con el número de ítems -->
       <button id="btn-carrito" class="secondary">

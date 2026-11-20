@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Productos práctica</title>
+  <title>Panel admin · Numin</title>
 
   <!-- CDN: trae la librería de Supabase ANTES que nuestros propios
        scripts — sin esta línea, "supabase.createClient" no existiría
@@ -19,6 +19,7 @@
        administrador. data-vista controla qué se muestra: "elegir" (los dos
        botones), "login" o "registro". admin.js lo cambia al hacer clic. -->
   <section id="zona-acceso-admin" data-vista="elegir">
+    <a href="index.html" class="logo" aria-label="Numin, ir al inicio">N<span class="logo-u">U</span>MIN<sup>®</sup></a>
     <header class="encabezado">
       <div>
         <h1>Panel de <span class="resaltado">administración</span></h1>
@@ -90,8 +91,8 @@
     <!-- ===================== Barra lateral ===================== -->
     <aside class="sidebar">
       <div class="marca">
-        <span class="marca-logo">P</span>
-        Productos
+        <a href="index.html" class="logo" aria-label="Numin, ir al inicio">N<span class="logo-u">U</span>MIN<sup>®</sup></a>
+        <span class="marca-sub">Panel admin</span>
       </div>
 
       <!-- El menú son las pestañas del CRUD. Cada botón muestra su panel

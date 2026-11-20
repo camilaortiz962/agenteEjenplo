@@ -1,7 +1,7 @@
 /* cliente.css — estilos propios de cliente.html.
    Todo lo general (paleta, fuente, inputs, botones, tarjetas) viene de
    admin.css, que se carga antes. Aquí solo va el layout de esta página
-   y el mensaje de sesión, usando las MISMAS variables (--pink, --line...). */
+   y el mensaje de sesión, usando las MISMAS variables (--acento, --linea...). */
 
 /* El marco con sidebar (.app, .sidebar, .tab...) viene de admin.css.
    Aquí solo un poco menos de ancho: esta página tiene menos contenido */
@@ -14,7 +14,7 @@
 /* "Cerrar sesión" va al fondo de la barra (la sidebar es flex column:
    margin-top: auto empuja el elemento hacia abajo) */
 .tab-salir { margin-top: auto; }
-.tab-salir:hover { color: var(--red); }
+.tab-salir:hover { color: var(--rojo); }
 /* si "Cerrar sesión" se ve, el texto de abajo va pegado a él */
 .tab-salir:not([hidden]) + .sidebar-pie { margin-top: 0; }
 
@@ -23,7 +23,7 @@
 
 /* El punto es verde (de admin.css) solo con sesión: sin sesión, gris.
    La clase "conectado" la pone actualizarVista() en cliente.js */
-.sidebar-pie:not(.conectado) .punto { background: var(--muted); box-shadow: none; }
+.sidebar-pie:not(.conectado) .punto { background: var(--suave); box-shadow: none; }
 
 /* El botón de guardar no se estira a la altura del campo de al lado */
 #form-perfil button { align-self: end; }
@@ -44,9 +44,9 @@
   gap: 12px;
   padding: 16px 20px;
   border-radius: 18px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--muted);
+  border: 1px solid var(--linea);
+  background: var(--tarjeta);
+  color: var(--suave);
   font-size: 15px;
 }
 /* ::before crea un elemento "falso" antes del texto: aquí, el punto */
@@ -56,24 +56,24 @@
   height: 10px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--muted);
+  background: var(--suave);
 }
 
 /* Sesión iniciada: verde, con el mismo brillo de .punto en admin.css */
 #estado-sesion.exito {
-  color: var(--green);
-  border-color: rgba(79, 209, 139, 0.45);
-  background: rgba(79, 209, 139, 0.07);
+  color: var(--verde);
+  border-color: rgba(63, 122, 79, 0.45);
+  background: rgba(63, 122, 79, 0.07);
 }
-#estado-sesion.exito::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+#estado-sesion.exito::before { background: var(--verde); box-shadow: 0 0 8px var(--verde); }
 
 /* Error: rojo */
 #estado-sesion.error {
-  color: var(--red);
-  border-color: rgba(236, 123, 130, 0.45);
-  background: rgba(236, 123, 130, 0.07);
+  color: var(--rojo);
+  border-color: rgba(179, 58, 58, 0.45);
+  background: rgba(179, 58, 58, 0.07);
 }
-#estado-sesion.error::before { background: var(--red); }
+#estado-sesion.error::before { background: var(--rojo); }
 
 /* .secondary (inline-flex) y .cuenta-formularios (grid) tienen un display
    propio que le ganaría al atributo hidden; estas reglas aseguran que
@@ -84,12 +84,12 @@
 /* Campos de solo lectura (correo y rol en "Mis datos"): apagados, para
    que se note que no se pueden editar */
 input[readonly] {
-  color: var(--muted);
+  color: var(--suave);
   background: transparent;
   border-style: dashed;
   cursor: not-allowed;
 }
-input[readonly]:focus { border-color: var(--line); box-shadow: none; }
+input[readonly]:focus { border-color: var(--linea); box-shadow: none; }
 
 /* ============================================================
    Pestaña "Productos": el grid de tarjetas y el carrito deslizable
