@@ -27,3 +27,11 @@ JavaScript.
 Aprendí que ordenar archivos es difícil. (Sesión: filtros de la baraja, login con regex, juego de
 memoria y usuarios con historial; el código se fue repartiendo en `cartas.js`, `userStore.js`,
 `memory.js` y `game.js`.)
+
+## 2026-11-20
+
+Aprendí a recuperar lo perdido y a especificar qué es lo que quiero. (Sesión: carrito conectado
+a `pedidos` y `detalles_pedidos` en Supabase siguiendo la guía 5.1–5.8, recrear
+`supabaseClient.js` que no estaba en este computador, pestañas "Mis pedidos" para el cliente y
+"Pedidos" para el admin con cambio de estado, y landing page de Numin en `index.html` que lleva
+a la galería.)

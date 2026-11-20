@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Numin · Productos naturales</title>
+  <meta name="description" content="Numin: productos naturales en cápsula blanda para complementar tu rutina de bienestar." />
+
+  <!-- Dos fuentes: una serif elegante para títulos (como el catálogo) y
+       una sans limpia para el texto (la misma Outfit del resto del proyecto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+  <!-- ===== Barra superior: logo, anclas a las secciones y acceso a la tienda.
+       Los href="#..." saltan a la sección con ese id (sin JavaScript) ===== -->
+  <header class="barra">
+    <a href="#inicio" class="logo" aria-label="Numin, ir al inicio">N<span class="logo-u">U</span>MIN<sup>®</sup></a>
+
+    <nav class="menu" aria-label="Secciones">
+      <a href="#esencia">Esencia</a>
+      <a href="#lineas">Líneas</a>
+      <a href="#destacados">Destacados</a>
+      <a href="#comprar">Cómo comprar</a>
+    </nav>
+
+    <a href="galeria.html" class="boton boton-chico">Tienda</a>
+  </header>
+
+  <main>
+
+    <!-- ===================== 1. HERO ===================== -->
+    <section id="inicio" class="hero">
+      <div class="hero-texto">
+        <p class="sobretitulo">Productos naturales en cápsula blanda</p>
+        <h1>Bienestar que se siente, <em>calidad que confías.</em></h1>
+        <p class="hero-bajada">Fórmulas que nutren, ingredientes que transforman. Complementa tu rutina de bienestar con productos de origen natural.</p>
+
+        <div class="acciones">
+          <!-- La redirección principal a la galería -->
+          <a href="galeria.html" class="boton">Ver productos</a>
+          <a href="#lineas" class="boton boton-borde">Conocer las líneas</a>
+        </div>
+      </div>
+
+      <figure class="hero-imagen">
+        <img src="img/numin/hero-vitaminas.jpg" width="800" height="656"
+             alt="Frasco de 19 Vitaminas y Minerales Numin entre flores de lavanda" />
+      </figure>
+    </section>
+
+
+    <!-- ===================== 2. NUESTRA ESENCIA ===================== -->
+    <section id="esencia" class="seccion esencia">
+      <div class="ornamento" aria-hidden="true"><span></span>✦<span></span></div>
+      <h2>Nuestra esencia</h2>
+      <p class="frase">Bienestar que inspira confianza.</p>
+      <p class="esencia-texto">
+        Creemos que el bienestar no se improvisa. Se construye con calidad,
+        confianza y el poder de la naturaleza.
+      </p>
+
+      <ul class="valores">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19 13 11"/></svg>
+          <strong>Natural</strong>
+          <span>Ingredientes de origen natural</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+          <strong>Seguro</strong>
+          <span>Calidad garantizada en cada fórmula</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>
+          <strong>Confiable</strong>
+          <span>Una compra cercana y práctica</span>
+        </li>
+      </ul>
+    </section>
+
+
+    <!-- ===================== 3. LÍNEAS DE BIENESTAR ===================== -->
+    <section id="lineas" class="seccion">
+      <div class="encabezado-seccion">
+        <p class="sobretitulo">Nuestro catálogo</p>
+        <h2>Cuatro líneas de bienestar</h2>
+        <p>Organizamos los productos según lo que buscas para tu rutina.</p>
+      </div>
+
+      <div class="lineas">
+        <article class="linea">
+          <img src="img/numin/linea-origen-natural.jpg" width="560" height="840" loading="lazy"
+               alt="Portada de la línea: La naturaleza nos brinda lo esencial para cuidarte" />
+          <div class="linea-texto">
+            <h3>Origen natural</h3>
+            <p>Astaxantina, Calabaza, Fenogreco, Melena de león, Orégano, Papaya, Spirulina y Vinagre de manzana.</p>
+          </div>
+        </article>
+
+        <article class="linea">
+          <img src="img/numin/linea-belleza.jpg" width="560" height="840" loading="lazy"
+               alt="Portada de la línea: Nutrición natural para tu mejor versión" />
+          <div class="linea-texto">
+            <h3>Belleza</h3>
+            <p>Biotina, Colágeno + Biotina, NAD y Resveratrol.</p>
+          </div>
+        </article>
+
+        <article class="linea">
+          <img src="img/numin/linea-vitaminas.jpg" width="560" height="840" loading="lazy"
+               alt="Portada de la línea: Tu bienestar, nuestra naturaleza" />
+          <div class="linea-texto">
+            <h3>Vitaminas y minerales</h3>
+            <p>Magnesio, Potasio, Selenio, Zinc, Vitaminas C, D3, D3 + K2, E y 19 Vitaminas y Minerales.</p>
+          </div>
+        </article>
+
+        <article class="linea">
+          <img src="img/numin/linea-nutraceuticos.jpg" width="560" height="840" loading="lazy"
+               alt="Portada de la línea: Nutracéuticos de la naturaleza, para tu bienestar integral" />
+          <div class="linea-texto">
+            <h3>Nutracéuticos</h3>
+            <p>Cúrcuma + Pimienta + Omega 3, Glutamina, Inositol, L-Carnitina, Omega 3, Omega 3·6·9 y Probióticos.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <!-- ===================== 4. PRODUCTOS DESTACADOS ===================== -->
+    <section id="destacados" class="seccion destacados">
+      <div class="encabezado-seccion">
+        <p class="sobretitulo">Favoritos</p>
+        <h2>Productos destacados</h2>
+      </div>
+
+      <!-- Cada tarjeta entera es un enlace a la galería -->
+      <ul class="productos">
+        <li>
+          <a href="galeria.html" class="producto">
+            <img src="img/numin/spirulina-picolinato.jpg" width="600" height="492" loading="lazy"
+                 alt="Frasco de Spirulina + Picolinato de cromo Numin" />
+            <span class="producto-linea">Origen natural</span>
+            <h3>Spirulina + Picolinato de cromo</h3>
+          </a>
+        </li>
+        <li>
+          <a href="galeria.html" class="producto">
+            <img src="img/numin/colageno-biotina.jpg" width="600" height="492" loading="lazy"
+                 alt="Frasco de Colágeno + Biotina Numin" />
+            <span class="producto-linea">Belleza</span>
+            <h3>Colágeno + Biotina</h3>
+          </a>
+        </li>
+        <li>
+          <a href="galeria.html" class="producto">
+            <img src="img/numin/magnesio-complex.jpg" width="600" height="492" loading="lazy"
+                 alt="Frasco de Magnesio Complex 8 en 1 Numin" />
+            <span class="producto-linea">Vitaminas y minerales</span>
+            <h3>Magnesio Complex 8 en 1</h3>
+          </a>
+        </li>
+        <li>
+          <a href="galeria.html" class="producto">
+            <img src="img/numin/omega-3.jpg" width="600" height="492" loading="lazy"
+                 alt="Frasco de Omega 3 Numin" />
+            <span class="producto-linea">Nutracéuticos</span>
+            <h3>Omega 3</h3>
+          </a>
+        </li>
+      </ul>
+
+      <div class="centrado">
+        <a href="galeria.html" class="boton">Ver todo el catálogo</a>
+      </div>
+    </section>
+
+
+    <!-- ===================== 5. CÓMO COMPRAR + CIERRE ===================== -->
+    <section id="comprar" class="seccion comprar">
+      <div class="encabezado-seccion">
+        <p class="sobretitulo">Simple y cercano</p>
+        <h2>Cómo comprar en Numin</h2>
+      </div>
+
+      <!-- <ol>: los pasos tienen orden. El número lo pone el CSS con counter() -->
+      <ol class="pasos">
+        <li>
+          <h3>Explora</h3>
+          <p>Recorre el catálogo y elige lo que necesitas.</p>
+        </li>
+        <li>
+          <h3>Agrega</h3>
+          <p>Suma tus productos al carrito, con la cantidad que quieras.</p>
+        </li>
+        <li>
+          <h3>Ingresa tus datos</h3>
+          <p>Inicia sesión y escribe la dirección de envío.</p>
+        </li>
+        <li>
+          <h3>Recibe</h3>
+          <p>Te confirmamos el pedido y lo llevamos a tu casa.</p>
+        </li>
+      </ol>
+
+      <div class="cierre">
+        <p class="frase">Tu bienestar, nuestra naturaleza.</p>
+        <div class="acciones">
+          <a href="galeria.html" class="boton">Ir a la tienda</a>
+          <a href="cliente.html" class="boton boton-borde">Mi cuenta</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <a href="#inicio" class="logo" aria-label="Numin, volver al inicio">N<span class="logo-u">U</span>MIN<sup>®</sup></a>
+    <p>Bienestar que se siente, calidad que confías.</p>
+    <nav aria-label="Enlaces del pie">
+      <a href="galeria.html">Tienda</a>
+      <a href="cliente.html">Mi cuenta</a>
+      <a href="#inicio">Volver arriba ↑</a>
+    </nav>
+  </footer>
+
+</body>
+</html>

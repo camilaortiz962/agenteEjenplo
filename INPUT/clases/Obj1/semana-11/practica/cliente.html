@@ -39,6 +39,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
             Actualizar datos
           </button>
+          <!-- Mis pedidos: solo con sesión (cliente.js le quita el hidden) -->
+          <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-pedidos" id="tab-pedidos" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+            Mis pedidos
+          </button>
 
           <!-- Productos: siempre visible (con o sin sesión). Muestra el
                catálogo real de la tienda, solo para mirar. -->
@@ -153,6 +158,14 @@
           </form>
         </section>
 
+        <!-- Panel "Mis pedidos": lo llena cargarMisPedidos() (cliente.js) con
+             las funciones de pedidos.js. RLS hace que solo lleguen los tuyos -->
+        <section class="tarjeta" id="panel-pedidos" role="tabpanel" hidden>
+          <h2>Mis pedidos</h2>
+          <p class="ayuda">Tus compras confirmadas, la más reciente arriba. El total lo calcula la base de datos.</p>
+          <div id="lista-mis-pedidos" class="lista-pedidos"></div>
+        </section>
+
         <!-- Panel "Productos": la tienda completa. galeria.js llena #galeria
              con listarProductos() y maneja el carrito (los mismos ids que
              galeria.html: #galeria, #btn-carrito, #contador-badge) -->
@@ -198,6 +211,30 @@
           <span class="total-label">Total</span>
           <span class="total-valor" id="total-valor">$0</span>
         </div>
+        <!-- Mensajes del carrito (vacío, sin sesión, stock insuficiente,
+             pedido confirmado). role="status": un lector de pantalla lo anuncia -->
+        <p id="mensaje-carrito" class="mensaje-carrito" role="status"></p>
+
+        <!-- Formulario de envío (guía 5.6). Arranca oculto: lo muestra
+             "Proceder al pago" solo si hay productos y sesión -->
+        <form id="form-checkout" hidden>
+          <label class="check full">
+            <input id="checkout-envio" type="checkbox" />
+            Envío a domicilio
+          </label>
+          <label class="full">Dirección de envío
+            <input id="checkout-direccion" type="text" autocomplete="street-address" />
+          </label>
+          <label class="full">Teléfono de contacto
+            <input id="checkout-telefono" type="tel" autocomplete="tel" />
+          </label>
+          <label class="full">Observaciones
+            <textarea id="checkout-observacion" rows="2"></textarea>
+          </label>
+          <button id="btn-confirmar" type="submit" class="full">Confirmar pedido</button>
+          <button id="btn-cancelar-checkout" type="button" class="secondary full">Volver al carrito</button>
+        </form>
+
         <button id="btn-checkout" type="button">Proceder al pago →</button>
       </div>
     </aside>
@@ -205,9 +242,13 @@
     <script src="../js/supabaseClient.js"></script>
     <!-- datos.js trae listarProductos(); lo usan cliente.js y galeria.js -->
     <script src="../js/datos.js"></script>
-    <script src="../js/cliente.js"></script>
     <!-- galeria.js maneja la pestaña Productos: render del catálogo y carrito.
-         Reutilizado tal cual de la tienda (mismos ids en el HTML de arriba) -->
+         Va ANTES que cliente.js: cliente.js llama a cargarCarritoDesdeBD() y
+         vaciarCarritoLocal() apenas carga (mostrarEstadoSesion), y esas
+         funciones viven en galeria.js -->
     <script src="../js/galeria.js"></script>
+    <!-- pedidos.js: leer y dibujar pedidos (lo usa la pestaña "Mis pedidos") -->
+    <script src="../js/pedidos.js"></script>
+    <script src="../js/cliente.js"></script>
   </body>
 </html>

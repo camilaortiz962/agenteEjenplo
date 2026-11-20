@@ -156,6 +156,9 @@ document.getElementById('form-login').addEventListener('submit', async (event) =
     mostrarMensaje(`✓ Sesión iniciada como ${usuario.email}`, 'exito');
     actualizarVista(usuario);
     cargarPerfil(usuario.id);   // lee sus datos y llena el formulario "Actualizar datos"
+    // Este login no pasa por mostrarEstadoSesion(): sin esta línea, el carrito
+    // guardado en Supabase no aparecería hasta recargar la página
+    cargarCarritoDesdeBD();
   } else {
     mostrarMensaje('No se pudo iniciar sesión: ' + motivoError(error), 'error');
   }
@@ -188,8 +191,23 @@ function activarTab(idPanel) {
 }
 
 tabs.forEach(tab => {
-  tab.addEventListener('click', () => activarTab(tab.dataset.panel));
+  tab.addEventListener('click', () => {
+    activarTab(tab.dataset.panel);
+    // Cada vez que se abre "Mis pedidos" se vuelve a consultar: así aparece
+    // el pedido que acabas de confirmar, o el estado que cambió el admin
+    if (tab.dataset.panel === 'panel-pedidos') cargarMisPedidos();
+  });
 });
+
+// Lee y dibuja los pedidos del cliente (funciones de pedidos.js).
+// No filtramos por cliente_id: la política ver_pedidos ya hace que solo
+// lleguen los del usuario con sesión.
+async function cargarMisPedidos() {
+  const contenedor = document.getElementById('lista-mis-pedidos');
+  contenedor.replaceChildren(elementoPedido('p', 'vacio', 'Cargando tus pedidos...'));
+  const pedidos = await consultarPedidos();
+  mostrarListaPedidos(contenedor, pedidos, {}, 'Todavía no tienes pedidos confirmados.');
+}
 
 // Con sesión: en la sidebar aparecen "Actualizar datos" y "Cerrar sesión"
 // y se esconde "Acceso". Sin sesión: al revés.
@@ -197,6 +215,9 @@ tabs.forEach(tab => {
 function actualizarVista(usuario) {
   document.getElementById('tab-acceso').hidden = !!usuario;
   document.getElementById('tab-perfil').hidden = !usuario;
+  document.getElementById('tab-pedidos').hidden = !usuario;
+  // Al cerrar sesión no deben quedar en pantalla los pedidos de nadie
+  if (!usuario) document.getElementById('lista-mis-pedidos').replaceChildren();
   btnLogout.hidden = !usuario;
   document.getElementById('sidebar-usuario').textContent = usuario ? usuario.email : 'Sin sesión';
   document.querySelector('.sidebar-pie').classList.toggle('conectado', !!usuario);   // punto verde o gris
@@ -333,9 +354,11 @@ async function mostrarEstadoSesion() {
   if (data.user) {
     mostrarMensaje(`✓ Sesión iniciada como ${data.user.email}`, 'exito');
     cargarPerfil(data.user.id);
+    cargarCarritoDesdeBD();   // guía 5.8: reconstruye su carrito desde Supabase (galeria.js)
   } else {
     perfilActual = null;
     mostrarMensaje('No has iniciado sesión.', '');
+    vaciarCarritoLocal();     // guía 5.8: sin sesión, no queda el carrito de nadie en pantalla
   }
 }
 

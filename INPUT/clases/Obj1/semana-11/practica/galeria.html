@@ -64,8 +64,31 @@
         <span class="total-label">Total</span>
         <span class="total-valor" id="total-valor">$0</span>
       </div>
-      <!-- Sin acción por ahora: la vista es solo visual/UX -->
-      <button id="btn-checkout">Proceder al pago →</button>
+      <!-- Mensajes del carrito (vacío, sin sesión, stock insuficiente,
+           pedido confirmado). role="status": un lector de pantalla lo anuncia -->
+      <p id="mensaje-carrito" class="mensaje-carrito" role="status"></p>
+
+      <!-- Formulario de envío (guía 5.6). Arranca oculto: lo muestra
+           "Proceder al pago" solo si hay productos y sesión -->
+      <form id="form-checkout" hidden>
+        <label class="check full">
+          <input id="checkout-envio" type="checkbox" />
+          Envío a domicilio
+        </label>
+        <label class="full">Dirección de envío
+          <input id="checkout-direccion" type="text" autocomplete="street-address" />
+        </label>
+        <label class="full">Teléfono de contacto
+          <input id="checkout-telefono" type="tel" autocomplete="tel" />
+        </label>
+        <label class="full">Observaciones
+          <textarea id="checkout-observacion" rows="2"></textarea>
+        </label>
+        <button id="btn-confirmar" type="submit" class="full">Confirmar pedido</button>
+        <button id="btn-cancelar-checkout" type="button" class="secondary full">Volver al carrito</button>
+      </form>
+
+      <button id="btn-checkout" type="button">Proceder al pago →</button>
     </div>
   </aside>
 
