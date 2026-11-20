@@ -753,3 +753,79 @@ button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
   .buscador { flex-wrap: wrap; }
   .buscador input { flex-basis: 100%; }
 }
+
+/* ============================================================
+   Pedidos: "Mis pedidos" (cliente.html) y "Pedidos" (admin.html).
+   Van aquí porque las dos páginas cargan admin.css. Las tarjetas las
+   arma crearTarjetaPedido() en pedidos.js
+   ============================================================ */
+.pedidos-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.pedidos-cabecera label { min-width: 180px; }
+
+.lista-pedidos { display: flex; flex-direction: column; gap: 14px; }
+
+.pedido {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--tile);
+}
+.pedido-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pedido-cabecera h3 { margin: 0; font-size: 16px; font-weight: 500; }
+.pedido-meta { margin: 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+
+/* Etiqueta del estado: un color por estado */
+.estado-pedido {
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.estado-confirmado { color: var(--pink);  border-color: rgba(227, 176, 216, 0.45); }
+.estado-enviado    { color: #9cc3ff;      border-color: rgba(156, 195, 255, 0.45); }
+.estado-entregado  { color: var(--green); border-color: rgba(79, 209, 139, 0.45); }
+.estado-cancelado  { color: var(--red);   border-color: rgba(236, 123, 130, 0.45); }
+
+/* Productos del pedido: nombre × cantidad a la izquierda, subtotal a la derecha */
+.pedido-lineas {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+.pedido-lineas li { display: flex; justify-content: space-between; gap: 12px; }
+.pedido-lineas li > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pedido-lineas .detalle { font-size: 12px; color: var(--muted); }
+
+.pedido-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Botones de estado (solo admin): más chicos que los del formulario */
+.pedido-acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.pedido-acciones button { padding: 8px 16px; font-size: 13px; }

@@ -73,6 +73,8 @@ async function mostrarEstadoSesionAdmin() {
   document.body.classList.toggle('admin-ok', esAdmin);
   // El botón de salir solo tiene sentido cuando hay un admin dentro
   document.getElementById('btn-logout-admin').hidden = !esAdmin;
+  // Al salir no deben quedar en pantalla los pedidos (datos personales de clientes)
+  if (!esAdmin) document.getElementById('lista-pedidos-admin').replaceChildren();
 }
 
 document.getElementById('btn-logout-admin').addEventListener('click', async () => {
@@ -718,6 +720,61 @@ btnLimpiarRegistro.addEventListener('click', () => {
 });
 
 /* ============================================================
+   Pedidos: ver todos y avanzar su estado
+   Leer y dibujar está en pedidos.js; aquí solo lo propio del admin.
+   ============================================================ */
+const filtroEstadoPedidos = document.getElementById('filtro-estado-pedidos');
+const listaPedidosAdmin = document.getElementById('lista-pedidos-admin');
+
+async function cargarPedidosAdmin() {
+  listaPedidosAdmin.replaceChildren(elementoPedido('p', 'vacio', 'Cargando pedidos...'));
+  const pedidos = await consultarPedidos({ conCliente: true, estado: filtroEstadoPedidos.value });
+  mostrarListaPedidos(
+    listaPedidosAdmin,
+    pedidos,
+    { conCliente: true, alCambiarEstado: cambiarEstadoPedido },
+    filtroEstadoPedidos.value ? 'No hay pedidos con ese estado.' : 'Todavía no hay pedidos confirmados.'
+  );
+}
+
+filtroEstadoPedidos.addEventListener('change', cargarPedidosAdmin);
+
+// Cambia el estado con un update directo. Lo permiten tres capas (4.8):
+//   - permiso por columna: authenticated puede escribir SOLO "estado"
+//   - política admin_actualiza_estado: solo si estás en admins_practica
+//   - trigger validar_transicion_estado: solo saltos válidos
+// Y el trigger pedidos_historial_cambio lo anota solo en el historial.
+async function cambiarEstadoPedido(pedido, nuevoEstado, boton) {
+  if (nuevoEstado === 'cancelado' &&
+      !confirm(`¿Cancelar el pedido #${pedido.id}? Las unidades NO vuelven al stock automáticamente.`)) {
+    return;
+  }
+
+  boton.disabled = true;
+  const { data, error } = await db
+    .from('pedidos')
+    .update({ estado: nuevoEstado })
+    .eq('id', pedido.id)
+    .select('id');
+  boton.disabled = false;
+
+  if (error) {
+    // P0001 = lo rechazó el trigger, ej. 'Transicion de estado no permitida: entregado -> enviado'
+    console.log('Error al cambiar el estado:', error);
+    notificar('No se pudo cambiar el estado: ' + error.message, 'error');
+    return;
+  }
+  // RLS no da error cuando bloquea un update: cambia 0 filas
+  if (data.length === 0) {
+    notificar('No se cambió nada: RLS no lo permitió (¿tu usuario está en admins_practica?).', 'error');
+    return;
+  }
+
+  notificar(`Pedido #${pedido.id} marcado como ${nuevoEstado}.`, 'exito');
+  cargarPedidosAdmin();   // volvemos a leer: lo que se ve es lo que quedó en la base
+}
+
+/* ============================================================
    Pestañas del CRUD
    ============================================================ */
 const tabs = document.querySelectorAll('.tab');
@@ -741,6 +798,8 @@ tabs.forEach(tab => {
     // cambió algo en Supabase desde otro lado (igual que hacía el botón
     // "Traer productos" que reemplazamos por esta pestaña)
     if (tab.dataset.panel === 'panel-catalogo') refrescarDatos();
+    // Igual con los pedidos: siempre la versión actual de la base
+    if (tab.dataset.panel === 'panel-pedidos') cargarPedidosAdmin();
   });
 });
 

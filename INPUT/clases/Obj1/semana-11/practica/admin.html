@@ -122,6 +122,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
           Eliminar
         </button>
+        <!-- Pedidos de todos los clientes: al abrirla, admin.js los consulta -->
+        <button type="button" class="tab" role="tab" aria-selected="false" data-panel="panel-pedidos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+          Pedidos
+        </button>
       </nav>
 
       <p class="sidebar-pie"><span class="punto"></span> Conectado a Supabase</p>
@@ -339,6 +344,26 @@
             </div>
           </div>
 
+          <!-- Pedidos: los llena cargarPedidosAdmin() (admin.js) con las
+               funciones de pedidos.js. La política ver_pedidos deja que el
+               admin lea TODOS los pedidos -->
+          <div class="panel" id="panel-pedidos" role="tabpanel" hidden>
+            <div class="pedidos-cabecera">
+              <h2>Pedidos</h2>
+              <label>Estado
+                <select id="filtro-estado-pedidos">
+                  <option value="">Todos</option>
+                  <option value="confirmado">Confirmados</option>
+                  <option value="enviado">Enviados</option>
+                  <option value="entregado">Entregados</option>
+                  <option value="cancelado">Cancelados</option>
+                </select>
+              </label>
+            </div>
+            <p class="ayuda">Pedidos confirmados de todos los clientes, el más reciente arriba. Avanza el estado con los botones; la base solo acepta los saltos válidos.</p>
+            <div id="lista-pedidos-admin" class="lista-pedidos"></div>
+          </div>
+
         </section>
       </div>
     </main>
@@ -352,6 +377,8 @@
        modificar, eliminar). Va DESPUÉS de supabaseClient.js porque usa "db",
        y ANTES de admin.js porque admin.js llama a esas funciones -->
   <script src="../js/datos.js"></script>
+  <!-- pedidos.js: leer y dibujar pedidos (lo usa la pestaña "Pedidos") -->
+  <script src="../js/pedidos.js"></script>
   <!-- admin.js: la interfaz (menú, formularios, catálogo) -->
   <script src="../js/admin.js"></script>
 </body>
