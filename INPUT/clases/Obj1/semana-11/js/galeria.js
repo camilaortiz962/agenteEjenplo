@@ -564,9 +564,11 @@
       return;
     }
 
+    // disponible = false → producto retirado de la tienda: no se muestra.
+    // (Si sigue disponible pero sin unidades, sí se muestra, como "Agotado".)
     // Mapear al formato de la galería. Un producto está "en stock" si está
     // marcado como disponible Y además le quedan unidades.
-    productos = lista.map(p => ({
+    productos = lista.filter(p => p.disponible !== false).map(p => ({
       id: p.id,
       nombre: p.nombre,
       descripcion: p.descripcion,

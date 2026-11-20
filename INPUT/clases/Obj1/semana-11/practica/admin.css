@@ -1,40 +1,46 @@
-/* admin.css — estilos de admin.html
-   Layout tipo dashboard: barra lateral negra con el menú del CRUD,
+/* admin.css — estilos de admin.html (y base de cliente.html y galeria.html)
+   Layout tipo dashboard: barra lateral verde oliva con el menú del CRUD,
    encabezado, fila de indicadores y abajo catálogo + panel.
-   Paleta: negro, gris-malva y rosa, tomada de la imagen de referencia. */
+   Paleta Numin, la misma de index.html (landing.css): beige, crema,
+   verde oliva y dorado. */
 
 /* @import trae la fuente de Google Fonts. Tiene que ir ANTES de
    cualquier otra regla del archivo, o el navegador lo ignora.
-   Outfit: geométrica y redondeada, como la de la referencia */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+   Outfit para el texto y Cormorant Garamond (serif) para los títulos,
+   las mismas dos fuentes de la landing */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap');
 
 /* ============================================================
    Variables: cambiando estos valores cambias toda la paleta
    ============================================================ */
 :root {
-  --bg: #08070a;               /* fondo de la página */
-  --frame-top: #4b4149;        /* marco gris-malva (arriba, más claro) */
-  --frame-bottom: #1d191d;     /* marco gris-malva (abajo, más oscuro) */
-  --sidebar: #050405;
-  --card: #0d0c0e;             /* tarjetas */
-  --tile: #141215;             /* tarjetas internas (productos, indicadores) */
-  --field: #18161a;            /* inputs */
-  --text: #f5f0f4;
-  --muted: #9d939b;
-  --line: rgba(255, 255, 255, 0.10);
-  --line-strong: rgba(255, 255, 255, 0.28);
-  --pink: #e3b0d8;             /* acento: "Nadia", textos destacados */
-  --pink-deep: #b47fa9;        /* botones */
-  --mauve-a: #8d7189;          /* degradado del ítem activo */
-  --mauve-b: #2e252c;
-  --green: #4fd18b;
-  --red: #ec7b82;
+  --fondo: #f3ede2;            /* beige: fondo de la página */
+  --marco-a: #ece4d5;          /* marco (arriba) */
+  --marco-b: #e4d9c5;          /* marco (abajo) */
+  --lateral: #4a5232;          /* verde oliva: barra lateral */
+  --tarjeta: #fbf8f2;          /* crema: tarjetas */
+  --superficie: #f5efe4;       /* tarjetas internas (productos, indicadores) */
+  --campo: #ffffff;            /* inputs */
+  --texto: #2b2a22;
+  --suave: #6b665a;
+  --linea: rgba(74, 82, 50, 0.16);
+  --linea-fuerte: rgba(74, 82, 50, 0.38);
+  --acento: #8a6f3a;           /* dorado oscuro: textos destacados (legible sobre crema) */
+  --acento-fuerte: #4a5232;    /* verde oliva: botones */
+  --acento-hover: #2f3520;     /* oliva oscuro: hover de botones y títulos */
+  --activo-a: #ece3d1;         /* cuadro sin imagen (degradado) */
+  --activo-b: #d9ccb2;
+  --verde: #3f7a4f;
+  --rojo: #b33a3a;
+  --vino: #6e1f2b;
+  --rojo-logo: #d4111c;        /* la U del logo */
 
-  --font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Cormorant Garamond", Georgia, serif;
 
-  /* color-scheme: dark hace que lo que dibuja el navegador (opciones del
-     <select>, barras de scroll, la X del input search) también salga oscuro */
-  color-scheme: dark;
+  /* color-scheme: light hace que lo que dibuja el navegador (opciones del
+     <select>, barras de scroll, la X del input search) salga claro */
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -43,18 +49,46 @@ body {
   margin: 0;
   padding: 32px 16px;
   min-height: 100vh;
-  /* brillo malva difuso detrás del marco, como en la referencia */
+  /* formas suaves de fondo, como el hero de la landing */
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(140, 95, 130, 0.22), transparent 70%),
-    var(--bg);
-  color: var(--text);
-  font-family: var(--font);
+    radial-gradient(circle at 0% 0%, rgba(74, 82, 50, 0.12), transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(164, 138, 82, 0.14), transparent 45%),
+    var(--fondo);
+  color: var(--texto);
+  font-family: var(--sans);
   font-size: 14px;
   line-height: 1.5;
 }
 
-h1, h2 { font-weight: 400; margin: 0; }
-h2 { font-size: 19px; margin-bottom: 4px; }
+/* Títulos en serif, como la landing */
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; color: var(--acento-hover); margin: 0; }
+h2 { font-size: 26px; margin-bottom: 4px; }
+
+/* ============================================================
+   Logo Numin: "NUMIN" con la U roja y su punto (igual que la landing)
+   ============================================================ */
+.logo {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: #111;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo-u { position: relative; color: var(--rojo-logo); }
+.logo-u::before {
+  content: "";
+  position: absolute;
+  top: -0.05em;
+  left: 50%;
+  width: 0.24em;
+  height: 0.24em;
+  border-radius: 50%;
+  background: var(--rojo-logo);
+  transform: translateX(-50%);
+}
+.logo sup { font-size: 0.4em; margin-left: 2px; }
 
 /* ============================================================
    Marco general: sidebar | contenido
@@ -66,10 +100,10 @@ h2 { font-size: 19px; margin-bottom: 4px; }
   display: grid;
   grid-template-columns: 230px 1fr;
   gap: 24px;
-  background: linear-gradient(165deg, var(--frame-top) 0%, #2c262b 40%, var(--frame-bottom) 100%);
-  border: 1px solid var(--line);
+  background: linear-gradient(165deg, var(--marco-a) 0%, var(--marco-b) 100%);
+  border: 1px solid var(--linea);
   border-radius: 30px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 30px 70px -30px rgba(47, 53, 32, 0.35);
 }
 
 /* ============================================================
@@ -119,19 +153,19 @@ body.admin-ok #zona-acceso-admin { display: none; }
 .acceso-opciones button { width: 100%; justify-content: center; }
 
 /* "¿Ya tienes cuenta? ..." con un botón que parece enlace */
-.acceso-cambiar { margin: 16px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
+.acceso-cambiar { margin: 16px 0 0; font-size: 13px; color: var(--suave); text-align: center; }
 .enlace {
   padding: 0;
   border: none;
   background: none;
   box-shadow: none;
-  color: var(--pink);
+  color: var(--acento);
   font: inherit;
   font-size: 13px;
   cursor: pointer;
   text-decoration: underline;
 }
-.enlace:hover { filter: none; color: var(--pink-deep); }
+.enlace:hover { filter: none; color: var(--acento-fuerte); }
 
 /* Mensaje de estado: una barra con un punto a la izquierda, como el
    #estado-sesion de la página de cuenta */
@@ -142,9 +176,9 @@ body.admin-ok #zona-acceso-admin { display: none; }
   gap: 12px;
   padding: 16px 20px;
   border-radius: 18px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--muted);
+  border: 1px solid var(--linea);
+  background: var(--tarjeta);
+  color: var(--suave);
   font-size: 15px;
 }
 #estado-sesion-admin::before {
@@ -153,14 +187,14 @@ body.admin-ok #zona-acceso-admin { display: none; }
   height: 10px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--muted);
+  background: var(--suave);
 }
 
 /* ============================================================
    Barra lateral
    ============================================================ */
 .sidebar {
-  background: var(--sidebar);
+  background: var(--lateral);
   border-radius: 22px;
   padding: 28px 14px;
   display: flex;
@@ -168,24 +202,29 @@ body.admin-ok #zona-acceso-admin { display: none; }
   gap: 32px;
 }
 
+/* Marca: logo Numin + nombre de la sección debajo */
 .marca {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 2px;
   padding: 0 10px;
-  font-size: 19px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
 }
-.marca-logo {
-  width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%);
-  color: #1a1018;
-  font-weight: 600;
+/* Sobre la barra oliva, el logo va en una pastilla crema: así conserva
+   sus colores originales (la U roja se pierde sobre el verde) */
+.sidebar .logo {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: var(--tarjeta);
+}
+.marca-sub { margin-top: 8px; }
+/* Logo arriba de la zona de acceso del admin */
+#zona-acceso-admin > .logo { align-self: center; font-size: 28px; }
+.marca-sub {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(251, 248, 242, 0.7);
 }
 
 /* Menú vertical: cada pestaña es una fila con ícono + texto */
@@ -200,7 +239,7 @@ body.admin-ok #zona-acceso-admin { display: none; }
   border: none;
   border-radius: 14px;
   background: transparent;
-  color: #d6ced4;
+  color: rgba(251, 248, 242, 0.82);
   font: inherit;
   font-size: 15px;
   text-align: left;
@@ -209,14 +248,13 @@ body.admin-ok #zona-acceso-admin { display: none; }
   transition: background 0.15s, color 0.15s;
 }
 .tab svg { width: 19px; height: 19px; flex-shrink: 0; }
-.tab:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); filter: none; }
+.tab:hover { background: rgba(255, 255, 255, 0.08); color: #fbf8f2; filter: none; }
 
-/* Ítem activo: degradado malva que se desvanece hacia la derecha,
-   igual que "Dashboard" en la referencia */
+/* Ítem activo: píldora crema sobre la barra oliva */
 .tab.activa {
-  background: linear-gradient(90deg, var(--mauve-a) 0%, var(--mauve-b) 100%);
-  color: var(--text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: var(--tarjeta);
+  color: var(--acento-hover);
+  box-shadow: none;
 }
 
 /* margin-top: auto empuja este texto al fondo de la barra (es flex column) */
@@ -224,7 +262,7 @@ body.admin-ok #zona-acceso-admin { display: none; }
   margin: auto 0 0;
   padding: 0 10px;
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(251, 248, 242, 0.7);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -233,8 +271,8 @@ body.admin-ok #zona-acceso-admin { display: none; }
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
+  background: var(--verde);
+  box-shadow: 0 0 0 3px rgba(122, 196, 140, 0.3);
 }
 
 /* ============================================================
@@ -255,9 +293,9 @@ body.admin-ok #zona-acceso-admin { display: none; }
   gap: 16px;
   flex-wrap: wrap;
 }
-.encabezado h1 { font-size: 32px; letter-spacing: -0.01em; }
-.resaltado { color: var(--pink); }
-.subtitulo { margin: 2px 0 0; font-size: 13px; color: #cfc6cd; }
+.encabezado h1 { font-size: 40px; font-weight: 500; }
+.resaltado { color: var(--acento); font-style: italic; }
+.subtitulo { margin: 2px 0 0; font-size: 13px; color: var(--suave); }
 
 /* --- Indicadores --- */
 .resumen {
@@ -271,19 +309,19 @@ body.admin-ok #zona-acceso-admin { display: none; }
   gap: 4px;
   padding: 18px 22px;
   border-radius: 20px;
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
 }
 /* El indicador principal lleva el brillo malva de "Total Holding" */
 .stat-principal {
   background:
-    radial-gradient(circle at 90% 10%, rgba(227, 176, 216, 0.28), transparent 60%),
-    var(--card);
+    radial-gradient(circle at 90% 10%, rgba(164, 138, 82, 0.22), transparent 60%),
+    var(--tarjeta);
 }
-.stat-label { font-size: 14px; color: #d6ced4; }
+.stat-label { font-size: 14px; color: var(--suave); }
 .stat strong { font-size: 30px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 .stat-principal strong { font-size: 34px; }
-.stat-nota { font-size: 12px; color: var(--muted); }
+.stat-nota { font-size: 12px; color: var(--suave); }
 
 /* --- Catálogo + panel --- */
 /* Una sola columna: el catálogo ya no va al lado, ahora es un panel más
@@ -302,14 +340,14 @@ body.admin-ok #zona-acceso-admin { display: none; }
 .tarjeta { container-type: inline-size; }
 
 .tarjeta {
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
   border-radius: 22px;
   padding: 22px;
   min-width: 0;
 }
 
-.ayuda { margin: 0 0 18px; font-size: 13px; color: var(--muted); }
+.ayuda { margin: 0 0 18px; font-size: 13px; color: var(--suave); }
 
 /* ============================================================
    Catálogo: productos como tarjetas en cuadrícula ("My Portfolio")
@@ -335,11 +373,11 @@ body.admin-ok #zona-acceso-admin { display: none; }
   gap: 12px;
   padding: 12px;
   border-radius: 18px;
-  background: var(--tile);
-  border: 1px solid var(--line);
+  background: var(--superficie);
+  border: 1px solid var(--linea);
   transition: border-color 0.15s, transform 0.15s;
 }
-#resultado .producto:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+#resultado .producto:hover { border-color: var(--linea-fuerte); transform: translateY(-2px); }
 
 /* Imagen arriba, ocupando todo el ancho de la tarjeta.
    object-fit: cover recorta la foto para llenar el cuadro sin deformarla */
@@ -351,12 +389,13 @@ body.admin-ok #zona-acceso-admin { display: none; }
   background: #fff;     /* muchas fotos de producto tienen fondo blanco */
 }
 
-/* Sin imagen (o URL rota): cuadro malva con la inicial */
+/* Sin imagen (o URL rota): cuadro beige con la inicial */
 .producto-img.sin-imagen {
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--mauve-a) 0%, var(--mauve-b) 100%) !important;
-  color: var(--text);
+  background: linear-gradient(135deg, var(--activo-a) 0%, var(--activo-b) 100%) !important;
+  color: var(--acento-fuerte);
+  font-family: var(--serif);
   font-size: 28px;
   font-weight: 500;
 }
@@ -370,12 +409,12 @@ body.admin-ok #zona-acceso-admin { display: none; }
 }
 .producto-cabecera strong { font-weight: 500; font-size: 14px; }
 .precio { font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.producto-id { color: var(--pink); font-weight: 400; font-size: 12px; }
+.producto-id { color: var(--acento); font-weight: 400; font-size: 12px; }
 
 .producto p {
   margin: 4px 0 0;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--suave);
   /* corta la descripción a 2 líneas con "..." para que las tarjetas
      tengan alturas parecidas */
   display: -webkit-box;
@@ -390,7 +429,7 @@ body.admin-ok #zona-acceso-admin { display: none; }
 .categoria {
   font-size: 11px;
   padding: 1px 9px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--linea-fuerte);
   border-radius: 999px;
 }
 
@@ -401,11 +440,11 @@ body.admin-ok #zona-acceso-admin { display: none; }
   align-items: center;
   margin-top: 12px;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--suave);
 }
-.producto-pie b { color: var(--text); font-weight: 500; }
-.estado.si { color: var(--green); }
-.estado.no { color: var(--red); }
+.producto-pie b { color: var(--texto); font-weight: 500; }
+.estado.si { color: var(--verde); }
+.estado.no { color: var(--rojo); }
 
 /* Filas compactas (imagen chica a la izquierda): resultados de Buscar y
    vista previa de Eliminar. Las dos usan la clase .lista-filas */
@@ -414,7 +453,7 @@ body.admin-ok #zona-acceso-admin { display: none; }
   display: flex;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--linea);
 }
 .lista-filas .producto:last-child { border-bottom: none; }
 .lista-filas .producto-img {
@@ -429,24 +468,24 @@ body.admin-ok #zona-acceso-admin { display: none; }
 .lista-filas .producto-info { flex: 1; min-width: 0; }
 .lista-filas .precio { font-size: 16px; }
 
-.vacio { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
+.vacio { margin: 16px 0 0; font-size: 13px; color: var(--suave); }
 
 /* Vista previa de Eliminar: caja con borde y fondo rojizos para que
    quede claro que ESE es el producto que se va a borrar */
 .vista-eliminar {
   grid-column: 1 / -1;
   padding: 12px 16px 4px;
-  border: 1px solid rgba(236, 123, 130, 0.45);
+  border: 1px solid rgba(179, 58, 58, 0.45);
   border-radius: 16px;
-  background: rgba(236, 123, 130, 0.07);
+  background: rgba(179, 58, 58, 0.07);
 }
-.vista-titulo { margin: 0; font-size: 12px; color: var(--red); }
+.vista-titulo { margin: 0; font-size: 12px; color: var(--rojo); }
 
 /* Registro de eliminados: separado del formulario por una línea */
 .registro {
   margin-top: 26px;
   padding-top: 20px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--linea);
 }
 .registro-cabecera {
   display: flex;
@@ -478,7 +517,7 @@ body.admin-ok #zona-acceso-admin { display: none; }
   align-items: center;
   gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--linea);
 }
 .registro-item:last-child { border-bottom: none; }
 .registro-item .producto-img {
@@ -494,10 +533,10 @@ body.admin-ok #zona-acceso-admin { display: none; }
 .registro-item .producto-img.sin-imagen { font-size: 16px; }
 .registro-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .registro-info strong { font-weight: 500; font-size: 14px; }
-.registro-fecha { font-size: 12px; color: var(--muted); }
+.registro-fecha { font-size: 12px; color: var(--suave); }
 .registro-precio {
   font-size: 14px;
-  color: var(--muted);
+  color: var(--suave);
   text-decoration: line-through;   /* tachado: ya no está a la venta */
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -507,18 +546,18 @@ body.admin-ok #zona-acceso-admin { display: none; }
 
 /* JSON plegable */
 #detalles-json { margin-top: 16px; }
-#detalles-json summary { cursor: pointer; font-size: 13px; color: var(--muted); }
-#detalles-json summary:hover { color: var(--pink); }
+#detalles-json summary { cursor: pointer; font-size: 13px; color: var(--suave); }
+#detalles-json summary:hover { color: var(--acento); }
 #detalles-json:has(code:empty) { display: none; }  /* oculto mientras no haya JSON */
 #json-productos {
   margin: 12px 0 0;
   padding: 16px;
   max-height: 300px;
   overflow: auto;
-  background: var(--field);
-  border: 1px solid var(--line);
+  background: var(--campo);
+  border: 1px solid var(--linea);
   border-radius: 14px;
-  color: var(--pink);
+  color: var(--acento);
   font-family: ui-monospace, Consolas, monospace;
   font-size: 12px;
 }
@@ -555,7 +594,7 @@ label {
   flex-direction: column;
   gap: 6px;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--suave);
 }
 
 /* width: 100% + min-width: 0: sin esto, un <input> no se encoge por
@@ -565,20 +604,20 @@ input, textarea, select {
   min-width: 0;
   font: inherit;
   font-size: 14px;
-  color: var(--text);
+  color: var(--texto);
   padding: 11px 14px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--linea);
   border-radius: 14px;
-  background: var(--field);
+  background: var(--campo);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-input::placeholder, textarea::placeholder { color: #6c636a; }
+input::placeholder, textarea::placeholder { color: #9a9384; }
 textarea { resize: vertical; min-height: 84px; }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--pink-deep);
-  box-shadow: 0 0 0 3px rgba(227, 176, 216, 0.14);
+  border-color: var(--acento-fuerte);
+  box-shadow: 0 0 0 3px rgba(74, 82, 50, 0.14);
 }
 
 label.check {
@@ -586,15 +625,15 @@ label.check {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: var(--text);
+  color: var(--texto);
 }
 /* accent-color pinta el checkbox del color de acento */
-label.check input { width: 17px; height: 17px; flex-shrink: 0; margin: 0; accent-color: var(--pink-deep); }
+label.check input { width: 17px; height: 17px; flex-shrink: 0; margin: 0; accent-color: var(--acento-fuerte); }
 
 /* Buscador redondo, como "Ask helios.ai anything" */
 .buscador { display: flex; gap: 8px; }
 .buscador input { flex: 1; width: auto; border-radius: 999px; padding-left: 20px; }
-#mensaje-busqueda { margin: 14px 0 0; font-size: 13px; color: var(--muted); }
+#mensaje-busqueda { margin: 14px 0 0; font-size: 13px; color: var(--suave); }
 #mensaje-busqueda:empty { display: none; }
 
 /* ============================================================
@@ -644,7 +683,7 @@ label.check input { width: 17px; height: 17px; flex-shrink: 0; margin: 0; accent
   }
   /* sin la línea de abajo en la última fila de cada columna se vería
      cortada; mejor usar solo la de arriba */
-  #resultado-busqueda .producto { border-bottom: none; border-top: 1px solid var(--line); }
+  #resultado-busqueda .producto { border-bottom: none; border-top: 1px solid var(--linea); }
 
   /* El buscador no necesita todo el ancho */
   .buscador { max-width: 640px; }
@@ -654,41 +693,43 @@ label.check input { width: 17px; height: 17px; flex-shrink: 0; margin: 0; accent
    Botones
    ============================================================ */
 
-/* Principal: píldora rosa, como "Explore AI Insights" */
+/* Principal: píldora verde oliva, como los botones de la landing */
 button {
   font: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   padding: 11px 24px;
   border-radius: 999px;
-  border: 1px solid transparent;
-  background: linear-gradient(180deg, #d3a5c9 0%, var(--pink-deep) 100%);
-  color: #1d121b;
+  border: 1px solid var(--acento-fuerte);
+  background: var(--acento-fuerte);
+  color: #fbf8f2;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(180, 127, 169, 0.25);
-  transition: filter 0.15s, background 0.15s;
+  box-shadow: none;
+  transition: background 0.15s, color 0.15s;
 }
-button:hover { filter: brightness(1.08); }
+button:hover { background: var(--acento-hover); }
 
-/* Secundario: píldora negra con borde claro, como "See all" */
+/* Secundario: píldora con borde oliva y fondo transparente */
 .secondary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #050405;
-  color: var(--text);
-  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--acento-fuerte);
+  border-color: var(--acento-fuerte);
   box-shadow: none;
 }
 .secondary svg { width: 17px; height: 17px; }
-.secondary:hover { background: #151215; filter: none; }
+.secondary:hover { background: var(--acento-fuerte); color: #fbf8f2; filter: none; }
 
 /* Acciones que borran datos */
 .peligro {
-  background: linear-gradient(180deg, #f0959b 0%, #c95c63 100%);
-  color: #1d0b0c;
-  box-shadow: 0 6px 20px rgba(201, 92, 99, 0.25);
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: #fff;
 }
+.peligro:hover { background: #8f2c2c; }
 
 button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
 
@@ -709,18 +750,18 @@ button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
   max-width: calc(100% - 32px);
   padding: 12px 24px;
   border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: rgba(13, 12, 14, 0.9);
+  border: 1px solid var(--linea-fuerte);
+  background: rgba(251, 248, 242, 0.95);
   backdrop-filter: blur(12px);  /* desenfoca lo de atrás: efecto vidrio */
-  color: var(--text);
+  color: var(--texto);
   font-size: 14px;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 34px rgba(47, 53, 32, 0.2);
 }
-#notificacion.exito { border-color: rgba(79, 209, 139, 0.55); color: var(--green); }
-#notificacion.error { border-color: rgba(236, 123, 130, 0.55); color: var(--red); }
+#notificacion.exito { border-color: rgba(63, 122, 79, 0.55); color: var(--verde); }
+#notificacion.error { border-color: rgba(179, 58, 58, 0.55); color: var(--rojo); }
 
-/* Barra de scroll fina y oscura */
-* { scrollbar-width: thin; scrollbar-color: #463d44 transparent; }
+/* Barra de scroll fina, del color de la paleta */
+* { scrollbar-width: thin; scrollbar-color: #c9bda4 transparent; }
 
 /* ============================================================
    Pantallas más pequeñas
@@ -776,9 +817,9 @@ button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
   flex-direction: column;
   gap: 8px;
   padding: 16px 18px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--linea);
   border-radius: 18px;
-  background: var(--tile);
+  background: var(--superficie);
 }
 .pedido-cabecera {
   display: flex;
@@ -788,20 +829,20 @@ button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
   flex-wrap: wrap;
 }
 .pedido-cabecera h3 { margin: 0; font-size: 16px; font-weight: 500; }
-.pedido-meta { margin: 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.pedido-meta { margin: 0; font-size: 13px; color: var(--suave); overflow-wrap: anywhere; }
 
 /* Etiqueta del estado: un color por estado */
 .estado-pedido {
   padding: 3px 10px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--linea-fuerte);
   border-radius: 999px;
   font-size: 12px;
   text-transform: capitalize;
 }
-.estado-confirmado { color: var(--pink);  border-color: rgba(227, 176, 216, 0.45); }
-.estado-enviado    { color: #9cc3ff;      border-color: rgba(156, 195, 255, 0.45); }
-.estado-entregado  { color: var(--green); border-color: rgba(79, 209, 139, 0.45); }
-.estado-cancelado  { color: var(--red);   border-color: rgba(236, 123, 130, 0.45); }
+.estado-confirmado { color: var(--acento); border-color: rgba(138, 111, 58, 0.45); }
+.estado-enviado    { color: #2f5d8a;      border-color: rgba(47, 93, 138, 0.4); }
+.estado-entregado  { color: var(--verde); border-color: rgba(63, 122, 79, 0.45); }
+.estado-cancelado  { color: var(--rojo);   border-color: rgba(179, 58, 58, 0.45); }
 
 /* Productos del pedido: nombre × cantidad a la izquierda, subtotal a la derecha */
 .pedido-lineas {
@@ -815,13 +856,13 @@ button:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
 }
 .pedido-lineas li { display: flex; justify-content: space-between; gap: 12px; }
 .pedido-lineas li > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.pedido-lineas .detalle { font-size: 12px; color: var(--muted); }
+.pedido-lineas .detalle { font-size: 12px; color: var(--suave); }
 
 .pedido-total {
   display: flex;
   justify-content: space-between;
   padding-top: 10px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--linea);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
